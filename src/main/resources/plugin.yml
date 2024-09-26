@@ -1,0 +1,10 @@
+name: Planet
+version: '1.0-SNAPSHOT'
+main: fr.myriapod.milkywayexplorer.Main
+api-version: '1.21.1'
+authors: [ Enlaniel,myriapod ]
+description: c'est un bordel pour l'instant
+
+commands:
+  gen:
+    permission: op

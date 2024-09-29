@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer;
 
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShip;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class Main extends JavaPlugin {
         }
 
         getCommand("gen").setExecutor(new GenPlanet(this));
+        getCommand("ship").setExecutor(new CreateShip(this));
 
     }
 }

@@ -1,19 +1,18 @@
 package fr.myriapod.milkywayexplorer.mytools;
 
-import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Gradients {
 
-    public static String getGradientColor(ArrayList<Vector3i> colorList, double pos){
-        double sectionSize = 1.0 / colorList.size();
-        String hex = "";
+    public static String getGradientColor(List<Vector3i> colorList, double pos){
+        double precisePos = (colorList.size() - 1) * pos;
+        precisePos = Math.clamp(precisePos,0,colorList.size() - 1.001);
+        int firstPos = (int) Math.floor(precisePos);
+        double miniPos = precisePos - firstPos;
 
-
-
-        return hex;
+        return gradFromTwoColors(colorList.get(firstPos+1) , colorList.get(firstPos) , miniPos);
     }
 
     public static String gradFromTwoColors(Vector3i color1, Vector3i color2, double pos) {
@@ -22,8 +21,7 @@ public class Gradients {
         int r = (int) (color1.x * pos + color2.x * pos2);
         int g = (int) (color1.y * pos + color2.y * pos2);
         int b = (int) (color1.z * pos + color2.z * pos2);
-        Vector3i color = new Vector3i(r,g,b);
-        String hex = "#" + String.format("%02x",r) + String.format("%02x",g) + String.format("%02x",b);
-        return hex;
+
+        return "#" + String.format("%02x",r) + String.format("%02x",g) + String.format("%02x",b);
     }
 }

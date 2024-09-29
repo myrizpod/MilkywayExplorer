@@ -6,5 +6,7 @@ authors: [ Enlaniel,myriapod ]
 description: c'est un bordel pour l'instant
 
 commands:
+  ship:
+    permission: op
   gen:
     permission: op

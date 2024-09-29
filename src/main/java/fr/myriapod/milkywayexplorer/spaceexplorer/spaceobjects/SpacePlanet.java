@@ -15,6 +15,8 @@ import org.joml.Vector4d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
 
 public class SpacePlanet {
     Main plugin;
@@ -25,6 +27,7 @@ public class SpacePlanet {
     private double radius;
     private int seed;
     private Vector3d starPos;
+    private Random generator;
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, Main main, int seed, Vector3d starPos) {
         this.plugin = main;
@@ -33,6 +36,7 @@ public class SpacePlanet {
         this.radius = radius;
         this.seed = seed;
         this.starPos = starPos;
+        this.generator = new Random(seed);
     }
 
     public void create() {
@@ -41,21 +45,18 @@ public class SpacePlanet {
         List<Vector4d> points = Maths.fibonacciSphere(pixelAmount,radius);
         pixelComponnents = new ArrayList<>();
 
+        ArrayList colorlist = new ArrayList<Vector3i>();
+        int colorAmount = (Math.abs(seed) % 2) + 2;
+        Bukkit.getLogger().info(String.valueOf(colorAmount));
+        for (int eachCol = 0; eachCol < colorAmount; eachCol++) {
+            colorlist.add(new Vector3i(Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255));
+        }
+
         for (Vector4d eachPoint : points) {
-            double ccolor = noisePipeline.evaluateNoise(eachPoint.x / radius + 1,eachPoint.y / radius + 1,eachPoint.z / radius + 1);
+            double bwMap = noisePipeline.evaluateNoise(eachPoint.x / radius + 1,eachPoint.y / radius + 1,eachPoint.z / radius + 1);
             double angle = eachPoint.w;
 
-            /*
-            double rcolor = Math.abs(eachPoint.x / radius);
-            double gcolor = Math.abs(eachPoint.y / radius);
-            double bcolor = Math.abs(eachPoint.z / radius);
-
-            String rscolor = String.format("%02x",(Long) Math.round(ccolor * rcolor * 255));
-            String gscolor = String.format("%02x",(Long) Math.round(ccolor * gcolor * 255));
-            String bscolor = String.format("%02x",(Long) Math.round(ccolor * bcolor * 255));
-            String color = "#" + rscolor + gscolor + bscolor;
-            */
-            String color = Gradients.gradFromTwoColors(new Vector3i(255,0,0), new Vector3i(0,0,255), ccolor);
+            String color = Gradients.getGradientColor(colorlist,bwMap);
             pixelComponnents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
 
         }
@@ -66,8 +67,8 @@ public class SpacePlanet {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             private double currentAngle = 0;
             public void run() {
-                rotateOnItself(0.1);
-                //rotate(0.1);
+                rotateOnItself(-0.05);
+                rotate(0.05);
 
             }
 

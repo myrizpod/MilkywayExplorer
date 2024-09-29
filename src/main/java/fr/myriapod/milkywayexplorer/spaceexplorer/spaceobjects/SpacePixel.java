@@ -23,7 +23,7 @@ public class SpacePixel {
         this.size = size;
         this.color = color;
         this.trigSpherePos = trigSpherePos;
-        this.currentAngle = Math.toDegrees(angle);
+        this.currentAngle = angle;
 
         pixel = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z), TextDisplay.class);
         pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "\u2b24");
@@ -61,8 +61,8 @@ public class SpacePixel {
     public void rotate(Vector3d center,double angle) {
         currentAngle += angle;
         double rad = Math.sqrt(Math.pow(pos.x - center.x,2)+Math.pow(pos.z - center.z,2));
-        double x = rad * Math.cos(Math.PI * 2 * Math.toRadians(currentAngle));
-        double z = rad * Math.sin(Math.PI * 2 * Math.toRadians(currentAngle));
+        double x = Math.cos(currentAngle) * rad;
+        double z = Math.sin(currentAngle) * rad;
         this.tpTo(new Vector3d(x + center.x ,pos.y,z + center.z));
 
     }

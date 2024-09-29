@@ -11,7 +11,7 @@ public class Maths {
     public static List<Vector4d> fibonacciSphere(int samples, double radius) {
         List<Vector4d> pointsPos = new ArrayList<>();
 
-        double phi = Math.PI * (3 - Math.sqrt(5.0)); // golden angle in radians
+        double phi = Math.PI * (Math.sqrt(5.0) - 1.0); // golden angle in radians
 
         for (int i = 0; i < samples; i++) {
             double y = (double) i / (double) samples * 2 - 1;  // y goes from 1 to -1

@@ -24,7 +24,7 @@ public class GenPlanet implements CommandExecutor {
         Player player = (Player) commandSender;
         Vector3d pos = new Vector3d(player.getLocation().getX(),player.getLocation().getY(),player.getLocation().getZ());
 
-        newPlanet = new SpacePlanet(pos, Integer.valueOf(args[0]), Double.valueOf(args[1]), this.main, new Random().nextInt(),new Vector3d(0,100,0));
+        newPlanet = new SpacePlanet(pos, Integer.valueOf(args[0]), Double.valueOf(args[1]), new Random().nextInt(),new Vector3d(0,100,0),0.05,-0.05);
         newPlanet.create();
         newPlanet.rotatePlanet();
 

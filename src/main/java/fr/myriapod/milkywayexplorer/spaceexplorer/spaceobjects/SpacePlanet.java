@@ -2,13 +2,11 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 
 import de.articdive.jnoise.core.api.functions.Interpolation;
 import de.articdive.jnoise.generators.noise_parameters.fade_functions.FadeFunction;
-import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
 import de.articdive.jnoise.pipeline.JNoise;
 import fr.myriapod.milkywayexplorer.Main;
 import fr.myriapod.milkywayexplorer.mytools.Gradients;
 import fr.myriapod.milkywayexplorer.mytools.Maths;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector4d;
@@ -16,12 +14,11 @@ import org.joml.Vector4d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
 public class SpacePlanet {
     Main plugin;
 
-    private ArrayList<SpacePixel> pixelComponnents;
+    private ArrayList<SpacePixel> pixelComponents;
     private Vector3d pos;
     private int pixelAmount;
     private double radius;
@@ -29,25 +26,34 @@ public class SpacePlanet {
     private Vector3d starPos;
     private Random generator;
 
-    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, Main main, int seed, Vector3d starPos) {
+    private double rotSpeed;
+    private double revolveSpeed;
+
+
+    public SpacePlanet(Main main) {
         this.plugin = main;
+    }
+
+    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
         this.pos = pos;
         this.pixelAmount = pixelAmount;
         this.radius = radius;
-        this.seed = seed;
+        this.seed = seed; //seed defines color and planet pattern
         this.starPos = starPos;
         this.generator = new Random(seed);
+        this.revolveSpeed = revolveSpeed; //rotation on itself
+        this.rotSpeed = rotSpeed; //rotation around star
     }
 
     public void create() {
 
         JNoise noisePipeline=JNoise.newBuilder().perlin(seed,Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
-        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount,radius);
-        pixelComponnents = new ArrayList<>();
+        // ^ this is funny noise pattern using complicated library TODO make some of its parameters depend on seed
+        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount,radius); //4th dimension is angle in radians
+        pixelComponents = new ArrayList<>();
 
-        ArrayList colorlist = new ArrayList<Vector3i>();
-        int colorAmount = (Math.abs(seed) % 2) + 2;
-        Bukkit.getLogger().info(String.valueOf(colorAmount));
+        ArrayList<Vector3i> colorlist = new ArrayList<>();
+        int colorAmount = (Math.abs(seed) % 2) + 2; //choose the color amount: randint(2,4)
         for (int eachCol = 0; eachCol < colorAmount; eachCol++) {
             colorlist.add(new Vector3i(Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255));
         }
@@ -57,7 +63,7 @@ public class SpacePlanet {
             double angle = eachPoint.w;
 
             String color = Gradients.getGradientColor(colorlist,bwMap);
-            pixelComponnents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
+            pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
 
         }
 
@@ -67,8 +73,8 @@ public class SpacePlanet {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             private double currentAngle = 0;
             public void run() {
-                rotateOnItself(-0.05);
-                rotate(0.05);
+                rotateOnItself(revolveSpeed);
+                rotate(rotSpeed);
 
             }
 
@@ -78,7 +84,7 @@ public class SpacePlanet {
                 double x = rad * Math.cos(Math.PI * 2 * Math.toRadians(currentAngle));
                 double z = rad * Math.sin(Math.PI * 2 * Math.toRadians(currentAngle));
 
-                for (SpacePixel eachPixel : pixelComponnents){
+                for (SpacePixel eachPixel : pixelComponents){
                     Vector3d pixelPos = eachPixel.getPos();
                     Vector3d newPos = new Vector3d(x + pixelPos.x - pos.x , pixelPos.y, z + pixelPos.z - pos.z );
                     eachPixel.tpTo(newPos);
@@ -87,9 +93,8 @@ public class SpacePlanet {
                 pos.z = z;
             }
             private void rotateOnItself(double speed){
-                for (SpacePixel eachPixel : pixelComponnents) {
+                for (SpacePixel eachPixel : pixelComponents) {
                     eachPixel.rotate(pos,speed);
-
                 }
 
             }

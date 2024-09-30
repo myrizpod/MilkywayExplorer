@@ -9,15 +9,19 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Transformation;
+import org.joml.Vector3d;
 
 public class Ship {
     private ArmorStand seat;
     private TextDisplay controlCircle;
     private ItemDisplay skyBox;
+    private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5);
 
     public Ship(Player player) {
 
-        skyBox = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 101, 2.5), ItemDisplay.class);
+        //create a skybox using a black #000000 head item display with reversed size
+        int skyBoxSize = 150;
+        skyBox = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, shipCenter.y, 2.5), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
         skyBox.setTransformation(boxTransformation);

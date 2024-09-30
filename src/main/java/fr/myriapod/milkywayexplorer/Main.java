@@ -25,6 +25,8 @@ public class Main extends JavaPlugin {
             player.sendMessage("._.");
         }
 
+        new SpacePlanet(this);
+
         getCommand("gen").setExecutor(new GenPlanet(this));
         getCommand("ship").setExecutor(new CreateShip(this));
 

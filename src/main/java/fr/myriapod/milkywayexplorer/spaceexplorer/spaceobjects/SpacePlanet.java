@@ -6,7 +6,9 @@ import de.articdive.jnoise.pipeline.JNoise;
 import fr.myriapod.milkywayexplorer.Main;
 import fr.myriapod.milkywayexplorer.mytools.Gradients;
 import fr.myriapod.milkywayexplorer.mytools.Maths;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector4d;
@@ -28,13 +30,14 @@ public class SpacePlanet {
 
     private double rotSpeed;
     private double revolveSpeed;
+    private Ship ship;
 
 
     public SpacePlanet(Main main) {
         this.plugin = main;
     }
 
-    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
+    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed, Ship ship) {
         this.pos = pos;
         this.pixelAmount = pixelAmount;
         this.radius = radius;
@@ -43,6 +46,7 @@ public class SpacePlanet {
         this.generator = new Random(seed);
         this.revolveSpeed = revolveSpeed; //rotation on itself
         this.rotSpeed = rotSpeed; //rotation around star
+        this.ship = ship;
     }
 
     public void create() {
@@ -75,6 +79,7 @@ public class SpacePlanet {
             public void run() {
                 rotateOnItself(revolveSpeed);
                 rotate(rotSpeed);
+                updateAllPoints();
 
             }
 
@@ -96,6 +101,14 @@ public class SpacePlanet {
                 for (SpacePixel eachPixel : pixelComponents) {
                     eachPixel.rotate(pos,speed);
                 }
+
+            }
+
+            private void updateAllPoints() {
+                for (SpacePixel eachPixel : pixelComponents) {
+                    eachPixel.renderToShip(ship);
+                }
+
 
             }
 

@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -17,6 +18,7 @@ public class SpacePixel {
     private double size;
     private Vector3d trigSpherePos;
     private double currentAngle;
+    private Vector3d renderPos;
 
     public SpacePixel(Vector3d pos,Vector3d trigSpherePos, String color, double size,double angle){
         this.pos = pos;
@@ -39,14 +41,12 @@ public class SpacePixel {
         pos.x += shift.x;
         pos.y += shift.y;
         pos.z += shift.z;
-        pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z));
     }
 
     public void tpTo(Vector3d newPos) {
         pos.x = newPos.x;
         pos.y = newPos.y;
         pos.z = newPos.z;
-        pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z));
     }
     public Vector3d getPos() {
 
@@ -65,5 +65,10 @@ public class SpacePixel {
         double z = Math.sin(currentAngle) * rad;
         this.tpTo(new Vector3d(x + center.x ,pos.y,z + center.z));
 
+    }
+
+    public void renderToShip(Ship ship) {
+        //pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z)); old way to render
+        renderPos = pos.sub(ship.getPos()).div(ship.getSpaceScale()).add(ship.getWorldCenter());
     }
 }

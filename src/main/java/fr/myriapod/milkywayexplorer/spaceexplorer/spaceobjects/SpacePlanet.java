@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 
 public class SpacePlanet {
-    Main plugin;
 
     private ArrayList<SpacePixel> pixelComponents;
     private Vector3d pos;
@@ -32,10 +31,6 @@ public class SpacePlanet {
     private double revolveSpeed;
     private Ship ship;
 
-
-    public SpacePlanet(Main main) {
-        this.plugin = main;
-    }
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed, Ship ship) {
         this.pos = pos;
@@ -74,7 +69,7 @@ public class SpacePlanet {
     }
 
     public void rotatePlanet() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
             private double currentAngle = 0;
             public void run() {
                 rotateOnItself(revolveSpeed);

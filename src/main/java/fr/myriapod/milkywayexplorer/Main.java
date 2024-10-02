@@ -11,6 +11,8 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
 
 import java.util.ArrayList;
 
+//https://mm.tt/app/map/3454339276?t=W7hAsr21jL tech tree
+
 public class Main extends JavaPlugin {
 
     public ArrayList<SpacePlanet> allPlanets = new ArrayList<>();
@@ -28,11 +30,11 @@ public class Main extends JavaPlugin {
             player.sendMessage("._.");
         }
 
-        new SpacePlanet(this);
-
-        getCommand("gen").setExecutor(new GenPlanet(this));
-        getCommand("ship").setExecutor(new CreateShip(this));
-        getCommand("goto").setExecutor(new DevMoveShip(this));
+        getCommand("gen").setExecutor(new GenPlanet());
+        getCommand("ship").setExecutor(new CreateShip());
+        getCommand("goto").setExecutor(new DevMoveShip());
 
     }
+
+
 }

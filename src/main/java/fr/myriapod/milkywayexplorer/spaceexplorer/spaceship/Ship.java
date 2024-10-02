@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
+import fr.myriapod.milkywayexplorer.Game;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -13,6 +14,7 @@ import org.joml.Vector3d;
 
 public class Ship {
     private ArmorStand seat;
+    private Player player;
     private TextDisplay controlCircle;
     private ItemDisplay skyBox;
     private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
@@ -22,6 +24,11 @@ public class Ship {
 
 
     public Ship(Player player) {
+
+        Game.addShip(this);
+
+        this.player = player;
+
         //create a skybox using a black #000000 head item display with reversed size
         //TODO make it work cuz we dont get right head rn
         int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
@@ -67,6 +74,10 @@ public class Ship {
 
     public void moveShip(Vector3d movement){
         shipPos.add(movement);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
 

@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
@@ -23,12 +22,13 @@ public class SpacePixel {
     public SpacePixel(Vector3d pos,Vector3d trigSpherePos, String color, double size,double angle){
         this.pos = pos;
         this.size = size;
-        this.color = color;
-        this.trigSpherePos = trigSpherePos;
-        this.currentAngle = angle;
+        this.color = color; //hex color code
+        this.trigSpherePos = trigSpherePos; //position on the trig sphere: [-1;1] kinda usleless
+        this.currentAngle = angle; // angle of the pixel around the vertical axis of the planet in degrees
+
 
         pixel = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z), TextDisplay.class);
-        pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "\u2b24");
+        pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
         pixel.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         Transformation transformation = pixel.getTransformation();
         pixel.setBillboard(Display.Billboard.CENTER);
@@ -49,12 +49,10 @@ public class SpacePixel {
         pos.z = newPos.z;
     }
     public Vector3d getPos() {
-
         return pos;
     }
 
     public Vector3d getTrigSpherePos() {
-
         return trigSpherePos;
     }
 

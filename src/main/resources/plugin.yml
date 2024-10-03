@@ -10,3 +10,5 @@ commands:
     permission: op
   gen:
     permission: op
+  goto:
+    permission: op

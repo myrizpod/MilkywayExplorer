@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
@@ -66,7 +67,9 @@ public class SpacePixel {
     }
 
     public void renderToShip(Ship ship) {
-        //pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z)); old way to render
-        renderPos = pos.sub(ship.getPos()).div(ship.getSpaceScale()).add(ship.getWorldCenter());
+        //pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z)); //old way to render
+        renderPos = new Vector3d((pos.x - ship.getPos().x) / ship.getSpaceScale() + ship.getWorldCenter().x , (pos.y - ship.getPos().y) / ship.getSpaceScale() + ship.getWorldCenter().y , (pos.z - ship.getPos().z) / ship.getSpaceScale() + ship.getWorldCenter().z);
+        //pos.sub(ship.getPos()).add(ship.getWorldCenter()).div(ship.getSpaceScale())
+        pixel.teleport(new Location(Bukkit.getWorld("world"), renderPos.x , renderPos.y , renderPos.z));
     }
 }

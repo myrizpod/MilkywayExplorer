@@ -1,12 +1,12 @@
 package fr.myriapod.milkywayexplorer;
 
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShip;
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShip;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.GenPlanet;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.GenPlanetCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
 
 import java.util.ArrayList;
@@ -30,9 +30,9 @@ public class Main extends JavaPlugin {
             player.sendMessage("._.");
         }
 
-        getCommand("gen").setExecutor(new GenPlanet());
-        getCommand("ship").setExecutor(new CreateShip());
-        getCommand("goto").setExecutor(new DevMoveShip());
+        getCommand("gen").setExecutor(new GenPlanetCommand());
+        getCommand("ship").setExecutor(new CreateShipCommand());
+        getCommand("goto").setExecutor(new DevMoveShipCommand());
 
     }
 

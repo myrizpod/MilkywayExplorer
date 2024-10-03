@@ -9,7 +9,7 @@ import org.joml.Vector3d;
 
 import java.util.Random;
 
-public class GenPlanet implements CommandExecutor {
+public class GenPlanetCommand implements CommandExecutor {
 
     public SpacePlanet newPlanet;
 

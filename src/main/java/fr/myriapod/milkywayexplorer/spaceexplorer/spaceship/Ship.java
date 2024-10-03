@@ -1,6 +1,8 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.Main;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePixel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 public class Ship {
     private ArmorStand seat;
@@ -28,6 +31,8 @@ public class Ship {
         Game.addShip(this);
 
         this.player = player;
+        this.shipPos = new Vector3d(0,0,0);
+        this.shipMomentum = new Vector3d(0,0,0);
 
         //create a skybox using a black #000000 head item display with reversed size
         //TODO make it work cuz we dont get right head rn
@@ -60,8 +65,8 @@ public class Ship {
         return shipPos;
     }
 
-    public Vector3d getMomentum() {
-        return shipMomentum;
+    public void setMomentum(Vector3d momentum) {
+        shipMomentum = momentum;
     }
 
     public int getSpaceScale(){
@@ -78,6 +83,16 @@ public class Ship {
 
     public Player getPlayer() {
         return player;
+    }
+
+
+    public void movementLoop() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
+            public void run() {
+                moveShip(shipMomentum);
+
+            }
+        }, 20, 1);
     }
 }
 

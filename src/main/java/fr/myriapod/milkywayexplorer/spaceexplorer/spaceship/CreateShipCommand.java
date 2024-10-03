@@ -1,19 +1,20 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
-
-import fr.myriapod.milkywayexplorer.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.joml.Vector3d;
 
-import java.util.Random;
+public class CreateShipCommand implements CommandExecutor {
 
-public class DevMoveShip implements CommandExecutor {
+    public Ship newShip;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        Player player = (Player) commandSender;
+
+        newShip = new Ship(player);
+        newShip.movementLoop();
 
         return true;
     }

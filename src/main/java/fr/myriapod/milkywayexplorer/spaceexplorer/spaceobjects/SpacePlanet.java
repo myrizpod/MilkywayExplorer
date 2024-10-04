@@ -8,7 +8,6 @@ import fr.myriapod.milkywayexplorer.mytools.Gradients;
 import fr.myriapod.milkywayexplorer.mytools.Maths;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector4d;
@@ -22,14 +21,14 @@ public class SpacePlanet {
     private ArrayList<SpacePixel> pixelComponents;
     private Vector3d pos;
     private int pixelAmount;
-    private double radius;
-    private int seed;
+    private final double radius;
+    private final int seed;
     private Vector3d starPos;
-    private Random generator;
+    private final Random generator;
 
     private double rotSpeed;
     private double revolveSpeed;
-    private Ship ship;
+    private final Ship ship;
 
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed, Ship ship) {

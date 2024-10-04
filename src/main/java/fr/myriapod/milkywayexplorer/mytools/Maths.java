@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.mytools;
 
-import org.joml.Vector3d;
 import org.joml.Vector4d;
 
 import java.util.ArrayList;

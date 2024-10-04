@@ -2,7 +2,6 @@ package fr.myriapod.milkywayexplorer;
 
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 
 public class Game {

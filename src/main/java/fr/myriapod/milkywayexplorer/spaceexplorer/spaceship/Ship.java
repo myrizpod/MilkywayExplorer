@@ -2,7 +2,6 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Main;
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePixel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -13,13 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
-import org.joml.Vector3i;
 
 public class Ship {
-    private ArmorStand seat;
-    private Player player;
-    private TextDisplay controlCircle;
-    private ItemDisplay skyBox;
+    private final ArmorStand seat;
+    private final Player player;
+    private final TextDisplay controlCircle;
+    private final ItemDisplay skyBox;
     private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
     private Vector3d shipPos; //pos of the ship in space
     private Vector3d shipMomentum; //a vector of the current speed of the ship. is added to pos every X time
@@ -41,16 +39,12 @@ public class Ship {
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
         skyBox.setTransformation(boxTransformation);
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer("Adamchelou")); //Adamchelou is a player with a mostly black btw its temporary tho
-        skull.setItemMeta(skullMeta);
-        skyBox.setItemStack(skull);
+        skyBox.setItemStack(Skull.getCustomSkull("http://textures.minecraft.net/texture/7c57f9192e81eb6897c24ecd4935cfb5a731a6f9a57abb51f2b35e8b4be7ebc");
 
         seat = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 98.5, 0.5), ArmorStand.class);
         seat.setGravity(false);
         seat.setInvulnerable(true);
-        seat.setPassenger(player); //TODO make player unable to dismount armorstand as well as make it invisible
+        seat.addPassenger(player); //TODO make player unable to dismount armorstand as well as make it invisible
 
         controlCircle = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 101, 2.5), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");

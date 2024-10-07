@@ -9,20 +9,22 @@ import java.util.Map;
 
 public enum Ressource {
 
-    WOOD("Bois", Material.OAK_WOOD),
-    IRON("Fer", Material.IRON_INGOT),
-    COPPER("Cuivre", Material.COPPER_INGOT) ,
-    SULFUR("Sulfur", Material.YELLOW_DYE),
-    GOLD("Or", Material.GOLD_INGOT),
-    TITANIUM("Titane", Material.BLUE_DYE);
+    WOOD("Bois", Material.OAK_WOOD, 100),
+    IRON("Fer", Material.IRON_INGOT, 101),
+    COPPER("Cuivre", Material.COPPER_INGOT, 102),
+    SULFUR("Sulfur", Material.YELLOW_DYE, 103),
+    GOLD("Or", Material.GOLD_INGOT, 104),
+    TITANIUM("Titane", Material.BLUE_DYE, 105);
 
 
     private String name;
     private Material material;
+    private int modelData;
 
-    Ressource(String name, Material mat) {
+    Ressource(String name, Material mat, int modelData) {
         this.name = name;
         this.material = mat;
+        this.modelData = modelData;
     }
 
 
@@ -31,7 +33,7 @@ public enum Ressource {
 
         for(ItemStack item : inventory.getContents()) {
             for(Ressource r : Ressource.values()) {
-                if (item.getItemMeta().getDisplayName().equals(r.name) && item.getType().equals(r.material)) {
+                if (item.getItemMeta().getCustomModelData() == r.modelData && item.getType().equals(r.material)) {
                     ressources.put(r, item.getAmount());
                 }
             }

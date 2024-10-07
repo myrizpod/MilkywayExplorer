@@ -31,7 +31,7 @@ public class Game {
         return null;
     }
 
-    public static void unlockTech(Tech tech) { //A REVOIR AVEC RESSOURCE SUR LE JOUEUR ET TOUT...
+    public static void unlockTech(Tech tech) {
         techtree.unlockTech(tech);
     }
 

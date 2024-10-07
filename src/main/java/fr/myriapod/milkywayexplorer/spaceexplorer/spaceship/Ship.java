@@ -2,15 +2,12 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Main;
+import fr.myriapod.milkywayexplorer.mytools.Skull;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.profile.PlayerProfile;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
 
@@ -39,15 +36,11 @@ public class Ship {
         skyBox = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, shipCenter.y, 2.5), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
+        boxTransformation.getTranslation().set(0, (float) -skyBoxSize /4, 0);
         skyBox.setTransformation(boxTransformation);
 
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        PlayerProfile profile = Bukkit.createPlayerProfile("kaka");
-        profile.setTextures();
-        meta.setOwnerProfile(profile);
 
-        skyBox.setItemStack(Skull.getCustomSkull("http://textures.minecraft.net/texture/7c57f9192e81eb6897c24ecd4935cfb5a731a6f9a57abb51f2b35e8b4be7ebc");
+        skyBox.setItemStack(Skull.getSpaceSkull());
 
         seat = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 98.5, 0.5), ArmorStand.class);
         seat.setGravity(false);

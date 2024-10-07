@@ -7,8 +7,15 @@ description: c'est un bordel pour l'instant
 
 commands:
   ship:
-    permission: op
+    description: generate a ship for user at 0 100 0
+    permission: debug.ship
   gen:
-    permission: op
+    permission: debug.gen
   goto:
-    permission: op
+    description: gives momentum to user's ship (the user needs a ship...)
+    permission: debug.goto
+
+
+permissions:
+  debug.*:
+    default: op

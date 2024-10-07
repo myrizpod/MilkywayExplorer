@@ -2,7 +2,8 @@ package fr.myriapod.milkywayexplorer;
 
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import fr.myriapod.milkywayexplorer.surface.BlockInteractionListener;
+import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +19,6 @@ public class Main extends JavaPlugin {
     public ArrayList<SpacePlanet> allPlanets = new ArrayList<>();
 
     public static Main plugin;
-    public Ship ship;
 
     @Override
     public void onEnable() {
@@ -26,13 +26,14 @@ public class Main extends JavaPlugin {
 
         Bukkit.getLogger().info("Hello Bozo");
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage("._.");
-        }
+        new Game();
 
         getCommand("gen").setExecutor(new GenPlanetCommand());
         getCommand("ship").setExecutor(new CreateShipCommand());
         getCommand("goto").setExecutor(new DevMoveShipCommand());
+
+        Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockInteractionListener(), this);
 
     }
 

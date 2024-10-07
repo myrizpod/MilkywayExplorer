@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
 
@@ -18,9 +19,9 @@ public class Ship {
     private final Player player;
     private final TextDisplay controlCircle;
     private final ItemDisplay skyBox;
-    private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
     private Vector3d shipPos; //pos of the ship in space
     private Vector3d shipMomentum; //a vector of the current speed of the ship. is added to pos every X time
+    private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
     private static final int spaceScale = 50; //This is the scale ratio between space and world: world pos is (objPos-shipPos)/spaceScale + shipCenter
 
 
@@ -39,6 +40,13 @@ public class Ship {
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
         skyBox.setTransformation(boxTransformation);
+
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        PlayerProfile profile = Bukkit.createPlayerProfile("kaka");
+        profile.setTextures();
+        meta.setOwnerProfile(profile);
+
         skyBox.setItemStack(Skull.getCustomSkull("http://textures.minecraft.net/texture/7c57f9192e81eb6897c24ecd4935cfb5a731a6f9a57abb51f2b35e8b4be7ebc");
 
         seat = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 98.5, 0.5), ArmorStand.class);

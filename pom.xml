@@ -40,6 +40,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>de.articdive</groupId>
             <artifactId>jnoise-pipeline</artifactId>
             <version>4.1.0</version>

@@ -12,6 +12,8 @@ import java.util.List;
 public class TechtreeInventories {
 
 
+    public static final String RETOUR = ChatColor.RESET + "" + ChatColor.GOLD + "Retour";
+
     public static Inventory getDefaultInventory() {
         List<Tech> major = Tech.getMajorBranches();
         Inventory inv = Bukkit.createInventory(null, 6*9, Techtree.INVENTORY_NAME);
@@ -35,10 +37,10 @@ public class TechtreeInventories {
 
     public static Inventory getTree(Tech t) {
         List<Tech> sons = t.getSons();
-        Inventory inv = Bukkit.createInventory(null, 6*9, Techtree.INVENTORY_NAME + t.getName()); //CHANGE TO MAKE PAS BO
+        Inventory inv = Bukkit.createInventory(null, 6*9, Techtree.INVENTORY_NAME + t.getName()); //TODO Correct name affiching
 
         int i = 0;
-        for(Tech son : sons) {
+        for(Tech son : sons) { //TODO get sons of sons si tech is unlocked
             ItemStack item = new ItemStack(son.getMaterial());
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(son.getName());
@@ -46,14 +48,17 @@ public class TechtreeInventories {
 
             inv.setItem(i, item);
 
-            i++; //TODO faire meilleur placement
+            i++;
 
         }
 
         ItemStack item = new ItemStack(Material.ARROW);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(ChatColor.RESET + "" + ChatColor.GOLD + "Retour");
+        meta.setDisplayName(RETOUR);
+        item.setItemMeta(meta);
+
+        inv.setItem(5*9 + 4, item);
 
 
         return inv;

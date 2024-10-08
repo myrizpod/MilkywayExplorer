@@ -20,4 +20,7 @@ public class Techtree {
         techsUnlocked.add(tech);
     }
 
+    public boolean hasTech(Tech tech) {
+        return techsUnlocked.contains(tech);
+    }
 }

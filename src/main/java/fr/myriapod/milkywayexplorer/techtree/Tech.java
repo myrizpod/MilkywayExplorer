@@ -51,7 +51,7 @@ public enum Tech {
         List<Tech> sons = new ArrayList<>();
 
         for(Tech t : Tech.values()) {
-            if(t.father.equals(this)) {
+            if(Objects.equals(t.father, this)) {
                 sons.add(t);
             }
         }

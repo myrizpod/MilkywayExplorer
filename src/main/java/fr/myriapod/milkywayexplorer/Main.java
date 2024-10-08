@@ -5,11 +5,12 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.surface.BlockInteractionListener;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.GenPlanetCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 //https://mm.tt/app/map/3454339276?t=W7hAsr21jL tech tree
@@ -24,9 +25,14 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        Bukkit.getLogger().info("Hello Bozo");
+        Bukkit.getLogger().info("-------------");
+        Bukkit.getLogger().info("MilkyWayExplorer enabled");
+        Bukkit.getLogger().info("Searching for a save...");
+        Bukkit.getLogger().info("-------------");
 
-        new Game();
+        createSchematics();
+
+        new Game(); //TODO load game by .json or .yml or just config.yml
 
         getCommand("gen").setExecutor(new GenPlanetCommand());
         getCommand("ship").setExecutor(new CreateShipCommand());
@@ -34,6 +40,24 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockInteractionListener(), this);
+
+    }
+
+    private void createSchematics() { //TODO soit voir comment lire/copy un directory de ressources soit faire une liste de tous les schematics
+        String fileName = "schematics/test.schem";
+        String dirName = "schematics";
+
+        File schematicsFile = new File(getDataFolder(), dirName); //creates folder in the server's files
+        if (!schematicsFile.exists()) {
+            schematicsFile.mkdir();
+        }
+
+        getResource(dirName);
+
+        saveResource(fileName, false);
+
+        new File(getDataFolder(), fileName)
+                .renameTo(new File(getDataFolder() + File.separator + dirName + File.separator + fileName));
 
     }
 

@@ -31,8 +31,8 @@ public class Ship {
         this.shipMomentum = new Vector3d(0,0,0);
 
         //create a skybox using a black #000000 head item display with reversed size
-        //TODO make it work cuz we dont get right head rn
         int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
+//        int skyBoxSize = player.getClientViewDistance()*16; CHECK RENDER DISTANCE *16 ??
         skyBox = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, shipCenter.y, 2.5), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
@@ -45,7 +45,9 @@ public class Ship {
         seat = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 98.5, 0.5), ArmorStand.class);
         seat.setGravity(false);
         seat.setInvulnerable(true);
-        seat.addPassenger(player); //TODO make player unable to dismount armorstand as well as make it invisible
+        seat.addScoreboardTag("ship");
+        seat.setInvisible(true);
+        seat.addPassenger(player); //TODO TEST make player unable to dismount armorstand as well as make it invisible
 
         controlCircle = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 101, 2.5), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");

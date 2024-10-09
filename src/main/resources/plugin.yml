@@ -14,6 +14,9 @@ commands:
   goto:
     description: gives momentum to user's ship (the user needs a ship...)
     permission: debug.goto
+  debug:
+    description: Do what ever you want with this...
+    permission: debug.debug
 
 
 permissions:

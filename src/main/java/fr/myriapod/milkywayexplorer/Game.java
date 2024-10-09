@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer;
 
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.Techtree;
@@ -12,11 +13,13 @@ import java.util.List;
 public class Game {
     private static List<Ship> shipList;
     private static Techtree techtree;
+    public ArrayList<SpacePlanet> allPlanets;
 
 
     public Game() {
         shipList = new ArrayList<>();
         techtree = new Techtree();
+        allPlanets = new ArrayList<>();
     }
 
     public static void addShip(Ship ship) {
@@ -33,12 +36,17 @@ public class Game {
         return null;
     }
 
+
     public static void unlockTech(Tech tech) {
         if(techtree.hasTech(tech)) {
             return;
         }
         techtree.unlockTech(tech);
-        Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(ChatColor.GREEN + "Vous avez debeloqué la tech " + ChatColor.GOLD + tech.getName()));
+        Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(ChatColor.GREEN + "Vous avez débloqué la tech " + ChatColor.GOLD + tech.getName()));
+    }
+
+    public static boolean hasTech(Tech tech) {
+        return techtree.hasTech(tech);
     }
 
 }

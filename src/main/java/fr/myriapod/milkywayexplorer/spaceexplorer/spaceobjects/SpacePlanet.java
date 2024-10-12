@@ -28,10 +28,10 @@ public class SpacePlanet {
 
     private double rotSpeed;
     private double revolveSpeed;
-    private final Ship ship;
+    private Ship ship;
 
 
-    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed, Ship ship) {
+    public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
         this.pos = pos;
         this.pixelAmount = pixelAmount;
         this.radius = radius;
@@ -40,8 +40,13 @@ public class SpacePlanet {
         this.generator = new Random(seed);
         this.revolveSpeed = revolveSpeed; //rotation on itself
         this.rotSpeed = rotSpeed; //rotation around star
+    }
+
+
+    public void setShip(Ship ship) {
         this.ship = ship;
     }
+
 
     public void create() {
 
@@ -67,7 +72,7 @@ public class SpacePlanet {
 
     }
 
-    public void rotatePlanet() {
+    public void updatePlanet() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
             private double currentAngle = 0;
             public void run() {

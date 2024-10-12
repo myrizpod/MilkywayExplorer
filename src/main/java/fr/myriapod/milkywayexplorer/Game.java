@@ -1,25 +1,27 @@
 package fr.myriapod.milkywayexplorer;
 
-import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
+import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.Techtree;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
     private static List<Ship> shipList;
     private static Techtree techtree;
-    public ArrayList<SpacePlanet> allPlanets;
+    private static Univers univers;
+
 
 
     public Game() {
         shipList = new ArrayList<>();
         techtree = new Techtree();
-        allPlanets = new ArrayList<>();
+        univers = new Univers();
     }
 
     public static void addShip(Ship ship) {
@@ -49,4 +51,8 @@ public class Game {
         return techtree.hasTech(tech);
     }
 
+    public static void shipEnters(Ship ship) {
+        univers.shipEnters(ship);
+
+    }
 }

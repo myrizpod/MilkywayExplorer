@@ -46,7 +46,8 @@ public class TechtreeInventories {
         int i = 0;
         for(Tech son : iterate) { //TODO get sons of sons si tech is unlocked
             if(Game.hasTech(son)) {
-                iterate.addAll(son.getSons());
+                sons.remove(son);
+                sons.addAll(son.getSons()); //I think need to put sons.addAll()
             }
 
             List<String> lore = new ArrayList<>();

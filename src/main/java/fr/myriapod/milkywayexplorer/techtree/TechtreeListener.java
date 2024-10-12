@@ -2,6 +2,7 @@ package fr.myriapod.milkywayexplorer.techtree;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Ressource;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,8 +36,10 @@ public class TechtreeListener implements Listener {
             for(Tech t : majorTechs) {
                 if(item.getType().equals(t.getMaterial()) && item.getItemMeta().getDisplayName().equals(t.getName())) {
                     player.openInventory(TechtreeInventories.getTree(t));
+
                 }
             }
+            event.setCancelled(true);
         }
 
 
@@ -54,8 +57,27 @@ public class TechtreeListener implements Listener {
                         Map<Ressource, Integer> playerRessources = Ressource.inventoryToRessources(player.getInventory());
                         Map<Ressource, Integer> ressourcesManquantes = Ressource.ressourcesManquantes(playerRessources, son.getPrice());
 
-                        if(ressourcesManquantes == null) {
-                            Game.unlockTech(son);
+                        if(ressourcesManquantes.isEmpty()) {
+                            if(! Game.hasTech(son)) {
+
+                                Game.unlockTech(son);
+
+                                son.getPrice().forEach((ressource, integer) -> {
+                                    int remove = integer;
+                                    for (ItemStack i : player.getInventory().getContents()) {
+                                        if (ressource.isEqual(i)) {
+                                            ItemStack it = i.clone();
+                                            it.setAmount(remove);
+                                            player.getInventory().removeItem(it);
+                                        }
+                                    }
+                                });
+
+                                player.openInventory(TechtreeInventories.getTree(t));
+
+                            } else {
+                                player.sendMessage(ChatColor.RED + "Vous avez deja deblqué cette tech !");
+                            }
 
                         } else {
                             String message = ChatColor.RED + "Il vous manque: ";
@@ -67,10 +89,9 @@ public class TechtreeListener implements Listener {
                         }
                     }
                 }
+                event.setCancelled(true);
             }
         }
-
-        event.setCancelled(true);
 
     }
 

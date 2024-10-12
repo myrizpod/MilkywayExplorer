@@ -41,6 +41,18 @@ public enum Ressource {
     }
 
 
+    public boolean isEqual(ItemStack item) {
+        if(item == null) {
+            return false;
+        }
+
+        if(item.getItemMeta().hasCustomModelData() && item.getItemMeta().hasDisplayName()) {
+            return item.getType().equals(material) && item.getItemMeta().getCustomModelData() == modelData;
+        }
+        return false;
+    }
+
+
     public static Map<Ressource, Integer> inventoryToRessources(Inventory inventory) {
         Map<Ressource, Integer> ressources = new HashMap<>();
 
@@ -53,8 +65,12 @@ public enum Ressource {
             }
 
             for (Ressource r : Ressource.values()) {
-                if (item.getItemMeta().getCustomModelData() == r.modelData && item.getType().equals(r.material)) {
-                    ressources.put(r, item.getAmount());
+                if (r.isEqual(item)) {
+                    if(ressources.containsKey(r)) {
+                        ressources.put(r, ressources.get(r) + item.getAmount());
+                    } else {
+                        ressources.put(r, item.getAmount());
+                    }
                 }
             }
         }
@@ -64,25 +80,25 @@ public enum Ressource {
 
 
     /**
-     * @Return Retourne null si les ressources dans ressources sont plus grandes que celles demandées dans price sinon retourne la map des materiaux manquants
+     * @Return Retourne une map vide si les ressources dans ressources sont plus grandes que celles demandées dans price sinon retourne la map des materiaux manquants
      *
      */
     public static Map<Ressource, Integer> ressourcesManquantes(Map<Ressource, Integer> ressources, Map<Ressource, Integer> price) {
-        Map<Ressource, Integer> retourne = null;
+        Map<Ressource, Integer> retourne = new HashMap<>();
 
         if(ressources.isEmpty()) {
-            retourne = price;
+            return price;
         } if(price.isEmpty()) {
-            retourne = null;
+            return retourne;
         }
 
         for(Ressource r : price.keySet()) {
-            if(ressources.get(r) != null) {
+            if(ressources.containsKey(r)) {
                 if(ressources.get(r) < price.get(r)) {
-                    if(retourne == null) retourne = new HashMap<>();
-
                     retourne.put(r, price.get(r) - ressources.get(r));
                 }
+            } else {
+                retourne.put(r, price.get(r));
             }
         }
 

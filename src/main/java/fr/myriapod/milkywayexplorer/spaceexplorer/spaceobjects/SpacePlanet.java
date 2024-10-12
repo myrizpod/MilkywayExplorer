@@ -18,6 +18,13 @@ import java.util.Random;
 
 public class SpacePlanet {
 
+
+    private final double MIN_ROTATION_SPEED = 0.01;
+    private final double MAX_ROTATION_SPEED = 0.05;
+    private final double MIN_RESOLVE_SPEED = 0.05;
+    private final double MAX_RESOLVE_SPEED = 0.1;
+
+
     private ArrayList<SpacePixel> pixelComponents;
     private Vector3d pos;
     private int pixelAmount;
@@ -25,7 +32,6 @@ public class SpacePlanet {
     private final int seed;
     private Vector3d starPos;
     private final Random generator;
-
     private double rotSpeed;
     private double revolveSpeed;
     private Ship ship;
@@ -43,6 +49,18 @@ public class SpacePlanet {
     }
 
 
+    public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed) {
+        this.pos = pos;
+        this.pixelAmount = 400;
+        this.radius = radius;
+        this.seed = seed; //seed defines color and planet pattern
+        this.starPos = starPos;
+        this.generator = new Random(seed);
+        this.revolveSpeed = generator.nextDouble(MIN_RESOLVE_SPEED, MAX_RESOLVE_SPEED); //rotation on itself
+        this.rotSpeed = generator.nextDouble(MIN_ROTATION_SPEED, MAX_ROTATION_SPEED); //rotation around star
+    }
+
+
     public void setShip(Ship ship) {
         this.ship = ship;
     }
@@ -50,9 +68,8 @@ public class SpacePlanet {
 
     public void create() {
 
-        JNoise noisePipeline=JNoise.newBuilder().perlin(seed,Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
-        // ^ this is funny noise pattern using complicated library TODO make some of its parameters depend on seed
-        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount,radius); //4th dimension is angle in radians
+        JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library TODO make some of its parameters depend on seed
+        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount, radius); //4th dimension is angle in radians
         pixelComponents = new ArrayList<>();
 
         ArrayList<Vector3i> colorlist = new ArrayList<>();

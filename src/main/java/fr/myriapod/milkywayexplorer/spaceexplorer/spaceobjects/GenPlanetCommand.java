@@ -25,7 +25,7 @@ public class GenPlanetCommand implements CommandExecutor {
 //        Vector3d pos = new Vector3d(Double.parseDouble(args[2]),Double.parseDouble(args[3]),Double.parseDouble(args[4]));
 
 
-        Game.shipEnters(Game.getShipByPlayer(player));
+        Game.shipEnters(0, Game.getShipByPlayer(player));
 
 //        newPlanet = new SpacePlanet(pos, Integer.parseInt(args[0]), Double.parseDouble(args[1]), new Random().nextInt(),new Vector3d(0,100,0),0.05,-0.05, Game.getShipByPlayer(player));
 //        newPlanet.create();

@@ -21,12 +21,13 @@ Holds everything tied to planet world gen and activities on the surface of these
 -Lost structures/crashed ships that would also be dungeons  
 -Saving/loading/calculating player built structures  
 -Dungeon generation
+-Two Ores generation system: one with gisement (certain beginning of game drills works), other with noisemap (multi-ore generation but slower and more middle game)
 
 
 <h1>Player related</h1>  
 
-Holds everything that doesnt go in other categories
+Holds everything that doesn't go in other categories
 -Tech tree  
--Player managment(health,oxygen,survival,movement)  
+-Player management(health,oxygen,survival,movement)  
 -menu of interactive stuff  
 -player build machines

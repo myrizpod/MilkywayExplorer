@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TechtreeInventories {
 
@@ -39,16 +40,11 @@ public class TechtreeInventories {
 
 
     public static Inventory getTree(Tech t) {
-        List<Tech> sons = t.getSons();
+        List<Tech> sons = t.getArborescenceUnlocked();
         Inventory inv = Bukkit.createInventory(null, 6*9, Techtree.INVENTORY_NAME + t.getName()); //TODO Correct name affiching
-        List<Tech> iterate = new ArrayList<>(sons);
 
         int i = 0;
-        for(Tech son : iterate) { //TODO get sons of sons si tech is unlocked
-            if(Game.hasTech(son)) {
-                sons.remove(son);
-                sons.addAll(son.getSons()); //I think need to put sons.addAll()
-            }
+        for(Tech son : sons) {
 
             List<String> lore = new ArrayList<>();
             ItemStack item = new ItemStack(son.getMaterial());

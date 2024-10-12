@@ -52,7 +52,7 @@ public class TechtreeListener implements Listener {
                     return;
                 }
 
-                for(Tech son : t.getSons()) {
+                for(Tech son : t.getArborescenceUnlocked()) {
                     if(item.getType().equals(son.getMaterial()) && item.getItemMeta().getDisplayName().equals(son.getName())) {
                         Map<Ressource, Integer> playerRessources = Ressource.inventoryToRessources(player.getInventory());
                         Map<Ressource, Integer> ressourcesManquantes = Ressource.ressourcesManquantes(playerRessources, son.getPrice());
@@ -76,7 +76,7 @@ public class TechtreeListener implements Listener {
                                 player.openInventory(TechtreeInventories.getTree(t));
 
                             } else {
-                                player.sendMessage(ChatColor.RED + "Vous avez deja deblqué cette tech !");
+                                player.sendMessage(ChatColor.RED + "Vous avez deja debloqué cette tech !");
                             }
 
                         } else {

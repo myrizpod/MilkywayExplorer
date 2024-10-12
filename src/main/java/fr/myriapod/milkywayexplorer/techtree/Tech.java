@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer.techtree;
 
+import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.Tuple;
 
@@ -10,7 +11,7 @@ import org.bukkit.Material;
 public enum Tech {
     AUTOMATISATION_ESSENTIALS("Essentiels de l'automatisation", Material.GRAY_CARPET, null, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.WOOD, 10)),
     SMELTING("Smelting", Material.FURNACE, AUTOMATISATION_ESSENTIALS, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.COPPER, 15)),
-    COMPLEX_CRAFTING("Crafting", Material.CRAFTING_TABLE,AUTOMATISATION_ESSENTIALS, new Tuple<>(Ressource.IRON, 20)),
+    COMPLEX_CRAFTING("Crafting", Material.CRAFTING_TABLE, AUTOMATISATION_ESSENTIALS, new Tuple<>(Ressource.IRON, 20)),
     ADVANCED_CRAFTNG("Crafting Avancé", Material.CRAFTER, COMPLEX_CRAFTING, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.COPPER, 10), new Tuple<>(Ressource.SULFUR, 10));
 
 
@@ -53,6 +54,26 @@ public enum Tech {
         for(Tech t : Tech.values()) {
             if(Objects.equals(t.father, this)) {
                 sons.add(t);
+            }
+        }
+
+        return sons;
+    }
+
+    public List<Tech> getArborescenceUnlocked() {
+        List<Tech> sons = new ArrayList<>(getSons());
+        ListIterator<Tech> iterate = new ArrayList<>(sons).listIterator();
+
+
+        while (iterate.hasNext()) {
+            Tech son = iterate.next();
+            if (Game.hasTech(son)) {
+                iterate.remove();
+                sons.remove(son);
+                for(Tech tech : son.getArborescenceUnlocked()) {
+                    iterate.add(tech);
+                    sons.add(tech);
+                }
             }
         }
 

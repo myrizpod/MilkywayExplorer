@@ -21,7 +21,7 @@ public class BlockInteractionListener implements Listener {
         Entity interaction = event.getRightClicked();
         Set<String> tags = interaction.getScoreboardTags();
 
-        if(interaction.getScoreboardTags().size() > 1) return;
+        if(interaction.getScoreboardTags().isEmpty()) return;
 
         String tag = (String) tags.toArray()[0];
         switch (tag) {

@@ -32,10 +32,13 @@ public class Univers {
         world.setClearWeatherDuration(Integer.MAX_VALUE);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
 
+
+    }
+
+    public void loadAllStarSystems(){
         StarSystem s = new StarSystem(new Vector3d(0 , 0, 0), new Random());
 
         allLoadedSystems.add(s);
-
 
         for(StarSystem ss : allLoadedSystems) {
             ss.loadSystem();

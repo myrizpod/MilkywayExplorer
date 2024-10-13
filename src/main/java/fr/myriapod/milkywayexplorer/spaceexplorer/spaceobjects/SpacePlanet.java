@@ -15,14 +15,15 @@ import org.joml.Vector4d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class SpacePlanet {
 
 
     private final double MIN_ROTATION_SPEED = 0.01;
     private final double MAX_ROTATION_SPEED = 0.05;
-    private final double MIN_RESOLVE_SPEED = 0.05;
-    private final double MAX_RESOLVE_SPEED = 0.1;
+    private final double MIN_RESOLVE_SPEED = -0.01;
+    private final double MAX_RESOLVE_SPEED = 0.01;
 
 
     private ArrayList<SpacePixel> pixelComponents;
@@ -51,7 +52,7 @@ public class SpacePlanet {
 
     public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed) {
         this.pos = pos;
-        this.pixelAmount = 400;
+        this.pixelAmount = (int) (Maths.getSphereArea(radius) * 0.0032) ;
         this.radius = radius;
         this.seed = seed; //seed defines color and planet pattern
         this.starPos = starPos;
@@ -86,7 +87,6 @@ public class SpacePlanet {
             pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
 
         }
-
     }
 
     public void updatePlanet() {

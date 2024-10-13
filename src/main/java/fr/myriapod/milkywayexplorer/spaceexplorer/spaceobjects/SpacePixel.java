@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 
+import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -27,7 +28,7 @@ public class SpacePixel {
         this.currentAngle = angle; // angle of the pixel around the vertical axis of the planet in degrees
 
 
-        pixel = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z), TextDisplay.class);
+        pixel = Game.getUniversWorld().spawn(new Location(Game.getUniversWorld(), pos.x, pos.y, pos.z), TextDisplay.class);
         pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
         pixel.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         Transformation transformation = pixel.getTransformation();
@@ -69,6 +70,6 @@ public class SpacePixel {
         //pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z)); //old way to render
         renderPos = new Vector3d((pos.x - ship.getPos().x) / ship.getSpaceScale() + ship.getWorldCenter().x , (pos.y - ship.getPos().y) / ship.getSpaceScale() + ship.getWorldCenter().y , (pos.z - ship.getPos().z) / ship.getSpaceScale() + ship.getWorldCenter().z);
         //pos.sub(ship.getPos()).add(ship.getWorldCenter()).div(ship.getSpaceScale())
-        pixel.teleport(new Location(Bukkit.getWorld("world"), renderPos.x , renderPos.y , renderPos.z));
+        pixel.teleport(new Location(Game.getUniversWorld(), renderPos.x , renderPos.y , renderPos.z));
     }
 }

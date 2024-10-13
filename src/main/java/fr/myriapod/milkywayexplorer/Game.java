@@ -27,6 +27,7 @@ public class Game {
         shipList = new ArrayList<>();
         techtree = new Techtree();
         univers = new Univers();
+        univers.loadAllStarSystems();
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendTitle(ChatColor.GOLD + "MilkyWayExplorer", ChatColor.DARK_AQUA + "Bienvenue dans", 10, 50, 10);
@@ -35,6 +36,7 @@ public class Game {
             Location shipPos = player.getLocation().add(10, 0, 0);
             planet.getSurfacePlanet().shipLands(new Vector3d(shipPos.getX(), shipPos.getY(), shipPos.getZ()));
         });
+        Bukkit.getLogger().info(String.valueOf(univers));
     }
 
     public static void addShip(Ship ship) {

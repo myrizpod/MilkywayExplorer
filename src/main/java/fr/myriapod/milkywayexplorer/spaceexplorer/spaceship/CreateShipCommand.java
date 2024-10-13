@@ -12,6 +12,7 @@ public class CreateShipCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Player player = (Player) commandSender;
+        commandSender.sendMessage("Created new ship!");
 
         newShip = new Ship(player);
         newShip.movementLoop();

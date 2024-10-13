@@ -49,14 +49,14 @@ public class Main extends JavaPlugin {
         if (!schematicsFile.exists()) {
             schematicsFile.mkdir();
         }
-
+        /*
         getResource(dirName);
 
         saveResource(fileName, false);
 
         new File(getDataFolder(), fileName)
                 .renameTo(new File(getDataFolder() + File.separator + dirName + File.separator + fileName));
-
+        */
     }
 
 

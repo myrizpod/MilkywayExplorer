@@ -1,5 +1,7 @@
 package fr.myriapod.milkywayexplorer.mytools;
 
+import com.sun.source.tree.BreakTree;
+import org.joml.Vector2d;
 import org.joml.Vector4d;
 
 import java.util.ArrayList;
@@ -25,6 +27,14 @@ public class Maths {
 
         }
         return pointsPos;
+    }
+
+    public static double getSphereArea(double radius){
+        return 4 * Math.PI * radius * radius ;
+    }
+
+    public static double getSpherePointSize(int samples, double radius){
+        return Math.sqrt((4 * Math.PI * radius * radius) / samples);
     }
 
 

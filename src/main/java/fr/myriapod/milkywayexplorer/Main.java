@@ -42,7 +42,7 @@ public class Main extends JavaPlugin {
     }
 
     private void createSchematics() { //TODO soit voir comment lire/copy un directory de ressources soit faire une liste de tous les schematics
-        String fileName = "schematics/test.schem";
+        String fileName = "ship.schem";
         String dirName = "schematics";
 
         File schematicsFile = new File(getDataFolder(), dirName); //creates folder in the server's files

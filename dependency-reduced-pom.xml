@@ -47,6 +47,10 @@
       <name>Sonatype Snapshots</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
+    <repository>
+      <id>enginehub-maven</id>
+      <url>https://maven.enginehub.org/repo/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>

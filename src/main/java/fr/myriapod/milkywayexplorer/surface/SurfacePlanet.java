@@ -1,5 +1,6 @@
 package fr.myriapod.milkywayexplorer.surface;
 
+import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
@@ -48,7 +49,7 @@ public class SurfacePlanet {
 
         Bukkit.getLogger().info("inter: " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
 
-        //TODO Summon ship schem
+        new PasteSchem().generate(loc, "ship");
 
     }
 }

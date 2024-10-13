@@ -121,6 +121,8 @@ public class SpacePlanet {
             }
 
             private void updateAllPoints() {
+                if(ship == null) return;
+
                 for (SpacePixel eachPixel : pixelComponents) {
                     eachPixel.renderToShip(ship);
                 }

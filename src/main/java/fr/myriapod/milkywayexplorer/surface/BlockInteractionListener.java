@@ -1,8 +1,10 @@
 package fr.myriapod.milkywayexplorer.surface;
 
+import fr.myriapod.milkywayexplorer.Planet;
+import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +29,16 @@ public class BlockInteractionListener implements Listener {
         switch (tag) {
             case "techtree":
                 player.openInventory(TechtreeInventories.getDefaultInventory());
+                break;
+
+            case "ship":
+                Planet planet = Game.getPlayerPlanet(player);
+
+                Bukkit.getLogger().info(String.valueOf(planet));
+
+                if(planet == null) return;
+
+                planet.teleportPlayerToSpace(player);
 
             }
 

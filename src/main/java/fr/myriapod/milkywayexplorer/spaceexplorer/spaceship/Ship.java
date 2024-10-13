@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
@@ -23,6 +24,7 @@ public class Ship {
 
 
     public Ship(Player player) {
+        World world = player.getWorld();
 
         Game.addShip(this);
 
@@ -33,7 +35,7 @@ public class Ship {
         //create a skybox using a black #000000 head item display with reversed size
         int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
 //        int skyBoxSize = player.getClientViewDistance()*16; CHECK RENDER DISTANCE *16 ??
-        skyBox = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, shipCenter.y, 2.5), ItemDisplay.class);
+        skyBox = world.spawn(new Location(world, 0.5, shipCenter.y, 2.5), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-150);
         boxTransformation.getTranslation().set(0, (float) -skyBoxSize /4, 0);
@@ -42,14 +44,14 @@ public class Ship {
 
         skyBox.setItemStack(Skull.getSpaceSkull());
 
-        seat = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 98.5, 0.5), ArmorStand.class);
+        seat = world.spawn(new Location(world, 0.5, 98.5, 0.5), ArmorStand.class);
         seat.setGravity(false);
         seat.setInvulnerable(true);
         seat.addScoreboardTag("ship");
         seat.setInvisible(true);
         seat.addPassenger(player); //TODO TEST make player unable to dismount armorstand as well as make it invisible
 
-        controlCircle = Bukkit.getWorld("world").spawn(new Location(Bukkit.getWorld("world"), 0.5, 101, 2.5), TextDisplay.class);
+        controlCircle = world.spawn(new Location(world, 0.5, 101, 2.5), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");
         controlCircle.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         Transformation transformation = controlCircle.getTransformation();

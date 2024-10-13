@@ -2,6 +2,7 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -32,15 +33,27 @@ public class StarSystem {
     public void shipEnters(Ship ship) {
         for(Planet p : allPlanets) {
             SpacePlanet sp = p.getSpacePlanet();
-            sp.create();
-            sp.updatePlanet();
             sp.setShip(ship);
         }
     }
 
     public Planet getPlanet(int id) {
-        return allPlanets.get(0);
+        return allPlanets.get(id);
     }
 
 
+    public void loadSystem() {
+        for(Planet p : allPlanets) {
+            SpacePlanet sp = p.getSpacePlanet();
+            sp.create();
+            sp.updatePlanet();
+
+            SurfacePlanet spl = p.getSurfacePlanet();
+            spl.generate();
+        }
+    }
+
+    public List<Planet> getAllPlanets() {
+        return allPlanets;
+    }
 }

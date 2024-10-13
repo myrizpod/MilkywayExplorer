@@ -1,6 +1,7 @@
 package fr.myriapod.milkywayexplorer;
 
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,11 +33,13 @@ public class Planet {
 
 
     public void teleportPlayerToSurface(Player player) {
-        player.teleport(new Location(surfacePlanet.getWorld(), 0 ,100, 0));
+        player.teleport(new Location(surfacePlanet.getWorld(), 0 ,surfacePlanet.getWorld().getHighestBlockYAt(0, 0) + 1.5, 0));
     }
 
     public void teleportPlayerToSpace(Player player) {
         player.teleport(new Location(Game.getUniversWorld(), 0 ,100, 0));
+
+        new Ship(player);
     }
 
 

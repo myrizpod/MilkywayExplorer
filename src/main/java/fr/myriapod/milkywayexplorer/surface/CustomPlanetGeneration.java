@@ -28,6 +28,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     @Override
     public void generateNoise(WorldInfo worldInfo, Random random, int chunkX, int chunkZ, ChunkData chunkData) {
 //        int y = 30;
+        //TODO make shit work https://www.ronja-tutorials.com/post/029-tiling-noise/
         for(int y = 0; y < 130 && y < chunkData.getMaxHeight(); y++) { //can go from y = chunkData.getMinHeight() (-65)
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {

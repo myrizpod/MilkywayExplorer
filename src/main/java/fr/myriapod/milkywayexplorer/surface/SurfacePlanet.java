@@ -1,21 +1,31 @@
 package fr.myriapod.milkywayexplorer.surface;
 
+import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
+import org.joml.Random;
 import org.joml.Vector3d;
 
 public class SurfacePlanet {
 
 
-    private int radius;
+    private int area;
     private int seed;
+    private final Ressource[] ores;
     private World world;
 
     public SurfacePlanet(int radius, int seed) {
-        this.radius = radius;
+        this.area = (int) (radius * radius * Math.PI * 4);
         this.seed = seed;
+
+        Ressource[] ores = new Ressource[3];
+        Ressource[] allOres = Ressource.values();
+        for (int i = 0; i < ores.length ; i++) {
+            ores[i] = allOres[new Random(seed).nextInt(allOres.length)];
+        }
+        this.ores = ores;
     }
 
     public World getWorld() {
@@ -49,7 +59,7 @@ public class SurfacePlanet {
 
         Bukkit.getLogger().info("inter: " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
 
-        new PasteSchem().generate(loc, "ship");
+//        new PasteSchem().generate(loc, "ship");
 
     }
 }

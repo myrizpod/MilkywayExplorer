@@ -16,9 +16,14 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private JNoise noisePipeline;
     private double scale = 0.005;
     private JNoise colorPipeline;
+    private final double TILE_WIDTH;
+    private final double TILE_HEIGHT;
 
 
     public CustomPlanetGeneration(int seed) {
+        TILE_WIDTH = 100;
+        TILE_HEIGHT = 100;
+
         noisePipeline = JNoise.newBuilder().fastSimplex(seed, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale).octavate(3,1.2,2.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
         colorPipeline = JNoise.newBuilder().fastSimplex(seed+1, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale/2).octavate(4,1.2,4.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
 
@@ -28,16 +33,32 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     @Override
     public void generateNoise(WorldInfo worldInfo, Random random, int chunkX, int chunkZ, ChunkData chunkData) {
 //        int y = 30;
-        //TODO make shit work https://www.ronja-tutorials.com/post/029-tiling-noise/
+        //TODO make shit work (I think it works now but test cuz we never know)
         for(int y = 0; y < 130 && y < chunkData.getMaxHeight(); y++) { //can go from y = chunkData.getMinHeight() (-65)
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    double noise = noisePipeline.evaluateNoise(x + (chunkX * 16), z + (chunkZ * 16));
+
+
+                    // Sample noise at smaller intervals
+                    double actualX = x + chunkX * 16;
+                    double actualZ = z + chunkZ * 16;
+                    double s = actualX / TILE_WIDTH;
+                    double t = actualZ / TILE_HEIGHT;
+
+                    // Calculate our 4D coordinates - I have no clue on how that works
+
+                    double nx = 1 + Math.cos(s*2*Math.PI) * 1/(2*Math.PI);
+                    double ny = 1 + Math.cos(t*2*Math.PI) * 1/(2*Math.PI);
+                    double nz = 1 + Math.sin(s*2*Math.PI) * 1/(2*Math.PI);
+                    double nw = 1 + Math.sin(t*2*Math.PI) * 1/(2*Math.PI);
+
+                    double noise = noisePipeline.evaluateNoise(nx, ny, nz, nw);
+                    double colorNoise = colorPipeline.evaluateNoise(nx, ny, nz, nw);
 
                     if (! (65 + (10 * noise) < y)) { //65 = normal lvl, 10 = variations, noise can go from 0 to 1
-                        if (colorPipeline.evaluateNoise(x + (chunkX * 16),z + (chunkZ * 16)) < 0.4) {
+                        if (colorNoise < 0.4) {
                             chunkData.setBlock(x, y, z, Material.RED_TERRACOTTA);
-                        } else if (colorPipeline.evaluateNoise(x + (chunkX * 16),z + (chunkZ * 16)) > 0.6) {
+                        } else if (colorNoise > 0.6) {
                             chunkData.setBlock(x, y, z, Material.NETHERRACK);
                         } else {
                             chunkData.setBlock(x, y, z, Material.STRIPPED_MANGROVE_WOOD);

@@ -19,8 +19,8 @@ public class Ship {
     private final TextDisplay controlCircle;
     private final ItemDisplay skyBox;
     private Vector3d shipPos; //pos of the ship in space
-    private Vector2d shipRot; // rotation of the ship (pitch[-90;+90] yaw[-180;+180])
-    private Vector2d shipRotMomentum; //the rotation momentum of the ship
+    private Vector3d shipRot; // rotation of the ship (pitch[-90;+90] yaw[-180;+180] roll[-180;+180])
+    private Vector3d shipRotMomentum; //the rotation momentum of the ship
     private Vector3d shipMomentum; //a vector of the current speed of the ship. is added to pos every X time
     private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
     private static final int spaceScale = 50; //This is the scale ratio between space and world: world pos is (objPos-shipPos)/spaceScale + shipCenter
@@ -33,9 +33,9 @@ public class Ship {
 
         this.player = player;
         this.shipPos = new Vector3d(0,0,0);
-        this.shipRot = new Vector2d(0,0);
+        this.shipRot = new Vector3d(0,0,0);
         this.shipMomentum = new Vector3d(0,0,0);
-        this.shipRotMomentum = new Vector2d(0,0);
+        this.shipRotMomentum = new Vector3d(0,0,0);
 
         //create a skybox using a black #000000 head item display with reversed size
         int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
@@ -81,13 +81,17 @@ public class Ship {
         return shipCenter;
     }
 
-    public void moveShip(Vector3d movement, Vector2d rotMovement){
+    public void moveShip(Vector3d movement, Vector3d rotMovement){
         shipPos.add(movement);
         shipRot.add(rotMovement);
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void rotFriction() { //make it so when u rotate the ship the rot slows down (not realistic but feels nice)
+        shipMomentum = shipRotMomentum.div(1.5);
     }
 
 

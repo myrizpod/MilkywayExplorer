@@ -47,18 +47,18 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
                     // Calculate our 4D coordinates - I have no clue on how that works
 
-                    double nx = 1 + Math.cos(s*2*Math.PI) * 1/(2*Math.PI);
-                    double ny = 1 + Math.cos(t*2*Math.PI) * 1/(2*Math.PI);
-                    double nz = 1 + Math.sin(s*2*Math.PI) * 1/(2*Math.PI);
-                    double nw = 1 + Math.sin(t*2*Math.PI) * 1/(2*Math.PI);
+                    double nx = 1 + Math.cos(s*2*Math.PI) * 1/(2*Math.PI) * TILE_WIDTH;
+                    double ny = 1 + Math.cos(t*2*Math.PI) * 1/(2*Math.PI) * TILE_HEIGHT;
+                    double nz = 1 + Math.sin(s*2*Math.PI) * 1/(2*Math.PI) * TILE_WIDTH;
+                    double nw = 1 + Math.sin(t*2*Math.PI) * 1/(2*Math.PI) * TILE_HEIGHT;
 
                     double noise = noisePipeline.evaluateNoise(nx, ny, nz, nw);
                     double colorNoise = colorPipeline.evaluateNoise(nx, ny, nz, nw);
 
-                    if (! (65 + (10 * noise) < y)) { //65 = normal lvl, 10 = variations, noise can go from 0 to 1
-                        if (colorNoise < 0.4) {
+                    if (! (65 + (20 * noise) < y)) { //65 = normal lvl, 10 = variations, noise can go from 0 to 1
+                        if (colorNoise < 0.43) {
                             chunkData.setBlock(x, y, z, Material.RED_TERRACOTTA);
-                        } else if (colorNoise > 0.6) {
+                        } else if (colorNoise > 0.57) {
                             chunkData.setBlock(x, y, z, Material.NETHERRACK);
                         } else {
                             chunkData.setBlock(x, y, z, Material.STRIPPED_MANGROVE_WOOD);

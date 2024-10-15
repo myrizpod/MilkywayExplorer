@@ -28,7 +28,7 @@ public class SpacePixel {
         this.currentAngle = angle; // angle of the pixel around the vertical axis of the planet in degrees
 
 
-        pixel = Game.getUniversWorld().spawn(new Location(Game.getUniversWorld(), pos.x, pos.y, pos.z), TextDisplay.class);
+        pixel = Game.getUniversWorld().spawn(new Location(Game.getUniversWorld(), 0, 0, 0), TextDisplay.class);
         pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
         pixel.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         Transformation transformation = pixel.getTransformation();

@@ -1,10 +1,12 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class SpaceShipListener implements Listener {
 

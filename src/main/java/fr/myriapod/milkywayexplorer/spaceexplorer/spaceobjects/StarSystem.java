@@ -45,6 +45,8 @@ public class StarSystem {
         }
         SpacePlanet s = star.getSpacePlanet();
         s.setShip(ship);
+
+        ship.movementLoop();
     }
 
     public Planet getPlanet(int id) {

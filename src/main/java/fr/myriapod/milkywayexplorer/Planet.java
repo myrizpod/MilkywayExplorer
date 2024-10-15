@@ -38,8 +38,8 @@ public class Planet {
 
     public void teleportPlayerToSpace(Player player) {
         player.teleport(new Location(Game.getUniversWorld(), 0 ,100, 0));
-        Ship bob = new Ship(player);
-        Game.shipEnters(0, bob);
+        Ship ship = new Ship(player);
+        Game.shipEnters(0, ship);
     }
 
 

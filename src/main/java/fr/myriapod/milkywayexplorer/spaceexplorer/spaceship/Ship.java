@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.util.Transformation;
-import org.joml.Vector2d;
 import org.joml.Vector3d;
 
 public class Ship {
@@ -98,7 +98,52 @@ public class Ship {
     public void movementLoop() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
             public void run() {
+                getMovement();
                 moveShip(shipMomentum,shipRotMomentum);
+
+            }
+
+            Vector3d lastPos;
+
+            private void getMovement() {
+                if(player.getScoreboardTags().contains("onShip")) {
+                    Location loc = player.getLocation();
+                    Vector3d pos = new Vector3d(loc.getX(), loc.getY(), loc.getX());
+
+                    if(lastPos == null) lastPos = pos;
+
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.001);
+                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.1);
+                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(0.001);
+
+                    if(pos.equals(lastPos)) return;
+
+                    player.sendMessage("Pos: " + pos.toString());
+                    player.sendMessage("LastPos: " + lastPos.toString());
+
+                    //TODO WEIRD PROBS AND Z NOT WORKING...
+
+                    if(pos.x < lastPos.x) {
+                        shipMomentum.add(-0.5, 0, 0);
+                    } else if (pos.x > lastPos.x) {
+                        shipMomentum.add(0.5, 0, 0);
+                    } else if (pos.z < lastPos.z) {
+                        shipMomentum.add(0, 0, -0.5);
+                    } else if (pos.z > lastPos.z) {
+                        shipMomentum.add(0, 0, 0.5);
+                    }
+
+                    lastPos = pos;
+
+//                    player.teleport(seat.getLocation().add(0, 0.7, 0));
+
+                    player.sendMessage("Momentum: " + shipMomentum.toString());
+
+                } else {
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue());
+                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getDefaultValue());
+                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).getDefaultValue());
+                }
 
             }
         }, 20, 1);

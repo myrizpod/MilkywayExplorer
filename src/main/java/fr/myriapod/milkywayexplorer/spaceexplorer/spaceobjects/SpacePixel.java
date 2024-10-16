@@ -12,6 +12,10 @@ import org.joml.Vector3d;
 
 public class SpacePixel {
 
+    private final Color BACKGROUND_COLOR = Color.fromARGB(0, 0, 0, 0);
+    private final int TP_DURATION = 5;
+
+    private double scale;
     private TextDisplay pixel;
     private String color;
     private Vector3d pos;
@@ -23,6 +27,7 @@ public class SpacePixel {
     public SpacePixel(Vector3d pos,Vector3d trigSpherePos, String color, double size,double angle){
         this.pos = pos;
         this.size = size;
+        this.scale = 3;
         this.color = color; //hex color code
         this.trigSpherePos = trigSpherePos; //position on the trig sphere: [-1;1] kinda usleless
         this.currentAngle = angle; // angle of the pixel around the vertical axis of the planet in degrees
@@ -30,12 +35,12 @@ public class SpacePixel {
 
         pixel = Game.getUniversWorld().spawn(new Location(Game.getUniversWorld(), 0, 0, 0), TextDisplay.class);
         pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
-        pixel.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
+        pixel.setBackgroundColor(BACKGROUND_COLOR);
         Transformation transformation = pixel.getTransformation();
         pixel.setBillboard(Display.Billboard.CENTER);
-        transformation.getScale().set(3);
+        transformation.getScale().set(scale);
         pixel.setTransformation(transformation);
-        pixel.setTeleportDuration(5);
+        pixel.setTeleportDuration(TP_DURATION);
     }
 
     public void move(Vector3d shift){

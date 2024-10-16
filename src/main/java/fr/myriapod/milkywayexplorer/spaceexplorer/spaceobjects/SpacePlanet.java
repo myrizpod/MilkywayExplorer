@@ -24,6 +24,7 @@ public class SpacePlanet {
     private final double MAX_ROTATION_SPEED = 0.05;
     private final double MIN_RESOLVE_SPEED = -0.01;
     private final double MAX_RESOLVE_SPEED = 0.01;
+    private final double RAPPORT_NB_POINT_SURFACE = 0.0032;
 
 
     private ArrayList<SpacePixel> pixelComponents;
@@ -52,7 +53,7 @@ public class SpacePlanet {
 
     public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed) {
         this.pos = pos;
-        this.pixelAmount = (int) (Maths.getSphereArea(radius) * 0.0032) ;
+        this.pixelAmount = (int) (Maths.getSphereArea(radius) * RAPPORT_NB_POINT_SURFACE);
         this.radius = radius;
         this.seed = seed; //seed defines color and planet pattern
         this.starPos = starPos;

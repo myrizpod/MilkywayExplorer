@@ -14,16 +14,17 @@ import org.bukkit.util.Transformation;
 import org.joml.Vector3d;
 
 public class Ship {
+
+    private final double THRUST_POWER = 0.5;
+
     private final Horse seat;
     private final Player player;
-    private final TextDisplay controlCircle;
-    private final ItemDisplay skyBox;
     private Vector3d shipPos; //pos of the ship in space
     private Vector3d shipRot; // rotation of the ship (pitch[-90;+90] yaw[-180;+180] roll[-180;+180])
     private Vector3d shipRotMomentum; //the rotation momentum of the ship
     private Vector3d shipMomentum; //a vector of the current speed of the ship. is added to pos every X time
-    private static final Vector3d shipCenter = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
-    private static final int spaceScale = 50; //This is the scale ratio between space and world: world pos is (objPos-shipPos)/spaceScale + shipCenter
+    private final Vector3d SHIP_CENTER = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
+    private final int SPACE_SCALE = 50; //This is the scale ratio between space and world: world pos is (objPos-shipPos)/spaceScale + shipCenter
 
 
     public Ship(Player player) {
@@ -40,7 +41,7 @@ public class Ship {
         //create a skybox using a black #000000 head item display with reversed size
         int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
 //        int skyBoxSize = player.getClientViewDistance()*16; CHECK RENDER DISTANCE *16 ?? //TODO make sure stuff like planets are rendered too based on this
-        skyBox = world.spawn(new Location(world, shipCenter.x, shipCenter.y, shipCenter.z + 2), ItemDisplay.class);
+        ItemDisplay skyBox = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
         boxTransformation.getScale().set(-skyBoxSize);
         boxTransformation.getTranslation().set(0, (float) -skyBoxSize /4, 0);
@@ -49,14 +50,14 @@ public class Ship {
 
         skyBox.setItemStack(Skull.getSpaceSkull());
 
-        seat = world.spawn(new Location(world, shipCenter.x, shipCenter.y - 2, shipCenter.z), Horse.class);
+        seat = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y - 2, SHIP_CENTER.z), Horse.class);
         seat.setGravity(false);
         seat.setInvulnerable(true);
         seat.addScoreboardTag("ship");
         seat.setInvisible(true);
         seat.addPassenger(player); //TODO TEST make player unable to dismount horse as well as make it invisible
 
-        controlCircle = world.spawn(new Location(world, shipCenter.x, shipCenter.y, shipCenter.z + 2), TextDisplay.class);
+        TextDisplay controlCircle = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");
         controlCircle.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         Transformation transformation = controlCircle.getTransformation();
@@ -74,11 +75,11 @@ public class Ship {
     }
 
     public int getSpaceScale(){
-        return spaceScale;
+        return SPACE_SCALE;
     }
 
     public Vector3d getWorldCenter(){
-        return shipCenter;
+        return SHIP_CENTER;
     }
 
     public void moveShip(Vector3d movement, Vector3d rotMovement){
@@ -108,7 +109,7 @@ public class Ship {
             private void getMovement() {
                 if(player.getScoreboardTags().contains("onShip")) {
                     Location loc = player.getLocation();
-                    Vector3d pos = new Vector3d(loc.getX(), loc.getY(), loc.getX());
+                    Vector3d pos = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
 
                     if(lastPos == null) lastPos = pos;
 
@@ -124,13 +125,13 @@ public class Ship {
                     //TODO WEIRD PROBS AND Z NOT WORKING...
 
                     if(pos.x < lastPos.x) {
-                        shipMomentum.add(-0.5, 0, 0);
+                        shipMomentum.add(-THRUST_POWER, 0, 0);
                     } else if (pos.x > lastPos.x) {
-                        shipMomentum.add(0.5, 0, 0);
+                        shipMomentum.add(THRUST_POWER, 0, 0);
                     } else if (pos.z < lastPos.z) {
-                        shipMomentum.add(0, 0, -0.5);
+                        shipMomentum.add(0, 0, -THRUST_POWER);
                     } else if (pos.z > lastPos.z) {
-                        shipMomentum.add(0, 0, 0.5);
+                        shipMomentum.add(0, 0, THRUST_POWER);
                     }
 
                     lastPos = pos;

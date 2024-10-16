@@ -13,7 +13,7 @@ Holds everything tied to the space exploration.
 -Interractions between player ships  
 
 
-<h1>Surface</h1>  
+<h1>Surface</h1> 
 
 Holds everything tied to planet world gen and activities on the surface of these planets  
 -Planet terrain gen and block choice depending on its properties  

@@ -8,6 +8,8 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.generator.WorldInfo;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Random;
 
 public class Univers {
 
-
+    private final int seed = new Random().nextInt();
     private final List<StarSystem> allLoadedSystems = new ArrayList<>();
     private final World world;
 
@@ -26,6 +28,12 @@ public class Univers {
         wc.generateStructures(false);
         wc.keepSpawnInMemory(true);
         wc.type(WorldType.FLAT);
+        wc.generator(new ChunkGenerator() {
+            @java.lang.Override
+            public void generateSurface(WorldInfo worldInfo, java.util.Random random, int chunkX, int chunkZ, ChunkData chunkData) {
+
+            }
+        });
 
         world = wc.createWorld();
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
@@ -36,7 +44,7 @@ public class Univers {
     }
 
     public void loadAllStarSystems(){
-        StarSystem s = new StarSystem(new Vector3d(0 , 0, 0), new Random());
+        StarSystem s = new StarSystem(new Vector3d(0 , 0, 0), seed);
 
         allLoadedSystems.add(s);
 

@@ -16,24 +16,25 @@ public class StarSystem {
     private final List<Planet> allPlanets = new ArrayList<>();
 
 
-    public StarSystem(Vector3d center, Random seed) {
+    public StarSystem(Vector3d center, int seed) {
         int planetCount = 1;
+        Random generator = new Random(seed);
 
         for(int i = 0; i < planetCount; i++) {
             Planet planet = new Planet(
-                    new Vector3d(seed.nextInt(400,1500), 0, 0),
-                    seed.nextInt(25,100),
+                    new Vector3d(generator.nextInt(400,1500), 0, 0),
+                    generator.nextInt(25,100),
                     center,
-                    seed.nextInt()
+                    generator.nextInt()
                     );
 
             allPlanets.add(planet);
         }
         star = new Planet(
                 new Vector3d(0, 0, 0),
-                seed.nextInt(100,200),
+                generator.nextInt(100,200),
                 center,
-                seed.nextInt()
+                generator.nextInt()
         );
 
     }

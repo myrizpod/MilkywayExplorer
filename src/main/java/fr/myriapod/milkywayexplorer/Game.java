@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
@@ -32,11 +31,12 @@ public class Game {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.sendTitle(ChatColor.GOLD + "MilkyWayExplorer", ChatColor.DARK_AQUA + "Bienvenue dans", 10, 50, 10);
             Planet planet = univers.getFirstPlanet();
+            Tech.getMajorBranches().forEach(Game::unlockTech);
+
             planet.teleportPlayerToSurface(player);
             Location shipPos = player.getLocation().add(10, 0, 0);
-            planet.getSurfacePlanet().shipLands(new Vector3d(shipPos.getX(), shipPos.getY(), shipPos.getZ()));
+            planet.getSurfacePlanet().shipLands(new Vector3d(shipPos.getX(), shipPos.getY(), shipPos.getZ()), player);
         });
-        Bukkit.getLogger().info(String.valueOf(univers));
     }
 
     public static void addShip(Ship ship) {
@@ -73,11 +73,6 @@ public class Game {
 
     public static World getUniversWorld() {
         return univers.getWorld();
-    }
-
-    //TODO ONLY FOR DEGUB
-    public static List<StarSystem> getAllLoadedSystems() {
-        return univers.getAllLoadedSystems();
     }
 
     public static Planet getPlayerPlanet(Player player) {

@@ -5,10 +5,13 @@ import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex3
 import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex4DVariant;
 import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;
 import de.articdive.jnoise.pipeline.JNoise;
+import fr.myriapod.milkywayexplorer.Ressource;
 import org.bukkit.Material;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
+import org.joml.Vector3i;
 
+import java.util.Map;
 import java.util.Random;
 
 public class CustomPlanetGeneration extends ChunkGenerator {
@@ -20,9 +23,12 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private final double TILE_HEIGHT;
 
 
-    public CustomPlanetGeneration(int seed) {
-        TILE_WIDTH = 100;
-        TILE_HEIGHT = 100;
+    private Map<Ressource, Vector3i> oresPose;
+
+
+    public CustomPlanetGeneration(int seed, int side, Ressource[] ores) {
+        TILE_WIDTH = side;
+        TILE_HEIGHT = side;
 
         noisePipeline = JNoise.newBuilder().fastSimplex(seed, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale).octavate(3,1.2,2.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
         colorPipeline = JNoise.newBuilder().fastSimplex(seed+1, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale/2).octavate(4,1.2,4.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
@@ -32,8 +38,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
     @Override
     public void generateNoise(WorldInfo worldInfo, Random random, int chunkX, int chunkZ, ChunkData chunkData) {
-//        int y = 30;
-        //TODO make shit work (I think it works now but test cuz we never know)
+
         for(int y = 0; y < 130 && y < chunkData.getMaxHeight(); y++) { //can go from y = chunkData.getMinHeight() (-65)
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -55,7 +60,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
                     double noise = noisePipeline.evaluateNoise(nx, ny, nz, nw);
                     double colorNoise = colorPipeline.evaluateNoise(nx, ny, nz, nw);
 
-                    if (! (65 + (20 * noise) < y)) { //65 = normal lvl, 10 = variations, noise can go from 0 to 1
+                    if (! (65 + (20 * noise) < y)) { //65 = normal lvl, 20 = variations, noise can go from 0 to 1
                         if (colorNoise < 0.43) {
                             chunkData.setBlock(x, y, z, Material.RED_TERRACOTTA);
                         } else if (colorNoise > 0.57) {
@@ -67,8 +72,17 @@ public class CustomPlanetGeneration extends ChunkGenerator {
                     }
 
 
+//                    RandomSpreadStructurePlacement spread = new RandomSpreadStructurePlacement(20, 10, RandomSpreadType.TRIANGULAR, 10387321);
+
+
+
                 }
             }
         }
     }
+
+    public Map<Ressource, Vector3i> getOrePose() {
+        return oresPose;
+    }
+
 }

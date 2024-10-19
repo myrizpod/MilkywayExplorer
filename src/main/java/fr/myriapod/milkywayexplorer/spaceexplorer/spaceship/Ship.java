@@ -55,7 +55,7 @@ public class Ship {
         seat.setInvulnerable(true);
         seat.addScoreboardTag("ship");
         seat.setInvisible(true);
-        seat.addPassenger(player); //TODO TEST make player unable to dismount horse as well as make it invisible
+        seat.addPassenger(player);
 
         TextDisplay controlCircle = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");
@@ -122,8 +122,6 @@ public class Ship {
                     player.sendMessage("Pos: " + pos.toString());
                     player.sendMessage("LastPos: " + lastPos.toString());
 
-                    //TODO WEIRD PROBS AND Z NOT WORKING...
-
                     if(pos.x < lastPos.x) {
                         shipMomentum.add(-THRUST_POWER, 0, 0);
                     } else if (pos.x > lastPos.x) {
@@ -135,8 +133,6 @@ public class Ship {
                     }
 
                     lastPos = pos;
-
-//                    player.teleport(seat.getLocation().add(0, 0.7, 0));
 
                     player.sendMessage("Momentum: " + shipMomentum.toString());
 

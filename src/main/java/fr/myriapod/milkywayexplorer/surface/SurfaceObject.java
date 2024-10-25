@@ -32,6 +32,9 @@ public enum SurfaceObject {
 
 
     public boolean isItemEqual(ItemStack item) {
+        if(item == null) {
+            return false;
+        }
         if(! item.getItemMeta().hasCustomModelData()) {
             return false;
         }

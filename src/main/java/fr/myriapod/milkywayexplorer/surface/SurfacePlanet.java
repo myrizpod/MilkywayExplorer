@@ -2,7 +2,6 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
-import fr.myriapod.milkywayexplorer.mytools.Tuple;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -13,6 +12,7 @@ import org.joml.Vector2i;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +23,7 @@ public class SurfacePlanet {
     private int side;
     private int seed;
     private final Ressource[] ores;
-    private Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> oresPose; // Where Vector2i is chunk pos and Vector3i exact pos
+    private Map<Ressource, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
     private Set<Player> players = new HashSet<>();
 
@@ -63,27 +63,34 @@ public class SurfacePlanet {
         world.setClearWeatherDuration(10);
 
 
-        oresPose = ((CustomPlanetGeneration) (wc.generator())).getOrePose();
+        Map<Ressource, Set<Vector2i>> oresPosChunk = ((CustomPlanetGeneration) (wc.generator())).getOrePose();
 
-        generateVeins();
+        generateVeins(oresPosChunk);
 
     }
 
-    private void generateVeins() {
-        for(Ressource r : oresPose.keySet()) {
+    private void generateVeins(Map<Ressource, Set<Vector2i>> oresPosChunk) {
+        for(Ressource r : oresPosChunk.keySet()) {
             if(r.getModelName() != null) {
 
-                for(Tuple<Vector2i, Vector3i> t : oresPose.get(r)) {
-                    Vector3i pos = t.getB();
+                Set<Vector3i> set = new HashSet<>();
 
-                    new PasteSchem().generate(new Location(world, pos.x, world.getHighestBlockYAt(pos.x, pos.z), pos.z), r.getModelName(), true);
+                for(Vector2i v : oresPosChunk.get(r)) {
+                    Vector3i pos = new Vector3i(v.x * 16, world.getHighestBlockYAt(v.x * 16, v.y * 16), v.y * 16);
+
+                    new PasteSchem().generate(new Location(world, pos.x, pos.y, pos.z), r.getModelName(), true);
+                    set.add(pos);
                 }
 
+                oresPose.put(r, set);
             }
         }
-
-
     }
+
+    public Map<Ressource, Set<Vector3i>> getOresPose() {
+        return oresPose;
+    }
+
 
 
     public void shipLands(Vector3d vector3d, Player player) {

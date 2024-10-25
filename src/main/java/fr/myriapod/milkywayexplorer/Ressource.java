@@ -9,12 +9,12 @@ import java.util.Map;
 
 public enum Ressource {
 
-    WOOD("Bois", Material.OAK_WOOD, 100, new GenParameters(0.5, null)),
-    IRON("Fer", Material.IRON_INGOT, 101, new GenParameters(0.5, "iron_ore")),
-    COPPER("Cuivre", Material.COPPER_INGOT, 102, new GenParameters(0.5, null)),
-    SULFUR("Sulfur", Material.YELLOW_DYE, 103, new GenParameters(0.6, null)),
-    GOLD("Or", Material.GOLD_INGOT, 104, new GenParameters(0.55, null)),
-    TITANIUM("Titane", Material.BLUE_DYE, 105, new GenParameters(0.75, null));
+    WOOD("Bois", Material.OAK_WOOD, 100, new GenParameters(0.25, null)),
+    IRON("Fer", Material.IRON_INGOT, 101, new GenParameters(0.25, "iron_ore")),
+    COPPER("Cuivre", Material.COPPER_INGOT, 102, new GenParameters(0.25, null)),
+    SULFUR("Sulfur", Material.YELLOW_DYE, 103, new GenParameters(0.20, null)),
+    GOLD("Or", Material.GOLD_INGOT, 104, new GenParameters(0.20, null)),
+    TITANIUM("Titane", Material.BLUE_DYE, 105, new GenParameters(0.15, null));
 
 
     private String name;

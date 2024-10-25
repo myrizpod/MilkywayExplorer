@@ -25,7 +25,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private final double TILE_HEIGHT;
 
 
-    private Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos and Vector3i exact pos
+    private Map<Ressource, Set<Vector2i>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos
 
 
     public CustomPlanetGeneration(int seed, int side, Ressource[] ores) {
@@ -87,13 +87,13 @@ public class CustomPlanetGeneration extends ChunkGenerator {
                     for(Ressource ore : oresPipeline.keySet()) {
                         double oreNoise = oresPipeline.get(ore).evaluateNoise(chunkX, chunkZ);
 
-                        if(oreNoise > ore.getRarity()) {
+                        if(oreNoise <= ore.getRarity()) {
 
-                            Set<Tuple<Vector2i, Vector3i>> poses = new HashSet<>(oresPose.get(ore));
+                            Set<Vector2i> poses = new HashSet<>(oresPose.get(ore));
 
                             //Check if chunck is already done
-                            for(Tuple<Vector2i, Vector3i> pos : poses) {
-                                if (pos.getA().x == chunkX && pos.getA().y == chunkZ) {
+                            for(Vector2i pos : poses) {
+                                if (pos.x == chunkX && pos.y == chunkZ) {
                                     //si chunck deja fait passer à celui d'apres
                                     chunckDone = true;
                                 }
@@ -101,7 +101,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
                             //si non alors ajouter à poses
                             if(! chunckDone) {
-                                poses.add(new Tuple<>(new Vector2i(chunkX, chunkZ), new Vector3i((int) actualX, y, (int) actualZ)));
+                                poses.add(new Vector2i(chunkX, chunkZ));
                                 oresPose.put(ore, poses);
                             }
 
@@ -115,7 +115,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
     }
 
-    public Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> getOrePose() {
+    public Map<Ressource, Set<Vector2i>> getOrePose() {
         return oresPose;
     }
 

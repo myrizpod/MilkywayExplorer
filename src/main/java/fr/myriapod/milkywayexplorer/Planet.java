@@ -40,6 +40,7 @@ public class Planet {
         player.teleport(new Location(Game.getUniversWorld(), 0 ,100, 0));
         Ship ship = new Ship(player);
         Game.shipEnters(0, ship);
+//        player.getScoreboardTags().add("onShip");
     }
 
 

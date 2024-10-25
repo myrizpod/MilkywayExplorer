@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -10,22 +9,24 @@ import java.util.Map;
 
 public enum Ressource {
 
-    WOOD("Bois", Material.OAK_WOOD, 100),
-    IRON("Fer", Material.IRON_INGOT, 101),
-    COPPER("Cuivre", Material.COPPER_INGOT, 102),
-    SULFUR("Sulfur", Material.YELLOW_DYE, 103),
-    GOLD("Or", Material.GOLD_INGOT, 104),
-    TITANIUM("Titane", Material.BLUE_DYE, 105);
+    WOOD("Bois", Material.OAK_WOOD, 100, new GenParameters(0.5, null)),
+    IRON("Fer", Material.IRON_INGOT, 101, new GenParameters(0.5, "iron_ore")),
+    COPPER("Cuivre", Material.COPPER_INGOT, 102, new GenParameters(0.5, null)),
+    SULFUR("Sulfur", Material.YELLOW_DYE, 103, new GenParameters(0.6, null)),
+    GOLD("Or", Material.GOLD_INGOT, 104, new GenParameters(0.55, null)),
+    TITANIUM("Titane", Material.BLUE_DYE, 105, new GenParameters(0.75, null));
 
 
     private String name;
     private Material material;
     private int modelData;
+    private GenParameters parameters;
 
-    Ressource(String name, Material mat, int modelData) {
+    Ressource(String name, Material mat, int modelData, GenParameters parameters) {
         this.name = name;
         this.material = mat;
         this.modelData = modelData;
+        this.parameters = parameters;
     }
 
     public String getName() {
@@ -38,6 +39,14 @@ public enum Ressource {
 
     public int getModelData() {
         return modelData;
+    }
+
+    public double getRarity() {
+        return parameters.rarity;
+    }
+
+    public String getModelName() {
+        return parameters.model_name;
     }
 
 
@@ -104,5 +113,19 @@ public enum Ressource {
 
         return retourne;
     }
+
+
+    static class GenParameters {
+
+        private double rarity;
+        private String model_name;
+
+        GenParameters(double rarity, String model) {
+            this.rarity = rarity;
+            this.model_name = model;
+        }
+
+    }
+
 
 }

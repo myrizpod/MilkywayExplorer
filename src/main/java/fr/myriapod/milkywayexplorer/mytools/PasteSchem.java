@@ -12,7 +12,6 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -23,9 +22,11 @@ public class PasteSchem {
 
     private final String path = "plugins/Planet/schematics/";
 
-    public void generate(Location loc, String fileName) {
+    public void generate(Location loc, String filename) {
+        generate(loc, filename, false);
+    }
 
-        Bukkit.getLogger().info(loc.getWorld().getName());
+    public void generate(Location loc, String fileName, boolean keepAir) {
 
         com.sk89q.worldedit.world.World weWorld = new BukkitWorld(loc.getWorld());
         File file = new File(path + fileName + ".schem");
@@ -43,6 +44,7 @@ public class PasteSchem {
             Operation operation = new ClipboardHolder(clipboard)
                     .createPaste(editSession)
                     .to(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))
+                    .ignoreAirBlocks(keepAir)
                     .build();
             Operations.complete(operation);
         } catch (WorldEditException e) {

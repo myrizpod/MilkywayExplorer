@@ -6,24 +6,26 @@ import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex4
 import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;
 import de.articdive.jnoise.pipeline.JNoise;
 import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.mytools.Tuple;
 import org.bukkit.Material;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
+import org.joml.Vector2i;
 import org.joml.Vector3i;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class CustomPlanetGeneration extends ChunkGenerator {
 
     private JNoise noisePipeline;
     private double scale = 0.005;
     private JNoise colorPipeline;
+    private Map<Ressource, JNoise> oresPipeline = new HashMap<>();
     private final double TILE_WIDTH;
     private final double TILE_HEIGHT;
 
 
-    private Map<Ressource, Vector3i> oresPose;
+    private Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos and Vector3i exact pos
 
 
     public CustomPlanetGeneration(int seed, int side, Ressource[] ores) {
@@ -32,6 +34,12 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
         noisePipeline = JNoise.newBuilder().fastSimplex(seed, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale).octavate(3,1.2,2.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
         colorPipeline = JNoise.newBuilder().fastSimplex(seed+1, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale/2).octavate(4,1.2,4.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
+
+        for(Ressource ore : ores) {
+            oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.ordinal(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
+            oresPose.computeIfAbsent(ore, k -> new HashSet<>());
+        }
+
 
     }
 
@@ -43,10 +51,11 @@ public class CustomPlanetGeneration extends ChunkGenerator {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
 
-
-                    // Sample noise at smaller intervals
                     double actualX = x + chunkX * 16;
                     double actualZ = z + chunkZ * 16;
+
+                    /********* High and Color Noises *********/
+                    // Sample noise at smaller intervals
                     double s = actualX / TILE_WIDTH;
                     double t = actualZ / TILE_HEIGHT;
 
@@ -72,16 +81,41 @@ public class CustomPlanetGeneration extends ChunkGenerator {
                     }
 
 
-//                    RandomSpreadStructurePlacement spread = new RandomSpreadStructurePlacement(20, 10, RandomSpreadType.TRIANGULAR, 10387321);
+                    /******** Ressource noises ********/
+                    boolean chunckDone = false;
 
+                    for(Ressource ore : oresPipeline.keySet()) {
+                        double oreNoise = oresPipeline.get(ore).evaluateNoise(chunkX, chunkZ);
 
+                        if(oreNoise > ore.getRarity()) {
+
+                            Set<Tuple<Vector2i, Vector3i>> poses = new HashSet<>(oresPose.get(ore));
+
+                            //Check if chunck is already done
+                            for(Tuple<Vector2i, Vector3i> pos : poses) {
+                                if (pos.getA().x == chunkX && pos.getA().y == chunkZ) {
+                                    //si chunck deja fait passer à celui d'apres
+                                    chunckDone = true;
+                                }
+                            }
+
+                            //si non alors ajouter à poses
+                            if(! chunckDone) {
+                                poses.add(new Tuple<>(new Vector2i(chunkX, chunkZ), new Vector3i((int) actualX, y, (int) actualZ)));
+                                oresPose.put(ore, poses);
+                            }
+
+                        }
+
+                    }
 
                 }
             }
         }
+
     }
 
-    public Map<Ressource, Vector3i> getOrePose() {
+    public Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> getOrePose() {
         return oresPose;
     }
 

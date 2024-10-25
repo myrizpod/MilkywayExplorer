@@ -2,12 +2,14 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
+import fr.myriapod.milkywayexplorer.mytools.Tuple;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.joml.Random;
+import org.joml.Vector2i;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
@@ -21,7 +23,7 @@ public class SurfacePlanet {
     private int side;
     private int seed;
     private final Ressource[] ores;
-    private Map<Ressource, Vector3i> oresPose;
+    private Map<Ressource, Set<Tuple<Vector2i, Vector3i>>> oresPose; // Where Vector2i is chunk pos and Vector3i exact pos
     private World world;
     private Set<Player> players = new HashSet<>();
 
@@ -34,6 +36,7 @@ public class SurfacePlanet {
         for (int i = 0; i < ores.length ; i++) {
             ores[i] = allOres[new Random(seed).nextInt(allOres.length)];
         }
+        ores[2] = Ressource.IRON;
         this.ores = ores;
     }
 
@@ -61,6 +64,24 @@ public class SurfacePlanet {
 
 
         oresPose = ((CustomPlanetGeneration) (wc.generator())).getOrePose();
+
+        generateVeins();
+
+    }
+
+    private void generateVeins() {
+        for(Ressource r : oresPose.keySet()) {
+            if(r.getModelName() != null) {
+
+                for(Tuple<Vector2i, Vector3i> t : oresPose.get(r)) {
+                    Vector3i pos = t.getB();
+
+                    new PasteSchem().generate(new Location(world, pos.x, world.getHighestBlockYAt(pos.x, pos.z), pos.z), r.getModelName(), true);
+                }
+
+            }
+        }
+
 
     }
 

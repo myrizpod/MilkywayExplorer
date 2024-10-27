@@ -122,15 +122,26 @@ public class Ship {
                     player.sendMessage("Pos: " + pos.toString());
                     player.sendMessage("LastPos: " + lastPos.toString());
 
-                    if(pos.x < lastPos.x) {
-                        shipMomentum.add(-THRUST_POWER, 0, 0);
-                    } else if (pos.x > lastPos.x) {
-                        shipMomentum.add(THRUST_POWER, 0, 0);
-                    } else if (pos.z < lastPos.z) {
-                        shipMomentum.add(0, 0, -THRUST_POWER);
-                    } else if (pos.z > lastPos.z) {
-                        shipMomentum.add(0, 0, THRUST_POWER);
+                    double Xdiff = Math.abs(pos.x-lastPos.x);
+                    double Zdiff = Math.abs(pos.z-lastPos.z);
+
+                    if (Xdiff > Zdiff){
+                        if(pos.x < lastPos.x) {
+                            shipMomentum.add(-THRUST_POWER, 0, 0);
+                        } else if (pos.x > lastPos.x) {
+                            shipMomentum.add(THRUST_POWER, 0, 0);
+                        }
+
+                    } else {
+                        if (pos.z < lastPos.z) {
+                            shipMomentum.add(0, 0, -THRUST_POWER);
+                        } else if (pos.z > lastPos.z) {
+                            shipMomentum.add(0, 0, THRUST_POWER);
+                        }
                     }
+
+
+
 
                     lastPos = pos;
 

@@ -23,18 +23,19 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private Map<Ressource, JNoise> oresPipeline = new HashMap<>();
     private final double TILE_WIDTH;
     private final double TILE_HEIGHT;
+    private SurfaceTypes currentSurface;
 
 
     private Map<Ressource, Set<Vector2i>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos
 
 
-    public CustomPlanetGeneration(int seed, int side, Ressource[] ores) {
+    public CustomPlanetGeneration(int seed, int side,SurfaceTypes currentSurface ,Ressource[] ores) {
         TILE_WIDTH = side;
         TILE_HEIGHT = side;
+        this.currentSurface = currentSurface;
 
-        noisePipeline = JNoise.newBuilder().fastSimplex(seed, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale).octavate(3,1.2,2.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
-        colorPipeline = JNoise.newBuilder().fastSimplex(seed+1, Simplex2DVariant.IMPROVE_X, Simplex3DVariant.IMPROVE_XY, Simplex4DVariant.IMRPOVE_XYZ).scale(scale/2).octavate(4,1.2,4.0, FractalFunction.FBM,true).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build();
-
+        noisePipeline = currentSurface.getHeightmapNoise(seed);
+        colorPipeline = currentSurface.getColorNoise(seed);
         for(Ressource ore : ores) {
             oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.ordinal(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
             oresPose.computeIfAbsent(ore, k -> new HashSet<>());
@@ -71,11 +72,11 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
                     if (! (65 + (20 * noise) < y)) { //65 = normal lvl, 20 = variations, noise can go from 0 to 1
                         if (colorNoise < 0.43) {
-                            chunkData.setBlock(x, y, z, Material.RED_TERRACOTTA);
+                            chunkData.setBlock(x, y, z, currentSurface.getMat3());
                         } else if (colorNoise > 0.57) {
-                            chunkData.setBlock(x, y, z, Material.NETHERRACK);
+                            chunkData.setBlock(x, y, z, currentSurface.getMat1());
                         } else {
-                            chunkData.setBlock(x, y, z, Material.STRIPPED_MANGROVE_WOOD);
+                            chunkData.setBlock(x, y, z, currentSurface.getMat2());
                         }
 
                     }

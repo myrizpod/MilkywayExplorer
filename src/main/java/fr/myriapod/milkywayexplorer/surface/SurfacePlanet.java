@@ -56,7 +56,7 @@ public class SurfacePlanet {
         WorldCreator wc = new WorldCreator("world_" + seed);
 
         wc.type(WorldType.FLAT);
-        wc.generator(new CustomPlanetGeneration(seed, side, ores));
+        wc.generator(new CustomPlanetGeneration(seed, side, SurfaceTypes.WHITE_STONES, ores));
         wc.generateStructures(false);
 
         world = wc.createWorld();

@@ -2,7 +2,9 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
+import fr.myriapod.milkywayexplorer.surface.machinery.BasicDrill;
 import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
 import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
@@ -31,6 +33,7 @@ public class SurfaceListener implements Listener {
     @EventHandler
     public void interactWithEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
+        Planet planet = Game.getPlayerPlanet(player);
 
         Entity interaction = event.getRightClicked();
         Set<String> tags = interaction.getScoreboardTags();
@@ -44,10 +47,6 @@ public class SurfaceListener implements Listener {
                 break;
 
             case "ship":
-                Planet planet = Game.getPlayerPlanet(player);
-
-                Bukkit.getLogger().info(String.valueOf(planet));
-
                 if(planet == null) return;
 
                 planet.teleportPlayerToSpace(player);
@@ -56,10 +55,10 @@ public class SurfaceListener implements Listener {
             case "vein":
                 Machinery m = new MachineryAnnotationProcessor().getAsMachinery(player.getInventory().getItemInMainHand());
 
-                Bukkit.getLogger().info("" + m);
-
                 if(m != null) {
                     if(m instanceof Drill) {
+                        if(planet == null) return;
+
                         Location loc = player.getTargetBlockExact(20).getLocation();
 
                         new PasteSchem().generate(loc, m.getModel());
@@ -69,27 +68,14 @@ public class SurfaceListener implements Listener {
                         e.setInteractionWidth(3);
                         e.setInteractionHeight(3);
                         e.addScoreboardTag("basic_drill");
-//                    planet.addMachinery(new Machinery(...)) TODO add machinery system and all...
+
+                        Machinery drill = new BasicDrill(Ressource.IRON, 0.1);
+
+                        planet.addMachinery(drill);
+
                     }
 
                 }
-
-
-//                if(SurfaceObject.BASIC_DRILL.isItemEqual(player.getInventory().getItemInMainHand())) {
-//                    SurfaceObject so = SurfaceObject.BASIC_DRILL;
-//
-//                    Location loc = player.getTargetBlockExact(20).getLocation();
-//
-//                    new PasteSchem().generate(loc, so.getModel());
-//                    interaction.remove();
-//
-//                    Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
-//                    e.setInteractionWidth(3);
-//                    e.setInteractionHeight(3);
-//                    e.addScoreboardTag("basic_drill");
-////                    planet.addMachinery(new Machinery(...)) TODO add machinery system and all...
-//
-//                }
 
 
             }
@@ -135,15 +121,9 @@ public class SurfaceListener implements Listener {
 
         int size = planet.getSurfacePlanet().getSide()/2;
 
-        SurfaceObject surfaceObject = null;
-        for(SurfaceObject so : SurfaceObject.values()) {
-            if(so.isItemEqual(player.getInventory().getItem(event.getNewSlot()))) {
-                surfaceObject = so;
-            }
-        }
+        Machinery surfaceObject = new MachineryAnnotationProcessor().getAsMachinery(player.getInventory().getItem(event.getNewSlot()));
 
         if(surfaceObject == null) {
-            Location loc = player.getLocation();
             Collection<Entity> entities = player.getWorld().getNearbyEntities(new BoundingBox(-size, -size, -size, size, size, size));
 
             for(Entity e : entities) {
@@ -154,7 +134,7 @@ public class SurfaceListener implements Listener {
             return;
         }
 
-        if(surfaceObject.equals(SurfaceObject.BASIC_DRILL)) {
+        if(surfaceObject instanceof Drill) {
 
             for(Set<Vector3i> s : planet.getSurfacePlanet().getOresPose().values()) {
                 for(Vector3i v : s) {

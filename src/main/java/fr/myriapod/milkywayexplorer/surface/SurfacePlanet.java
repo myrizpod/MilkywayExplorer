@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer.surface;
 import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
@@ -26,6 +27,8 @@ public class SurfacePlanet {
     private Map<Ressource, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
     private Set<Player> players = new HashSet<>();
+    private Set<Machinery> allMachineries = new HashSet<>();
+
 
     public SurfacePlanet(int radius, int seed) {
         this.side = (int) Math.sqrt(radius * radius * Math.PI * 4);
@@ -91,6 +94,10 @@ public class SurfacePlanet {
         return oresPose;
     }
 
+    public void addMachinery(Machinery machinery) {
+        allMachineries.add(machinery);
+    }
+
 
 
     public void shipLands(Vector3d vector3d, Player player) {
@@ -138,4 +145,5 @@ public class SurfacePlanet {
         //TODO MATHS THAT DETERMINES SHIP POS ON SURFACE DEPENDING OF AREA
         return new Vector3i();
     }
+
 }

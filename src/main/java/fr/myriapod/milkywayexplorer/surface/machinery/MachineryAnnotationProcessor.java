@@ -21,8 +21,6 @@ public class MachineryAnnotationProcessor {
         Reflections reflections = new Reflections("fr.myriapod.milkywayexplorer.surface.machinery", new SubTypesScanner(false));
 
         for (Class<? extends Machinery> m : reflections.getSubTypesOf(Machinery.class)) {
-            Bukkit.getLogger().info("Element: " + m.getSimpleName());
-            Bukkit.getLogger().info("annoted ? " + Machinery.class.isAnnotationPresent(MachineryAnnotation.class));
             if (Machinery.class.isAnnotationPresent(MachineryAnnotation.class)) {
 
                 try {
@@ -40,8 +38,6 @@ public class MachineryAnnotationProcessor {
 
     public Machinery getAsMachinery(ItemStack item) {
         for(Machinery m : allMachines) {
-            Bukkit.getLogger().info("macjeh " + m.name);
-
             if(m.isItemEqual(item)) {
                 return m;
             }

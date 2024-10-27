@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.SpacePlanet;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
+import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
@@ -44,4 +45,8 @@ public class Planet {
     }
 
 
+    public void addMachinery(Machinery machinery) {
+        surfacePlanet.addMachinery(machinery);
+
+    }
 }

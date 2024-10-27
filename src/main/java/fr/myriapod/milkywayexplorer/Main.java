@@ -4,6 +4,7 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
+import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin {
         Bukkit.getLogger().info("-------------");
 
         createSchematics();
+        new MachineryAnnotationProcessor().process();
 
         new Game(); //TODO load game by .json or .yml or just config.yml
 

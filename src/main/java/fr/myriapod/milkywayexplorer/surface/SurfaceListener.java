@@ -3,6 +3,9 @@ package fr.myriapod.milkywayexplorer.surface;
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
+import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
+import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
+import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -51,21 +54,42 @@ public class SurfaceListener implements Listener {
 
 
             case "vein":
-                if(SurfaceObject.BASIC_DRILL.isItemEqual(player.getInventory().getItemInMainHand())) {
-                    SurfaceObject so = SurfaceObject.BASIC_DRILL;
+                Machinery m = new MachineryAnnotationProcessor().getAsMachinery(player.getInventory().getItemInMainHand());
 
-                    Location loc = player.getTargetBlockExact(20).getLocation();
+                Bukkit.getLogger().info("" + m);
 
-                    new PasteSchem().generate(loc, so.getModel());
-                    interaction.remove();
+                if(m != null) {
+                    if(m instanceof Drill) {
+                        Location loc = player.getTargetBlockExact(20).getLocation();
 
-                    Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
-                    e.setInteractionWidth(3);
-                    e.setInteractionHeight(3);
-                    e.addScoreboardTag("basic_drill");
+                        new PasteSchem().generate(loc, m.getModel());
+                        interaction.remove();
+
+                        Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
+                        e.setInteractionWidth(3);
+                        e.setInteractionHeight(3);
+                        e.addScoreboardTag("basic_drill");
 //                    planet.addMachinery(new Machinery(...)) TODO add machinery system and all...
+                    }
 
                 }
+
+
+//                if(SurfaceObject.BASIC_DRILL.isItemEqual(player.getInventory().getItemInMainHand())) {
+//                    SurfaceObject so = SurfaceObject.BASIC_DRILL;
+//
+//                    Location loc = player.getTargetBlockExact(20).getLocation();
+//
+//                    new PasteSchem().generate(loc, so.getModel());
+//                    interaction.remove();
+//
+//                    Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
+//                    e.setInteractionWidth(3);
+//                    e.setInteractionHeight(3);
+//                    e.addScoreboardTag("basic_drill");
+////                    planet.addMachinery(new Machinery(...)) TODO add machinery system and all...
+//
+//                }
 
 
             }

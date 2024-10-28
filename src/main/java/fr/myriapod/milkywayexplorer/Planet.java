@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 
+import javax.crypto.Mac;
+
 public class Planet {
 
     private final SpacePlanet spacePlanet;
@@ -48,5 +50,9 @@ public class Planet {
     public void addMachinery(Machinery machinery) {
         surfacePlanet.addMachinery(machinery);
 
+    }
+
+    public Machinery getMachinery(Location entityLoc) {
+        return surfacePlanet.getMachinery(entityLoc);
     }
 }

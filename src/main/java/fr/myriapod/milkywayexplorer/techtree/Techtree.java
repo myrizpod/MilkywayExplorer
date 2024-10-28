@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.techtree;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public class Techtree {
     }
 
     public boolean hasTech(Tech tech) {
-        Bukkit.getLogger().info(techsUnlocked.toString());
         return techsUnlocked.contains(tech);
     }
 }

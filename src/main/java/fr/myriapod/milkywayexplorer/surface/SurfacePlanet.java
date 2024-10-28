@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer.surface;
 import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
 import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -24,7 +25,8 @@ public class SurfacePlanet {
     private int side;
     private int seed;
     private final Ressource[] ores;
-    private Map<Ressource, Set<Vector3i>> oresPose = new HashMap<>();
+    private final Map<Ressource, Set<Vector3i>> oresPoseFinal = new HashMap<>();
+    private final Map<Ressource, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
     private Set<Player> players = new HashSet<>();
     private Set<Machinery> allMachineries = new HashSet<>();
@@ -86,6 +88,7 @@ public class SurfacePlanet {
                 }
 
                 oresPose.put(r, set);
+                oresPoseFinal.put(r, set);
             }
         }
     }
@@ -96,6 +99,16 @@ public class SurfacePlanet {
 
     public void addMachinery(Machinery machinery) {
         allMachineries.add(machinery);
+
+        if(machinery instanceof Drill d) {
+            for(Ressource r : d.getRessources()) {
+                Set<Vector3i> set = oresPose.get(r);
+                set.remove(d.getLocation());
+                oresPose.put(r, set);
+            }
+
+        }
+
     }
 
 
@@ -146,4 +159,13 @@ public class SurfacePlanet {
         return new Vector3i();
     }
 
+    public Machinery getMachinery(Location entityLoc) {
+        Vector3i v = new Vector3i((int) entityLoc.getX(), (int) entityLoc.getY(), (int) entityLoc.getZ());
+        for(Machinery m : allMachineries) {
+            if(m.getLocation().equals(v)) {
+                return m;
+            }
+        }
+        return null;
+    }
 }

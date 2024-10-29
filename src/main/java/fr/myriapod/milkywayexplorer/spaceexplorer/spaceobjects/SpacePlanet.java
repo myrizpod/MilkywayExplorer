@@ -37,6 +37,8 @@ public class SpacePlanet {
     private double rotSpeed;
     private double revolveSpeed;
     private Ship ship;
+    private Vector3d renderedPos;
+    private double renderedScale;
 
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
@@ -88,6 +90,11 @@ public class SpacePlanet {
             pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
 
         }
+    }
+
+    public double getShipDistance(){
+        Vector3d shipPos = ship.getPos();
+        return Math.sqrt(Math.pow(pos.x-shipPos.x,2)+Math.pow(pos.y-shipPos.y,2)+Math.pow(pos.z-shipPos.z,2));
     }
 
     public void updatePlanet() {

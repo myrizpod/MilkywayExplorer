@@ -43,12 +43,6 @@ public class SpacePixel {
         pixel.setTeleportDuration(TP_DURATION);
     }
 
-    public void move(Vector3d shift){
-        pos.x += shift.x;
-        pos.y += shift.y;
-        pos.z += shift.z;
-    }
-
     public void tpTo(Vector3d newPos) {
         pos.x = newPos.x;
         pos.y = newPos.y;

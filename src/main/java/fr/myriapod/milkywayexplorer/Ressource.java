@@ -1,8 +1,10 @@
 package fr.myriapod.milkywayexplorer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ public enum Ressource {
         this.modelData = modelData;
         this.parameters = parameters;
     }
+
 
     public String getName() {
         return name;
@@ -59,6 +62,15 @@ public enum Ressource {
             return item.getType().equals(material) && item.getItemMeta().getCustomModelData() == modelData;
         }
         return false;
+    }
+
+    public static Ressource nameToRessource(String string) {
+        for(Ressource r : Ressource.values()) {
+            if(r.name.toLowerCase().equals(string)) {
+                return r;
+            }
+        }
+        return null;
     }
 
 
@@ -112,6 +124,15 @@ public enum Ressource {
         }
 
         return retourne;
+    }
+
+    public ItemStack getAsItem(Integer integer) {
+        ItemStack item = new ItemStack(material, integer);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(modelData);
+        meta.setDisplayName(ChatColor.RESET + name);
+        item.setItemMeta(meta);
+        return item;
     }
 
 

@@ -1,4 +1,4 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools;
 
 import org.joml.Vector3i;
 

@@ -4,8 +4,8 @@ import de.articdive.jnoise.core.api.functions.Interpolation;
 import de.articdive.jnoise.generators.noise_parameters.fade_functions.FadeFunction;
 import de.articdive.jnoise.pipeline.JNoise;
 import fr.myriapod.milkywayexplorer.Main;
-import fr.myriapod.milkywayexplorer.mytools.Gradients;
-import fr.myriapod.milkywayexplorer.mytools.Maths;
+import fr.myriapod.milkywayexplorer.tools.Gradients;
+import fr.myriapod.milkywayexplorer.tools.Maths;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.Bukkit;
 import org.joml.Vector3d;
@@ -15,7 +15,6 @@ import org.joml.Vector4d;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
 public class SpacePlanet {
 
@@ -72,7 +71,7 @@ public class SpacePlanet {
 
     public void create() {
 
-        JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library TODO make some of its parameters depend on seed
+        JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library
         List<Vector4d> points = Maths.fibonacciSphere(pixelAmount, radius); //4th dimension is angle in radians
         pixelComponents = new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools.noises;
 
 import de.articdive.jnoise.core.util.vectors.Vector;
 import de.articdive.jnoise.generators.noisegen.worley.WorleyNoiseGenerator;

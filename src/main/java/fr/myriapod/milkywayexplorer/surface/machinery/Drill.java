@@ -13,6 +13,7 @@ public abstract class Drill extends Machinery {
     protected final Map<Ressource, Double> production = new HashMap<>();
     protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
+    protected double prod;
 
 
     public void startProduction() {
@@ -23,8 +24,9 @@ public abstract class Drill extends Machinery {
         isProducting = false;
     }
 
-    public void setProduction(Ressource r, double prod) {
-        production.put(r, prod);
+    public void setProduction(Ressource r) {
+        production.put(r, this.prod);
+        Bukkit.getLogger().info("production " + production);
     }
 
     public Set<Ressource> getRessources() {
@@ -39,26 +41,21 @@ public abstract class Drill extends Machinery {
 
 
     protected void productionLoop() {
-        Map<Ressource, Double> productedD = new HashMap<>(production);
-        production.keySet().forEach(r -> producted.computeIfAbsent(r, ressource -> 0));
 
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
-
-            if(isProducting) {
+            if (isProducting) {
                 for(Ressource r : production.keySet()) {
-                    Double value = productedD.get(r);
-                    value += production.get(r);
+                    producted.computeIfAbsent(r, ressource -> 0);
 
-                    if(value > 1) {
-                        producted.put(r, (int) (producted.get(r) + value));
-                        value--;
-                    }
+                    int value = producted.get(r);
+                    value++;
 
-                    productedD.put(r, value);
-
+                    producted.put(r, value);
                 }
+
+
             }
-        }, 1, 20);
+        }, 1, (long) (prod*100) * 20);
 
     }
 

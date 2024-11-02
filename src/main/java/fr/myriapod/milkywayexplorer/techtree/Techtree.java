@@ -16,11 +16,19 @@ public class Techtree {
         techsUnlocked = new ArrayList<>();
     }
 
+    public Techtree(List<Tech> teches) {
+        techsUnlocked = new ArrayList<>(teches);
+    }
+
     public void unlockTech(Tech tech) {
         techsUnlocked.add(tech);
     }
 
     public boolean hasTech(Tech tech) {
         return techsUnlocked.contains(tech);
+    }
+
+    public List<Tech> getUnlocked() {
+        return techsUnlocked;
     }
 }

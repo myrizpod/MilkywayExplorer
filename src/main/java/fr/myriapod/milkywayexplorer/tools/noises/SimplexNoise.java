@@ -1,4 +1,4 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools.noises;
 
 import de.articdive.jnoise.generators.noise_parameters.simplex_variants.*;
 import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;

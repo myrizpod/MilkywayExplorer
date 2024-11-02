@@ -1,7 +1,5 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools;
 
-import com.sun.source.tree.BreakTree;
-import org.joml.Vector2d;
 import org.joml.Vector4d;
 
 import java.util.ArrayList;

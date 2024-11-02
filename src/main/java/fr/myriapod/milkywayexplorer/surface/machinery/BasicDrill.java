@@ -9,15 +9,20 @@ import org.joml.Vector3i;
 public class BasicDrill extends Drill {
 
 
-    BasicDrill() {
+    public BasicDrill() {
         setupInfo();
     }
 
-    public BasicDrill(Vector3i v, Ressource r, double prod) {
+    public BasicDrill(Vector3i v, Ressource r) {
         this.pos = v;
         setupInfo();
-        setProduction(r, prod);
-        startProduction();
+        setProduction(r);
+        productionLoop();
+    }
+
+    public BasicDrill(Vector3i v) {
+        this.pos = v;
+        setupInfo();
         productionLoop();
     }
 
@@ -29,6 +34,7 @@ public class BasicDrill extends Drill {
         this.modelData = 1001;
         this.description.add("Peut etre posé sur un sol exploitable");
         price.put(Ressource.IRON, 20);
+        this.prod = 0.1;
 
     }
 

@@ -2,7 +2,7 @@ package fr.myriapod.milkywayexplorer.techtree;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Ressource;
-import fr.myriapod.milkywayexplorer.mytools.Tuple;
+import fr.myriapod.milkywayexplorer.tools.Tuple;
 
 import java.util.*;
 

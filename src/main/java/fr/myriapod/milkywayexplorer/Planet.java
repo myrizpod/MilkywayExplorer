@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 
 import javax.crypto.Mac;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Planet {
 
@@ -22,7 +25,6 @@ public class Planet {
 
         spacePlanet = sp;
         surfacePlanet = surP;
-
     }
 
 
@@ -47,12 +49,16 @@ public class Planet {
     }
 
 
-    public void addMachinery(Machinery machinery) {
-        surfacePlanet.addMachinery(machinery);
+    public void addMachinery(UUID uuid, Machinery machinery) {
+        surfacePlanet.addMachinery(uuid, machinery);
 
     }
 
-    public Machinery getMachinery(Location entityLoc) {
-        return surfacePlanet.getMachinery(entityLoc);
+    public Machinery getMachinery(UUID uuid) {
+        return surfacePlanet.getMachinery(uuid);
+    }
+
+    public Map<UUID, Machinery> getAllMachines() {
+        return surfacePlanet.getAllMachineries();
     }
 }

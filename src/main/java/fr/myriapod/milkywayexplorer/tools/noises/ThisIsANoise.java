@@ -1,11 +1,12 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools.noises;
 
-public class ThisIsANoise {
+public abstract class ThisIsANoise {
 
     private int power = 1;
-    public void setBuilder(int seed){
 
-    }
+
+    public abstract void setBuilder(int seed);
+
     public double evaluateNoise(double x,double y,double z,double w){
         return 0;
     }

@@ -2,7 +2,7 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceship;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Main;
-import fr.myriapod.milkywayexplorer.mytools.Skull;
+import fr.myriapod.milkywayexplorer.tools.Skull;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -148,9 +148,9 @@ public class Ship {
                     player.sendMessage("Momentum: " + shipMomentum.toString());
 
                 } else {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue());
-                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getDefaultValue());
-                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).getDefaultValue());
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1f);
+                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.4f);
+                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(0.3f);
                 }
 
             }

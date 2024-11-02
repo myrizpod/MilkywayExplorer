@@ -1,19 +1,12 @@
 package fr.myriapod.milkywayexplorer.surface;
 
-import com.sk89q.worldedit.scripting.RhinoContextFactory;
 import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex2DVariant;
-import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex3DVariant;
-import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex4DVariant;
-import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;
 import de.articdive.jnoise.pipeline.JNoise;
 import fr.myriapod.milkywayexplorer.Ressource;
-import fr.myriapod.milkywayexplorer.mytools.ThisIsANoise;
-import fr.myriapod.milkywayexplorer.mytools.Tuple;
-import org.bukkit.Material;
+import fr.myriapod.milkywayexplorer.tools.noises.ThisIsANoise;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 import org.joml.Vector2i;
-import org.joml.Vector3i;
 
 import java.util.*;
 
@@ -23,15 +16,15 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private double scale = 0.005;
     private ThisIsANoise colorPipeline;
     private Map<Ressource, JNoise> oresPipeline = new HashMap<>();
-    private final double TILE_WIDTH;
-    private final double TILE_HEIGHT;
+    private final int TILE_WIDTH;
+    private final int TILE_HEIGHT;
     private SurfaceTypes currentSurface;
 
 
     private Map<Ressource, Set<Vector2i>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos
 
 
-    public CustomPlanetGeneration(int seed, int side,SurfaceTypes currentSurface ,Ressource[] ores) {
+    public CustomPlanetGeneration(int seed, int side, SurfaceTypes currentSurface, Ressource[] ores) {
         TILE_WIDTH = side;
         TILE_HEIGHT = side;
         this.currentSurface = currentSurface;
@@ -43,7 +36,8 @@ public class CustomPlanetGeneration extends ChunkGenerator {
             oresPose.computeIfAbsent(ore, k -> new HashSet<>());
         }
 
-
+        calculateOrePos();
+        
     }
 
 
@@ -83,40 +77,36 @@ public class CustomPlanetGeneration extends ChunkGenerator {
 
                     }
 
+                }
+            }
+        }
 
-                    /******** Ressource noises ********/
-                    boolean chunckDone = false;
+    }
 
-                    for(Ressource ore : oresPipeline.keySet()) {
-                        double oreNoise = oresPipeline.get(ore).evaluateNoise(chunkX, chunkZ);
 
-                        if(oreNoise <= ore.getRarity()) {
+    private void calculateOrePos() {
+        /******** Ressource noises ********/
+        for(int chunkZ = -TILE_HEIGHT/16; chunkZ < TILE_HEIGHT/16; chunkZ++) {
+            for (int chunkX = -TILE_WIDTH/16; chunkX < TILE_WIDTH/16; chunkX++) {
 
-                            Set<Vector2i> poses = new HashSet<>(oresPose.get(ore));
+                for (Ressource ore : oresPipeline.keySet()) {
+                    double oreNoise = oresPipeline.get(ore).evaluateNoise(chunkX, chunkZ);
 
-                            //Check if chunck is already done
-                            for(Vector2i pos : poses) {
-                                if (pos.x == chunkX && pos.y == chunkZ) {
-                                    //si chunck deja fait passer à celui d'apres
-                                    chunckDone = true;
-                                }
-                            }
+                    if (oreNoise <= ore.getRarity()) {
 
-                            //si non alors ajouter à poses
-                            if(! chunckDone) {
-                                poses.add(new Vector2i(chunkX, chunkZ));
-                                oresPose.put(ore, poses);
-                            }
+                        Set<Vector2i> poses = new HashSet<>(oresPose.get(ore));
 
-                        }
+                        //si non alors ajouter à poses
+                        poses.add(new Vector2i(chunkX, chunkZ));
+                        oresPose.put(ore, poses);
 
                     }
 
                 }
             }
         }
-
     }
+
 
     public Map<Ressource, Set<Vector2i>> getOrePose() {
         return oresPose;

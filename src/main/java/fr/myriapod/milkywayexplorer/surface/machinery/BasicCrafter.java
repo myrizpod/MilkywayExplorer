@@ -9,12 +9,13 @@ import org.joml.Vector3i;
 public class BasicCrafter extends Crafter {
 
 
-    BasicCrafter() {
+    public BasicCrafter() {
         setupInfo();
     }
 
     public BasicCrafter(Vector3i pos) {
         this.pos = pos;
+        setupInfo();
     }
 
 

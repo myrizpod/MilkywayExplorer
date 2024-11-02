@@ -7,12 +7,13 @@ import org.joml.Vector3i;
 
 public class TechtreeBlock extends Machinery {
 
-    TechtreeBlock() {
+    public TechtreeBlock() {
         setupInfo();
     }
 
     public TechtreeBlock(Vector3i pos) {
         this.pos = pos;
+        setupInfo();
     }
 
     void setupInfo() {

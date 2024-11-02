@@ -1,4 +1,4 @@
-package fr.myriapod.milkywayexplorer.mytools;
+package fr.myriapod.milkywayexplorer.tools.noises;
 
 import de.articdive.jnoise.generators.noisegen.worley.WorleyNoiseGenerator;
 import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;

@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
+import fr.myriapod.milkywayexplorer.tools.SaveFile;
 import org.joml.Vector3d;
 
 import java.util.*;
@@ -11,11 +12,13 @@ public class StarSystem {
 
     private final Planet star;
     private final List<Planet> allPlanets = new ArrayList<>();
+    private Vector3d center;
 
 
     public StarSystem(Vector3d center, int seed) {
         int planetCount = 1;
         Random generator = new Random(seed);
+        this.center = center;
 
         for(int i = 0; i < planetCount; i++) {
             Planet planet = new Planet(
@@ -35,6 +38,7 @@ public class StarSystem {
         );
 
     }
+
 
     public void shipEnters(Ship ship) {
         for(Planet p : allPlanets) {
@@ -60,6 +64,12 @@ public class StarSystem {
 
             SurfacePlanet spl = p.getSurfacePlanet();
             spl.generate();
+
+            SaveFile saveFile = new SaveFile();
+            if(saveFile.doPlanetHasMachinery(center, allPlanets.indexOf(p))) {
+                spl.setAllMachineries(saveFile.getAllMachineries(center, allPlanets.indexOf(p)));
+            }
+
         }
         SpacePlanet s = star.getSpacePlanet();
         s.create();
@@ -72,6 +82,10 @@ public class StarSystem {
 
     public Planet getStar() {
         return star;
+    }
+
+    public Vector3d getCenter() {
+        return center;
     }
 }
 

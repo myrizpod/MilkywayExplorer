@@ -3,11 +3,12 @@ package fr.myriapod.milkywayexplorer.surface;
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Ressource;
-import fr.myriapod.milkywayexplorer.mytools.PasteSchem;
+import fr.myriapod.milkywayexplorer.tools.PasteSchem;
 import fr.myriapod.milkywayexplorer.surface.listeners.CrafterInventory;
 import fr.myriapod.milkywayexplorer.surface.listeners.LoopOnPlanet;
 import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
+import fr.myriapod.milkywayexplorer.tools.SaveFile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,19 +20,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3i;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SurfaceListener implements Listener {
 
@@ -82,11 +79,16 @@ public class SurfaceListener implements Listener {
                     e.setInteractionWidth(3);
                     e.setInteractionHeight(3);
                     e.addScoreboardTag("drill");
+                    e.addScoreboardTag((String) t.toArray()[0]);
 
 
-                    Machinery drill = new BasicDrill(new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)), ressource, 0.1);
+                    Machinery drill = new BasicDrill(new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)), ressource);
+                    Drill d = (Drill) drill;
+                    d.startProduction();
 
-                    planet.addMachinery(drill);
+                    planet.addMachinery(e.getUniqueId(), drill);
+
+                    player.getInventory().remove(player.getInventory().getItemInMainHand());
                 }
 
             } else {
@@ -105,10 +107,11 @@ public class SurfaceListener implements Listener {
             }
         }
 
+
         else if(tags.contains("drill")) {
             if(planet == null) return;
 
-            m = planet.getMachinery(entityLoc);
+            m = planet.getMachinery(entity.getUniqueId());
 
             if(m instanceof BasicDrill) {
                 Drill drill = (Drill) m;
@@ -127,10 +130,11 @@ public class SurfaceListener implements Listener {
             }
         }
 
+
         else if(tags.contains("crafter")) {
             if(planet == null) return;
 
-            m = planet.getMachinery(entityLoc);
+            m = planet.getMachinery(entity.getUniqueId());
 
             if(m instanceof BasicCrafter) {
                 Crafter c = (Crafter) m;
@@ -189,13 +193,11 @@ public class SurfaceListener implements Listener {
 
                 try {
                     Machinery machinery = m.getClass().getDeclaredConstructor(Vector3i.class).newInstance(new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
-                    planet.addMachinery(machinery);
+                    planet.addMachinery(e.getUniqueId(), machinery);
                 } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
                          NoSuchMethodException ex) {
                     throw new RuntimeException(ex);
                 }
-
-
             }
 
         }
@@ -204,7 +206,6 @@ public class SurfaceListener implements Listener {
             event.setCancelled(true);
 
         }
-
 
     }
 
@@ -223,7 +224,8 @@ public class SurfaceListener implements Listener {
 
         Machinery surfaceObject = new MachineryAnnotationProcessor().getAsMachinery(item);
 
-        if(item == null) {
+        if(item == null) { //TODO ENTITIES SHOULD BE BASE ON ALL MACHINERY UUID AND NOT LOADED CHUNKSrl
+
             Collection<Entity> entities = player.getWorld().getEntities();
 
             for(Entity e : entities) {
@@ -235,7 +237,7 @@ public class SurfaceListener implements Listener {
         }
 
         if(item.hasItemMeta()) {
-            if(surfaceObject instanceof Drill || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) {
+            if(surfaceObject instanceof Drill || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) { //TODO outillage
 
                 for (Ressource r : planet.getSurfacePlanet().getOresPose().keySet()) {
                     for (Vector3i v : planet.getSurfacePlanet().getOresPose().get(r)) {
@@ -273,10 +275,33 @@ public class SurfaceListener implements Listener {
 
 
     @EventHandler
+    public void playerJoinEvent(PlayerJoinEvent event) {
+        SaveFile f = new SaveFile();
+        Player p = event.getPlayer();
+        if(f.isFirstTimePlayer(p)) {
+            Game.startGame(p);
+            f.savePlayer(p);
+        }
+
+    }
+
+
+    @EventHandler
+    public void foodEvent(FoodLevelChangeEvent event) {
+        event.setCancelled(true);
+    }
+
+
+    @EventHandler
+    public void healthEvent(EntityDamageEvent event) {
+        event.setCancelled(true);
+    }
+
+
+    @EventHandler
     public void inventoryEvent(InventoryClickEvent event) {
         new CrafterInventory().inCrafterInventory(event);
     }
-
 
 
     @EventHandler

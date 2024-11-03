@@ -12,6 +12,7 @@ import javax.crypto.Mac;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Vector;
 
 public class Planet {
 
@@ -44,6 +45,8 @@ public class Planet {
     public void teleportPlayerToSpace(Player player) {
         player.teleport(new Location(Game.getUniversWorld(), 0 ,100, 0));
         Ship ship = new Ship(player);
+        Vector3d exitpos = spacePlanet.getPos().add(new Vector3d(0,spacePlanet.getRadius(),0));
+        ship.setShipPos(exitpos);
         Game.shipEnters(0, ship);
 //        player.getScoreboardTags().add("onShip");
     }

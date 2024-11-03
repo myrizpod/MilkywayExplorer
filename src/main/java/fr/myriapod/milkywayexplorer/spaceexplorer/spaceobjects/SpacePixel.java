@@ -44,9 +44,7 @@ public class SpacePixel {
     }
 
     public void tpTo(Vector3d newPos) {
-        pos.x = newPos.x;
-        pos.y = newPos.y;
-        pos.z = newPos.z;
+        pos = newPos;
     }
     public Vector3d getPos() {
         return pos;
@@ -63,6 +61,15 @@ public class SpacePixel {
         double z = Math.sin(currentAngle) * rad;
         this.tpTo(new Vector3d(x + center.x ,pos.y,z + center.z));
 
+    }
+
+    public void setDistanceWithCenter(Vector3d center, double dist){
+        Vector3d relativePos = pos.sub(center);
+        scale = dist/50;
+        Transformation transformation = pixel.getTransformation();
+        transformation.getScale().set(scale);
+        pixel.setTransformation(transformation);
+        this.tpTo(new Vector3d(center.x + relativePos.x / relativePos.length() * dist ,center.y + relativePos.y / relativePos.length() * dist ,center.z + relativePos.z / relativePos.length() * dist ));
     }
 
     public void renderToShip(Ship ship) {

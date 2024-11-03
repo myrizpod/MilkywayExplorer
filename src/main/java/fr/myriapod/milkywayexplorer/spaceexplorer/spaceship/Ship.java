@@ -33,7 +33,7 @@ public class Ship {
         Game.addShip(this);
 
         this.player = player;
-        this.shipPos = new Vector3d(0,0,0);
+        this.shipPos = new Vector3d(200,0,100);
         this.shipRot = new Vector3d(0,0,0);
         this.shipMomentum = new Vector3d(0,0,0);
         this.shipRotMomentum = new Vector3d(0,0,0);
@@ -93,6 +93,10 @@ public class Ship {
 
     public void rotFriction() { //make it so when u rotate the ship the rot slows down (not realistic but feels nice)
         shipMomentum = shipRotMomentum.div(1.5);
+    }
+
+    public void setShipPos(Vector3d pos){
+        shipPos = pos;
     }
 
 
@@ -157,4 +161,3 @@ public class Ship {
         }, 20, 1);
     }
 }
-

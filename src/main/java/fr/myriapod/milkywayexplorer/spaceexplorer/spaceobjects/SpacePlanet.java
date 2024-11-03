@@ -54,7 +54,8 @@ public class SpacePlanet {
 
     public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed) {
         this.pos = pos;
-        this.pixelAmount = (int) (Maths.getSphereArea(radius) * RAPPORT_NB_POINT_SURFACE);
+        //this.pixelAmount = (int) (Maths.getSphereArea(radius) * RAPPORT_NB_POINT_SURFACE);
+        this.pixelAmount = 500;
         this.radius = radius;
         this.seed = seed; //seed defines color and planet pattern
         this.starPos = starPos;
@@ -66,6 +67,14 @@ public class SpacePlanet {
 
     public void setShip(Ship ship) {
         this.ship = ship;
+    }
+
+    public Vector3d getPos(){
+        return pos;
+    }
+
+    public double getRadius(){
+        return radius;
     }
 
 
@@ -103,6 +112,7 @@ public class SpacePlanet {
                 rotateOnItself(revolveSpeed);
                 rotate(rotSpeed);
                 updateAllPoints();
+                setScale(1000/getShipDistance()*radius);
 
             }
 
@@ -124,7 +134,12 @@ public class SpacePlanet {
                 for (SpacePixel eachPixel : pixelComponents) {
                     eachPixel.rotate(pos,speed);
                 }
+            }
 
+            private void setScale(double scale){
+                for (SpacePixel eachPixel : pixelComponents) {
+                    eachPixel.setDistanceWithCenter(pos,scale);
+                }
             }
 
             private void updateAllPoints() {
@@ -144,4 +159,3 @@ public class SpacePlanet {
 
 
 }
-

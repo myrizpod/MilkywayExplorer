@@ -112,7 +112,9 @@ public class SpacePlanet {
                 rotateOnItself(revolveSpeed);
                 rotate(rotSpeed);
                 updateAllPoints();
-                setScale(1000/getShipDistance()*radius);
+                if(ship != null) {
+                    setScale(1000 / getShipDistance() * radius);
+                }
 
             }
 

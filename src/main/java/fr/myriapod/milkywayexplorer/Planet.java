@@ -43,7 +43,7 @@ public class Planet {
     }
 
     public void teleportPlayerToSpace(Player player) {
-        player.teleport(new Location(Game.getUniversWorld(), 0 ,100, 0));
+        player.teleport(new Location(Game.getUniversWorld(), 0.5 ,100, 0.5));
         Ship ship = new Ship(player);
         Vector3d exitpos = spacePlanet.getPos().add(new Vector3d(0,spacePlanet.getRadius(),0));
         ship.setShipPos(exitpos);

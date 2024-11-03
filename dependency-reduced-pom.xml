@@ -9,7 +9,7 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <outputDirectory>C:\Users\ugoal\Desktop\single-player-server\plugins</outputDirectory>
+          <outputDirectory>C:\Users\augus\OneDrive\Bureau\Serveur 1.21\plugins</outputDirectory>
         </configuration>
       </plugin>
       <plugin>

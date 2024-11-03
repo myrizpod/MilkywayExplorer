@@ -16,7 +16,7 @@ public class StarSystem {
 
 
     public StarSystem(Vector3d center, int seed) {
-        int planetCount = 1;
+        int planetCount = 5;
         Random generator = new Random(seed);
         this.center = center;
 

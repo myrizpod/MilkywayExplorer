@@ -141,8 +141,8 @@ public class SurfacePlanet {
         Interaction interaction = (Interaction) world.spawnEntity(loc, EntityType.INTERACTION);
 
         interaction.addScoreboardTag("ship");
-        interaction.setInteractionWidth(2.5f);
-        interaction.setInteractionHeight(2.5f);
+        interaction.setInteractionWidth(6f);
+        interaction.setInteractionHeight(4f);
 
         new PasteSchem().generate(loc, "ship");
 

@@ -17,7 +17,7 @@ public class Ship {
 
     private final double THRUST_POWER = 0.5;
 
-    private final Horse seat;
+    //private final Horse seat;
     private final Player player;
     private Vector3d shipPos; //pos of the ship in space
     private Vector3d shipRot; // rotation of the ship (pitch[-90;+90] yaw[-180;+180] roll[-180;+180])
@@ -50,12 +50,12 @@ public class Ship {
 
         skyBox.setItemStack(Skull.getSpaceSkull());
 
-        seat = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y - 2, SHIP_CENTER.z), Horse.class);
-        seat.setGravity(false);
-        seat.setInvulnerable(true);
-        seat.addScoreboardTag("ship");
-        seat.setInvisible(true);
-        seat.addPassenger(player);
+//        seat = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y - 2, SHIP_CENTER.z), Horse.class);
+//        seat.setGravity(false);
+//        seat.setInvulnerable(true);
+//        seat.addScoreboardTag("ship");
+//        seat.setInvisible(true);
+        //seat.addPassenger(player);
 
         TextDisplay controlCircle = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");
@@ -123,8 +123,8 @@ public class Ship {
 
                     if(pos.equals(lastPos)) return;
 
-                    player.sendMessage("Pos: " + pos.toString());
-                    player.sendMessage("LastPos: " + lastPos.toString());
+                    //player.sendMessage("Pos: " + pos.toString());
+                    //player.sendMessage("LastPos: " + lastPos.toString());
 
                     double Xdiff = Math.abs(pos.x-lastPos.x);
                     double Zdiff = Math.abs(pos.z-lastPos.z);

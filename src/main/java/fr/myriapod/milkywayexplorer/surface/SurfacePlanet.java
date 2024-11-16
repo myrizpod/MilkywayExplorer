@@ -1,7 +1,10 @@
 package fr.myriapod.milkywayexplorer.surface;
 
-import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
+import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.RessourceAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
@@ -24,9 +27,9 @@ public class SurfacePlanet {
 
     private int side;
     private int seed;
-    private final Ressource[] ores;
-    private final Map<Ressource, Set<Vector3i>> oresPoseFinal = new HashMap<>();
-    private final Map<Ressource, Set<Vector3i>> oresPose = new HashMap<>();
+    private final Generable[] ores;
+    private final Map<Generable, Set<Vector3i>> oresPoseFinal = new HashMap<>();
+    private final Map<Generable, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
     private Set<Player> players = new HashSet<>();
     private Map<UUID, Machinery> allMachineries = new HashMap<>();
@@ -36,12 +39,12 @@ public class SurfacePlanet {
         this.side = (int) Math.sqrt(radius * radius * Math.PI * 4);
         this.seed = seed;
 
-        Ressource[] ores = new Ressource[3];
-        Ressource[] allOres = Ressource.values();
+        Generable[] ores = new Generable[3];
+        Generable[] allOres = new RessourceAnnotationProcessor().getGenerableIterator();
         for (int i = 0; i < ores.length ; i++) {
             ores[i] = allOres[new Random(seed).nextInt(allOres.length)];
         }
-        ores[2] = Ressource.IRON;
+        ores[2] = new Iron();
         this.ores = ores;
     }
 
@@ -71,14 +74,14 @@ public class SurfacePlanet {
         world.setClearWeatherDuration(10);
 
 
-        Map<Ressource, Set<Vector2i>> oresPosChunk = ((CustomPlanetGeneration) (wc.generator())).getOrePose();
+        Map<Generable, Set<Vector2i>> oresPosChunk = ((CustomPlanetGeneration) (wc.generator())).getOrePose();
 
         generateVeins(oresPosChunk);
     }
 
 
-    private void generateVeins(Map<Ressource, Set<Vector2i>> oresPosChunk) {
-        for(Ressource r : oresPosChunk.keySet()) {
+    private void generateVeins(Map<Generable, Set<Vector2i>> oresPosChunk) {
+        for(Generable r : oresPosChunk.keySet()) {
             if(r.getModelName() != null) {
 
                 Set<Vector3i> set = new HashSet<>();
@@ -111,7 +114,7 @@ public class SurfacePlanet {
         }
     }
 
-    public Map<Ressource, Set<Vector3i>> getOresPose() {
+    public Map<Generable, Set<Vector3i>> getOresPose() {
         return oresPose;
     }
 
@@ -119,7 +122,7 @@ public class SurfacePlanet {
         allMachineries.put(uuid, machinery);
 
         if(machinery instanceof Drill d) {
-            for(Ressource r : d.getRessources()) {
+            for(Generable r : d.getRessources()) {
                 Set<Vector3i> set = oresPose.get(r);
                 set.remove(d.getLocation());
                 oresPose.put(r, set);
@@ -209,7 +212,7 @@ public class SurfacePlanet {
 
                         if(ressource == null) continue;
 
-                        d.setProduction(ressource);
+                        d.setProduction((Generable) ressource);
                         d.startProduction();
                     }
 

@@ -1,7 +1,9 @@
 package fr.myriapod.milkywayexplorer.techtree;
 
 import fr.myriapod.milkywayexplorer.Game;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Copper;
+import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.tools.Tuple;
 
 import java.util.*;
@@ -9,10 +11,10 @@ import java.util.*;
 import org.bukkit.Material;
 
 public enum Tech {
-    AUTOMATISATION_ESSENTIALS("Essentiels de l'automatisation", Material.GRAY_CARPET, null, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.WOOD, 10)),
-    SMELTING("Smelting", Material.FURNACE, AUTOMATISATION_ESSENTIALS, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.COPPER, 15)),
-    COMPLEX_CRAFTING("Crafting", Material.CRAFTING_TABLE, AUTOMATISATION_ESSENTIALS, new Tuple<>(Ressource.IRON, 20)),
-    ADVANCED_CRAFTNG("Crafting Avancé", Material.CRAFTER, COMPLEX_CRAFTING, new Tuple<>(Ressource.IRON, 10), new Tuple<>(Ressource.COPPER, 10), new Tuple<>(Ressource.SULFUR, 10));
+    AUTOMATISATION_ESSENTIALS("Essentiels de l'automatisation", Material.GRAY_CARPET, null, new Tuple<>(new Iron(), 0)),
+    SMELTING("Smelting", Material.FURNACE, AUTOMATISATION_ESSENTIALS, new Tuple<>(new Iron(), 10), new Tuple<>(new Copper(), 15)),
+    COMPLEX_CRAFTING("Crafting", Material.CRAFTING_TABLE, AUTOMATISATION_ESSENTIALS, new Tuple<>(new Iron(), 20)),
+    ADVANCED_CRAFTNG("Crafting Avancé", Material.CRAFTER, COMPLEX_CRAFTING, new Tuple<>(new Iron(), 10), new Tuple<>(new Copper(), 10), new Tuple<>(new Copper(), 10));
 
 
     private final String name;

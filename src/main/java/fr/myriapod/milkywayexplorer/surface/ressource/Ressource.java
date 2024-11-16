@@ -1,5 +1,6 @@
-package fr.myriapod.milkywayexplorer;
+package fr.myriapod.milkywayexplorer.surface.ressource;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -9,28 +10,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum Ressource {
+@RessourceAnnotation
+public abstract class Ressource {
 
-    WOOD("Bois", Material.OAK_WOOD, 100, new GenParameters(0.25, null)),
-    IRON("Fer", Material.IRON_INGOT, 101, new GenParameters(0.25, "iron_ore")),
-    COPPER("Cuivre", Material.COPPER_INGOT, 102, new GenParameters(0.25, null)),
-    SULFUR("Sulfur", Material.YELLOW_DYE, 103, new GenParameters(0.20, null)),
-    GOLD("Or", Material.GOLD_INGOT, 104, new GenParameters(0.20, null)),
-    TITANIUM("Titane", Material.BLUE_DYE, 105, new GenParameters(0.15, null));
+    abstract void setupInfo();
 
-
-    private String name;
-    private Material material;
-    private int modelData;
-    private GenParameters parameters;
-
-    Ressource(String name, Material mat, int modelData, GenParameters parameters) {
-        this.name = name;
-        this.material = mat;
-        this.modelData = modelData;
-        this.parameters = parameters;
-    }
-
+    String name;
+    Material material;
+    int modelData;
 
     public String getName() {
         return name;
@@ -44,14 +31,10 @@ public enum Ressource {
         return modelData;
     }
 
-    public double getRarity() {
-        return parameters.rarity;
-    }
 
-    public String getModelName() {
-        return parameters.model_name;
+    public boolean isEqual(Ressource r) {
+        return this.getClass().equals(r.getClass());
     }
-
 
     public boolean isEqual(ItemStack item) {
         if(item == null) {
@@ -64,8 +47,19 @@ public enum Ressource {
         return false;
     }
 
+
+    public ItemStack getAsItem(Integer integer) {
+        ItemStack item = new ItemStack(material, integer);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(modelData);
+        meta.setDisplayName(ChatColor.RESET + name);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+
     public static Ressource nameToRessource(String string) {
-        for(Ressource r : Ressource.values()) {
+        for(Ressource r : new RessourceAnnotationProcessor().getIterator()) {
             if(r.name.toLowerCase().equals(string)) {
                 return r;
             }
@@ -85,7 +79,7 @@ public enum Ressource {
                 continue;
             }
 
-            for (Ressource r : Ressource.values()) {
+            for (Ressource r : new RessourceAnnotationProcessor().getIterator()) {
                 if (r.isEqual(item)) {
                     if(ressources.containsKey(r)) {
                         ressources.put(r, ressources.get(r) + item.getAmount());
@@ -95,7 +89,6 @@ public enum Ressource {
                 }
             }
         }
-
         return ressources;
     }
 
@@ -112,40 +105,18 @@ public enum Ressource {
         } if(price.isEmpty()) {
             return retourne;
         }
-
-        for(Ressource r : price.keySet()) {
-            if(ressources.containsKey(r)) {
-                if(ressources.get(r) < price.get(r)) {
-                    retourne.put(r, price.get(r) - ressources.get(r));
+        for(Ressource pr : price.keySet()) {
+            for (Ressource rr : ressources.keySet()) {
+                if (rr.isEqual(pr)) {
+                    if (ressources.get(rr) < price.get(pr)) {
+                        retourne.put(pr, price.get(pr) - ressources.get(rr));
+                    }
+                } else {
+                    retourne.put(pr, price.get(pr));
                 }
-            } else {
-                retourne.put(r, price.get(r));
             }
         }
-
         return retourne;
-    }
-
-    public ItemStack getAsItem(Integer integer) {
-        ItemStack item = new ItemStack(material, integer);
-        ItemMeta meta = item.getItemMeta();
-        meta.setCustomModelData(modelData);
-        meta.setDisplayName(ChatColor.RESET + name);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-
-    static class GenParameters {
-
-        private double rarity;
-        private String model_name;
-
-        GenParameters(double rarity, String model) {
-            this.rarity = rarity;
-            this.model_name = model;
-        }
-
     }
 
 

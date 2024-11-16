@@ -1,7 +1,6 @@
 package fr.myriapod.milkywayexplorer.techtree;
 
-import fr.myriapod.milkywayexplorer.Game;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,7 +10,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class TechtreeInventories {
 

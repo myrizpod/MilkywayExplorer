@@ -2,12 +2,11 @@ package fr.myriapod.milkywayexplorer.surface.listeners;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Planet;
-import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.surface.machinery.BasicCrafter;
 import fr.myriapod.milkywayexplorer.surface.machinery.Crafter;
 import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
-import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,7 +27,7 @@ public class CrafterInventory {
             if (event.getView().getTitle().equals(ChatColor.GOLD + m.getName())) {
                 if(m instanceof Crafter) {
                     if(m instanceof BasicCrafter) {
-                        Machinery buy = new MachineryAnnotationProcessor().getAsMachinery(event.getCurrentItem());
+                        Machinery buy = Machinery.getAsMachinery(event.getCurrentItem());
 
                         if(buy != null) {
                             Map<Ressource, Integer> playerRessources = Ressource.inventoryToRessources(player.getInventory());

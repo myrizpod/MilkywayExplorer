@@ -2,18 +2,14 @@ package fr.myriapod.milkywayexplorer.tools;
 
 import fr.myriapod.milkywayexplorer.Main;
 import fr.myriapod.milkywayexplorer.Planet;
-import fr.myriapod.milkywayexplorer.Ressource;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
-import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
 import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
 import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.joml.Vector2i;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 

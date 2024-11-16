@@ -2,14 +2,14 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
 import fr.myriapod.milkywayexplorer.surface.listeners.CrafterInventory;
 import fr.myriapod.milkywayexplorer.surface.listeners.LoopOnPlanet;
 import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -59,12 +59,12 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("vein")) {
-            m = new MachineryAnnotationProcessor().getAsMachinery(player.getInventory().getItemInMainHand());
+            m = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
 
             Set<String> t = new HashSet<>(tags);
             t.remove("vein");
 
-            Ressource ressource = Ressource.nameToRessource((String) t.toArray()[0]);
+            Generable ressource = (Generable) Ressource.nameToRessource((String) t.toArray()[0]);
 
             if(ressource == null) return;
 
@@ -176,7 +176,7 @@ public class SurfaceListener implements Listener {
 //        }
 
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            Machinery m = new MachineryAnnotationProcessor().getAsMachinery(item);
+            Machinery m = Machinery.getAsMachinery(item);
             if(m == null) {
                 event.setCancelled(true);
                 return;
@@ -222,7 +222,7 @@ public class SurfaceListener implements Listener {
             return;
         }
 
-        Machinery surfaceObject = new MachineryAnnotationProcessor().getAsMachinery(item);
+        Machinery surfaceObject = Machinery.getAsMachinery(item);
 
         if(item == null) { //TODO ENTITIES SHOULD BE BASE ON ALL MACHINERY UUID AND NOT LOADED CHUNKSrl
 
@@ -239,7 +239,7 @@ public class SurfaceListener implements Listener {
         if(item.hasItemMeta()) {
             if(surfaceObject instanceof Drill || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) { //TODO outillage
 
-                for (Ressource r : planet.getSurfacePlanet().getOresPose().keySet()) {
+                for (Generable r : planet.getSurfacePlanet().getOresPose().keySet()) {
                     for (Vector3i v : planet.getSurfacePlanet().getOresPose().get(r)) {
                         Interaction e = (Interaction) player.getWorld().spawnEntity(new Location(player.getWorld(), v.x+0.5, v.y, v.z+0.5), EntityType.INTERACTION);
 

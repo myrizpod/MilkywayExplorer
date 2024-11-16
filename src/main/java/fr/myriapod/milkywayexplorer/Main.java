@@ -5,6 +5,7 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
 import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
+import fr.myriapod.milkywayexplorer.surface.ressource.RessourceAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
@@ -28,9 +29,6 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        //TODO ADD ALL MACHINERIES TO PLUGIN ON LOAD SAVE, + DONT RECREATE ORES
-
-
         //Debug info
         Bukkit.getLogger().info("-------------");
         Bukkit.getLogger().info("MilkyWayExplorer enabled");
@@ -40,6 +38,7 @@ public class Main extends JavaPlugin {
         //important functions to makes the plugin work
         createSchematics();
         new MachineryAnnotationProcessor().process();
+        new RessourceAnnotationProcessor().process();
 
         Bukkit.unloadWorld("world_nether", false);
         Bukkit.unloadWorld("world_the_end", false);

@@ -1,20 +1,23 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 import fr.myriapod.milkywayexplorer.Main;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Drill extends Machinery {
+public abstract class Drill extends Machinery implements Producter {
 
-    protected final Map<Ressource, Double> production = new HashMap<>();
-    protected final Map<Ressource, Integer> producted = new HashMap<>();
+    protected final Map<Generable, Double> production = new HashMap<>();
+    protected final Map<Generable, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
 
+
+    public void addIncomes(Map<Ressource, Integer> incomes) {}
 
     public void startProduction() {
         isProducting = true;
@@ -24,12 +27,12 @@ public abstract class Drill extends Machinery {
         isProducting = false;
     }
 
-    public void setProduction(Ressource r) {
+    public void setProduction(Generable r) {
         production.put(r, this.prod);
         Bukkit.getLogger().info("production " + production);
     }
 
-    public Set<Ressource> getRessources() {
+    public Set<Generable> getRessources() {
         return production.keySet();
     }
 
@@ -40,11 +43,11 @@ public abstract class Drill extends Machinery {
     }
 
 
-    protected void productionLoop() {
+    public void productionLoop() {
 
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             if (isProducting) {
-                for(Ressource r : production.keySet()) {
+                for(Generable r : production.keySet()) {
                     producted.computeIfAbsent(r, ressource -> 0);
 
                     int value = producted.get(r);

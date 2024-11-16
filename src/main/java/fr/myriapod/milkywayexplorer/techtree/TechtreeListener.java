@@ -1,7 +1,7 @@
 package fr.myriapod.milkywayexplorer.techtree;
 
 import fr.myriapod.milkywayexplorer.Game;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

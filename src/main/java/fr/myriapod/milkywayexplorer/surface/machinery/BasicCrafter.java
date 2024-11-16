@@ -1,6 +1,6 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,7 +26,7 @@ public class BasicCrafter extends Crafter {
         this.model = "crafter";
         this.modelData = 1001;
         this.description.add(ChatColor.RESET + "Permet de creer les Machines de base");
-        price.put(Ressource.IRON, 10);
+        price.put(new Iron(), 10);
 
         for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
             if(m.prerequis.equals(Tech.AUTOMATISATION_ESSENTIALS)) {

@@ -2,7 +2,7 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import de.articdive.jnoise.generators.noise_parameters.simplex_variants.Simplex2DVariant;
 import de.articdive.jnoise.pipeline.JNoise;
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.tools.noises.ThisIsANoise;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
@@ -15,24 +15,24 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     private ThisIsANoise noisePipeline;
     private double scale = 0.005;
     private ThisIsANoise colorPipeline;
-    private Map<Ressource, JNoise> oresPipeline = new HashMap<>();
+    private Map<Generable, JNoise> oresPipeline = new HashMap<>();
     private final int TILE_WIDTH;
     private final int TILE_HEIGHT;
     private SurfaceTypes currentSurface;
 
 
-    private Map<Ressource, Set<Vector2i>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos
+    private Map<Generable, Set<Vector2i>> oresPose = new HashMap<>(); // Where Vector2i is chunk pos
 
 
-    public CustomPlanetGeneration(int seed, int side, SurfaceTypes currentSurface, Ressource[] ores) {
+    public CustomPlanetGeneration(int seed, int side, SurfaceTypes currentSurface, Generable[] ores) {
         TILE_WIDTH = side;
         TILE_HEIGHT = side;
         this.currentSurface = currentSurface;
 
         noisePipeline = currentSurface.setHeightmapNoise(seed);
         colorPipeline = currentSurface.setColorNoise(seed);
-        for(Ressource ore : ores) {
-            oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.ordinal(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
+        for(Generable ore : ores) {
+            oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.getModelData(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
             oresPose.computeIfAbsent(ore, k -> new HashSet<>());
         }
 
@@ -89,7 +89,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
         for(int chunkZ = -TILE_HEIGHT/16; chunkZ < TILE_HEIGHT/16; chunkZ++) {
             for (int chunkX = -TILE_WIDTH/16; chunkX < TILE_WIDTH/16; chunkX++) {
 
-                for (Ressource ore : oresPipeline.keySet()) {
+                for (Generable ore : oresPipeline.keySet()) {
                     double oreNoise = oresPipeline.get(ore).evaluateNoise(chunkX, chunkZ);
 
                     if (oreNoise <= ore.getRarity()) {
@@ -108,7 +108,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
     }
 
 
-    public Map<Ressource, Set<Vector2i>> getOrePose() {
+    public Map<Generable, Set<Vector2i>> getOrePose() {
         return oresPose;
     }
 

@@ -1,7 +1,7 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -38,12 +38,22 @@ public abstract class Machinery {
         this.price = price;
     }
 
+    abstract void setupInfo();
+
     public String getModel() {
         return model;
     }
 
     public Vector3i getLocation() {
         return pos;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Map<Ressource, Integer> getPrice() {
+        return price;
     }
 
 
@@ -59,8 +69,6 @@ public abstract class Machinery {
 
     }
 
-    abstract void setupInfo();
-
     public ItemStack getAsItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -72,11 +80,18 @@ public abstract class Machinery {
         return item;
     }
 
-    public String getName() {
-        return name;
+
+    public static Machinery getAsMachinery(ItemStack item) {
+        if(item == null) {
+            return null;
+        }
+        for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
+            if(m.isItemEqual(item)) {
+                return m;
+            }
+        }
+        return null;
     }
 
-    public Map<Ressource, Integer> getPrice() {
-        return price;
-    }
+
 }

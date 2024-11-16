@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
-import org.bukkit.inventory.ItemStack;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
@@ -32,16 +31,6 @@ public class MachineryAnnotationProcessor {
             }
         }
 
-    }
-
-
-    public Machinery getAsMachinery(ItemStack item) {
-        for(Machinery m : allMachines) {
-            if(m.isItemEqual(item)) {
-                return m;
-            }
-        }
-        return null;
     }
 
 

@@ -1,7 +1,8 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 
-import fr.myriapod.milkywayexplorer.Ressource;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
+import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Material;
 import org.joml.Vector3i;
@@ -13,7 +14,7 @@ public class BasicDrill extends Drill {
         setupInfo();
     }
 
-    public BasicDrill(Vector3i v, Ressource r) {
+    public BasicDrill(Vector3i v, Generable r) {
         this.pos = v;
         setupInfo();
         setProduction(r);
@@ -33,7 +34,7 @@ public class BasicDrill extends Drill {
         this.model = "basic_drill";
         this.modelData = 1001;
         this.description.add("Peut etre posé sur un sol exploitable");
-        price.put(Ressource.IRON, 20);
+        price.put(new Iron(), 20);
         this.prod = 0.1;
 
     }

@@ -27,6 +27,9 @@ public class PasteSchem {
     }
 
     public void generate(Location loc, String fileName, boolean keepAir) {
+        if(fileName == null) {
+            return;
+        }
 
         com.sk89q.worldedit.world.World weWorld = new BukkitWorld(loc.getWorld());
         File file = new File(path + fileName + ".schem");

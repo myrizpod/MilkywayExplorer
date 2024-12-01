@@ -21,6 +21,7 @@ public abstract class Machinery {
     protected String name;
     protected Material material;
     protected Tech prerequis;
+    protected String id;
     protected String model;
     protected int modelData;
     protected List<String> description = new ArrayList<>();
@@ -42,6 +43,10 @@ public abstract class Machinery {
 
     public String getModel() {
         return model;
+    }
+
+    public String getID() {
+        return id;
     }
 
     public Vector3i getLocation() {
@@ -83,6 +88,9 @@ public abstract class Machinery {
 
     public static Machinery getAsMachinery(ItemStack item) {
         if(item == null) {
+            return null;
+        }
+        if(item.getType().equals(Material.AIR)) {
             return null;
         }
         for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {

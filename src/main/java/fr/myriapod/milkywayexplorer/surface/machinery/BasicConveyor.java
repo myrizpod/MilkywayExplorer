@@ -14,6 +14,7 @@ public class BasicConveyor extends Conveyor {
     public BasicConveyor(Producter input, Producter output, Vector3i pos) {
         super(input, output);
         this.pos = pos;
+        rate = 0.2;
         conveyorLoop();
     }
 
@@ -22,9 +23,10 @@ public class BasicConveyor extends Conveyor {
         name = "Tapis Roulant Basique";
         material = Material.GRAY_CARPET;
         prerequis = Tech.AUTOMATISATION_ESSENTIALS;
-        model = "basic_conveyor";
+        model = null;
+        id = "basic_conveyor";
         modelData = 1001;
         description.add("Permet de transferer des ressources d'une machine à une autre");
-        price.put(new Iron(), 3);
+        price.put(new Iron().getNormalized(), 3);
     }
 }

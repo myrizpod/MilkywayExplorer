@@ -19,23 +19,25 @@ public class BasicAssembler extends Assembler {
     }
 
     public BasicAssembler(Vector3i v) {
-        this.pos = v;
+        pos = v;
         setupInfo();
+        startProduction();
         productionLoop();
     }
 
     void setupInfo() {
-        this.name = "Assembleur Basique";
-        this.material = Material.FURNACE;
-        this.prerequis = Tech.AUTOMATISATION_ESSENTIALS;
-        this.model = "basic_assembler";
-        this.modelData = 1001;
-        this.description.add("Permet de produire des ressources");
-        price.put(new Iron(), 35);
+        name = "Assembleur Basique";
+        material = Material.FURNACE;
+        prerequis = Tech.AUTOMATISATION_ESSENTIALS;
+        id = "basic_assembler";
+        model = null;
+        modelData = 1001;
+        description.add("Permet de produire des ressources");
+        price.put(new Iron().getNormalized(), 35);
         Map<Ressource, Integer> m = new HashMap<>();
         m.put(new Iron(), 40);
         recipes.put(new IronBar(), m);
-        this.prod = 0.1;
+        prod = 0.1;
 
     }
 

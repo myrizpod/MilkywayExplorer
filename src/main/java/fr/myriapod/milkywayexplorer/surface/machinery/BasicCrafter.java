@@ -20,13 +20,14 @@ public class BasicCrafter extends Crafter {
 
 
     void setupInfo() {
-        this.name = "Crafteur Basique";
-        this.material = Material.CRAFTING_TABLE;
-        this.prerequis = Tech.AUTOMATISATION_ESSENTIALS;
-        this.model = "crafter";
-        this.modelData = 1001;
-        this.description.add(ChatColor.RESET + "Permet de creer les Machines de base");
-        price.put(new Iron(), 10);
+        name = "Crafteur Basique";
+        material = Material.CRAFTING_TABLE;
+        prerequis = Tech.AUTOMATISATION_ESSENTIALS;
+        model = null;
+        id = "crafter";
+        modelData = 1001;
+        description.add(ChatColor.RESET + "Permet de creer les Machines de base");
+        price.put(new Iron().getNormalized(), 10);
 
         for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
             if(m.prerequis.equals(Tech.AUTOMATISATION_ESSENTIALS)) {

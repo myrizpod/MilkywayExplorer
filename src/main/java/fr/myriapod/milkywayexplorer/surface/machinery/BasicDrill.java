@@ -28,14 +28,15 @@ public class BasicDrill extends Drill {
     }
 
     void setupInfo() {
-        this.name = "Foreuse Basique";
-        this.material = Material.LIGHTNING_ROD;
-        this.prerequis = Tech.AUTOMATISATION_ESSENTIALS;
-        this.model = "basic_drill";
-        this.modelData = 1001;
-        this.description.add("Peut etre posé sur un sol exploitable");
-        price.put(new Iron(), 20);
-        this.prod = 0.1;
+        name = "Foreuse Basique";
+        material = Material.LIGHTNING_ROD;
+        prerequis = Tech.AUTOMATISATION_ESSENTIALS;
+        model = "basic_drill";
+        id = "basic_drill";
+        modelData = 1001;
+        description.add("Peut etre posé sur un sol exploitable");
+        price.put(new Iron().getNormalized(), 20);
+        prod = 0.1;
 
     }
 

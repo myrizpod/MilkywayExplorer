@@ -18,14 +18,17 @@ public abstract class Assembler extends Machinery implements Producter {
 
     public void addIncomes(Map<Ressource, Integer> incomes) {
         for(Ressource r : incomes.keySet()) {
+            this.incomes.putIfAbsent(r, 0);
             for(Ressource tr : this.incomes.keySet()) {
                 if(r.isEqual(tr)) {
+                    Bukkit.getLogger().info("working ???");
                     int n = this.incomes.get(tr);
                     n += incomes.get(r);
                     this.incomes.put(tr, n);
                 }
             }
         }
+        Bukkit.getLogger().info("ass " + this.incomes);
     }
 
     public void startProduction() {
@@ -49,11 +52,13 @@ public abstract class Assembler extends Machinery implements Producter {
 
 
     public void productionLoop() {
-
+        //TODO WTF THINGS HAPPENNING HERE I FKG DONT KNOW
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             if (isProducting) {
+//                Bukkit.getLogger().info("m " + this);
                 for(Ressource craft : recipes.keySet()) {
                     producted.computeIfAbsent(craft, ressource -> 0);
+//                    Bukkit.getLogger().info("rm " + Ressource.ressourcesManquantes(incomes, recipes.get(craft)));
                     if(Ressource.ressourcesManquantes(incomes, recipes.get(craft)).isEmpty()) {
                         int value = producted.get(craft);
                         value++;

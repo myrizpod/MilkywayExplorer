@@ -2,6 +2,7 @@ package fr.myriapod.milkywayexplorer;
 
 import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
 import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
+import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -22,6 +23,12 @@ public class DebugCommand implements CommandExecutor {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
 
+            Planet p = Game.getPlayerPlanet(player);
+
+            if(p != null) {
+                Bukkit.getLogger().info("a " + p.getAllMachines());
+                Bukkit.getLogger().info("a " + new MachineryAnnotationProcessor().getIterator());
+            }
 
             //GIVES ALL THE POSSIBLE RESSOURCES TO PLAYER
 //            for(Ressource r : Ressource.values()) {
@@ -43,14 +50,6 @@ public class DebugCommand implements CommandExecutor {
 //            p.getSurfacePlanet().generate();
 //            p.teleportPlayerToSurface(player);
 
-            Horse h = (Horse) player.getWorld().spawnEntity(player.getLocation(), EntityType.HORSE);
-            h.setAI(false);
-            h.setGravity(false);
-            h.setGlowing(true);
-            h.setInvisible(true);
-            h.setInvulnerable(true);
-            h.setOwner(player);
-            h.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(0.5);
 
 
 

@@ -48,6 +48,16 @@ public abstract class Ressource {
     }
 
 
+    public Ressource getNormalized() {
+        for(Ressource r : new RessourceAnnotationProcessor().getIterator()) {
+            if(r.isEqual(this)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+
     public ItemStack getAsItem(Integer integer) {
         ItemStack item = new ItemStack(material, integer);
         ItemMeta meta = item.getItemMeta();

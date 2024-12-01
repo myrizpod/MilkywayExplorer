@@ -10,6 +10,7 @@ import fr.myriapod.milkywayexplorer.surface.listeners.LoopOnPlanet;
 import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,6 +46,48 @@ public class SurfaceListener implements Listener {
 
         if(tags.isEmpty()) return;
 
+        if(planet == null) return;
+
+
+
+        //Conveyor case
+        m = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
+        if(m instanceof Conveyor conveyor) {
+            Machinery mClicked = planet.getMachinery(entity.getUniqueId());
+            if(mClicked instanceof Producter clicked) {
+                if(conveyor.hasInput()) {
+                    Machinery input = (Machinery) conveyor.getInput();
+                    Vector3i iLoc = input.getLocation();
+                    Vector3i cLoc = mClicked.getLocation();
+                    Vector3i pos = iLoc.add(cLoc).div(2);
+
+                    Interaction e = (Interaction) player.getWorld().spawnEntity(new Location(planet.getSurfacePlanet().getWorld(), pos.x, pos.y, pos.z), EntityType.INTERACTION);
+                    e.setInteractionWidth(2.5f);
+                    e.setInteractionHeight(1.5f);
+                    e.addScoreboardTag("conveyor");
+                    e.addScoreboardTag(SaveFile.formatVectorAsString(iLoc));
+                    e.addScoreboardTag(SaveFile.formatVectorAsString(cLoc));
+
+                    Conveyor c = new BasicConveyor(conveyor.getInput(), clicked, pos);
+                    ((Conveyor) m).setInput(null);
+
+                    planet.addMachinery(e.getUniqueId(), c);
+
+                    player.getInventory().remove(player.getInventory().getItemInMainHand());
+
+                } else {
+                    conveyor.setInput(clicked);
+                    player.sendMessage(ChatColor.GREEN + "Vous avez lié votre tapis roulant à cette machine");
+
+                }
+                return;
+            }
+
+        }
+
+
+
+
         /******* Tags Logic ********/
         if(tags.contains("techtree")) {
             player.openInventory(TechtreeInventories.getDefaultInventory());
@@ -52,8 +95,6 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("ship")) {
-            if(planet == null) return;
-
             planet.teleportPlayerToSpace(player);
         }
 
@@ -70,8 +111,6 @@ public class SurfaceListener implements Listener {
 
             if(m != null) {
                 if(m instanceof Drill) {
-                    if(planet == null) return;
-
                     new PasteSchem().generate(entityLoc, m.getModel());
                     interaction.remove();
 
@@ -109,8 +148,6 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("drill")) {
-            if(planet == null) return;
-
             m = planet.getMachinery(entity.getUniqueId());
 
             if(m instanceof BasicDrill) {
@@ -125,15 +162,33 @@ public class SurfaceListener implements Listener {
                         player.sendMessage(ChatColor.RED + "La foreuse ne contient rien !");
                     }
                 }
-            } else {
-                //TODO check if tapis roulant en main et faire des connecteurs
             }
+
+
+        }
+
+        else if (tags.contains("basic_assembler")) {
+            m = planet.getMachinery(entity.getUniqueId());
+
+            if(m instanceof Producter p) {
+                Map<Ressource, Integer> prod = p.getProducted();
+
+
+                Bukkit.getLogger().info("prod " + prod);
+                for(Ressource r : prod.keySet()) {
+                    if(prod.get(r) > 0) {
+                        player.getInventory().addItem(r.getAsItem(prod.get(r)));
+                        player.sendMessage(ChatColor.GREEN + "Vous avez obtenu " + ChatColor.AQUA + prod.get(r) + " " + ChatColor.GOLD + r.getName());
+                    } else {
+                        player.sendMessage(ChatColor.RED + "L'assembleur ne contient rien !");
+                    }
+                }
+            }
+
         }
 
 
         else if(tags.contains("crafter")) {
-            if(planet == null) return;
-
             m = planet.getMachinery(entity.getUniqueId());
 
             if(m instanceof BasicCrafter) {
@@ -142,8 +197,6 @@ public class SurfaceListener implements Listener {
                 player.openInventory(c.getCrafterInventory());
 
             }
-
-
 
         }
 
@@ -164,16 +217,6 @@ public class SurfaceListener implements Listener {
 
         if(planet == null) return;
 
-//        if(item.getType().equals(Material.FLETCHING_TABLE) && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-//            Location blockLoc = event.getClickedBlock().getLocation();
-//            Location loc = new Location(player.getWorld(), blockLoc.getBlockX() + 0.5, blockLoc.getBlockY() + 1, blockLoc.getBlockZ() + 0.5);
-//
-//            Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
-//            e.addScoreboardTag("techtree");
-//            e.setInteractionHeight(1.3f);
-//            e.setInteractionWidth(1.3f);
-//
-//        }
 
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Machinery m = Machinery.getAsMachinery(item);
@@ -182,22 +225,25 @@ public class SurfaceListener implements Listener {
                 return;
             }
 
-            if(m instanceof BasicCrafter || m instanceof TechtreeBlock) {
-                Location blockLoc = event.getClickedBlock().getLocation();
-                Location loc = new Location(player.getWorld(), blockLoc.getBlockX() + 0.5, blockLoc.getBlockY() + 1, blockLoc.getBlockZ() + 0.5);
+            Location blockLoc = event.getClickedBlock().getLocation();
+            Location loc = new Location(player.getWorld(), blockLoc.getBlockX() + 0.5, blockLoc.getBlockY() + 1, blockLoc.getBlockZ() + 0.5);
+
+            try {
+                Machinery machinery = m.getClass().getDeclaredConstructor(Vector3i.class).newInstance(new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
+
+                new PasteSchem().generate(loc, m.getModel());
 
                 Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
-                e.addScoreboardTag(m.getModel());
+                e.addScoreboardTag(m.getID());
                 e.setInteractionHeight(1.3f);
                 e.setInteractionWidth(1.3f);
 
-                try {
-                    Machinery machinery = m.getClass().getDeclaredConstructor(Vector3i.class).newInstance(new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
-                    planet.addMachinery(e.getUniqueId(), machinery);
-                } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                         NoSuchMethodException ex) {
-                    throw new RuntimeException(ex);
-                }
+                planet.addMachinery(e.getUniqueId(), machinery);
+
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                     NoSuchMethodException ex) {
+                event.setCancelled(true);
+                throw new RuntimeException(ex);
             }
 
         }

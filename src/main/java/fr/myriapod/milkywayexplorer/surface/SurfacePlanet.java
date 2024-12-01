@@ -32,7 +32,7 @@ public class SurfacePlanet {
     private final Map<Generable, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
     private Set<Player> players = new HashSet<>();
-    private Map<UUID, Machinery> allMachineries = new HashMap<>();
+    private final Map<UUID, Machinery> allMachineries = new HashMap<>();
 
 
     public SurfacePlanet(int radius, int seed) {
@@ -108,8 +108,8 @@ public class SurfacePlanet {
                     }
                 }
 
-                oresPose.put(r, set);
-                oresPoseFinal.put(r, set);
+                oresPose.put((Generable) r.getNormalized(), set);
+                oresPoseFinal.put((Generable) r.getNormalized(), set);
             }
         }
     }
@@ -123,7 +123,7 @@ public class SurfacePlanet {
 
         if(machinery instanceof Drill d) {
             for(Generable r : d.getRessources()) {
-                Set<Vector3i> set = oresPose.get(r);
+                Set<Vector3i> set = oresPose.get(r.getNormalized());
                 set.remove(d.getLocation());
                 oresPose.put(r, set);
             }

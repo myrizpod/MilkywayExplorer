@@ -37,7 +37,7 @@ public class SaveFile {
         for(Planet p : starSystem.getAllPlanets()) {
             for(UUID uuid : p.getAllMachines().keySet()) {
                 Machinery m = p.getAllMachines().get(uuid);
-                String path = "starsystems." + formatVectorAsString(starSystem.getCenter()) + "." + starSystem.getAllPlanets().indexOf(p) + ".machineries." + m.getModel();
+                String path = "starsystems." + formatVectorAsString(starSystem.getCenter()) + "." + starSystem.getAllPlanets().indexOf(p) + ".machineries." + m.getID();
                 List<String> chunckCoords = config.isSet(path) ? config.getStringList(path) : new ArrayList<>();
                 Location loc = Bukkit.getEntity(uuid).getLocation();
                 Vector3i v = new Vector3i(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -92,8 +92,8 @@ public class SaveFile {
         for(String s : config.getConfigurationSection(path).getKeys(false)) {
             for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
 
-                if(m.getModel().equals(s)) {
-                    for(String vectorS : config.getStringList(path + "." + m.getModel())){
+                if(m.getID().equals(s)) {
+                    for(String vectorS : config.getStringList(path + "." + m.getID())){
                         Vector3i v = formatStringAsVectori(vectorS);
 
                         try {
@@ -118,7 +118,7 @@ public class SaveFile {
         return (int) v.x + ";" + (int) v.y + ";" + (int) v.z;
     }
 
-    private String formatVectorAsString(Vector3i v) {
+    public static String formatVectorAsString(Vector3i v) {
         return v.x + ";" + v.y + ";" + v.z;
     }
 

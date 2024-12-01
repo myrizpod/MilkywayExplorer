@@ -17,12 +17,13 @@ public class TechtreeBlock extends Machinery {
     }
 
     void setupInfo() {
-        this.name = "Arbre De Competence";
-        this.material = Material.FLETCHING_TABLE;
-        this.prerequis = Tech.AUTOMATISATION_ESSENTIALS;
-        this.model = "techtree";
-        this.modelData = 1001;
-        this.description.add("Permet d'ouvrir l'arbre de competence");
-        price.put(new Iron(), 5);
+        name = "Arbre De Competence";
+        material = Material.FLETCHING_TABLE;
+        prerequis = Tech.AUTOMATISATION_ESSENTIALS;
+        model = null;
+        id = "techtree";
+        modelData = 1001;
+        description.add("Permet d'ouvrir l'arbre de competence");
+        price.put(new Iron().getNormalized(), 5);
     }
 }

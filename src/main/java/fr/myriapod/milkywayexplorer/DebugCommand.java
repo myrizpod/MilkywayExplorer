@@ -1,18 +1,10 @@
 package fr.myriapod.milkywayexplorer;
 
-import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
-import fr.myriapod.milkywayexplorer.surface.SurfacePlanet;
-import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class DebugCommand implements CommandExecutor {
 
@@ -27,7 +19,6 @@ public class DebugCommand implements CommandExecutor {
 
             if(p != null) {
                 Bukkit.getLogger().info("a " + p.getAllMachines());
-                Bukkit.getLogger().info("a " + new MachineryAnnotationProcessor().getIterator());
             }
 
             //GIVES ALL THE POSSIBLE RESSOURCES TO PLAYER

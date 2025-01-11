@@ -1,20 +1,50 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 import fr.myriapod.milkywayexplorer.Main;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.AssemblerType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
+import org.joml.Vector3i;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Assembler extends Machinery implements Producter {
+public class Assembler extends Machinery implements Producter {
 
-    protected final Map<Ressource , Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
+    protected Map<Ressource , Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
     protected Map<Ressource, Integer> incomes = new HashMap<>();
     protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
+    protected AssemblerType assemblerType;
+
+    public Assembler(AssemblerType assembler, Vector3i v) {
+        pos = v;
+        assemblerType = assembler;
+        setupInfo();
+        startProduction();
+        productionLoop();
+    }
+
+    @Override
+    void setupInfo() {
+        if(assemblerType == null) {
+            throw new NullPointerException("Type is not instantiated");
+        }
+
+        name = assemblerType.getName();
+        material = assemblerType.getMaterial();
+        prerequis = assemblerType.getPrerequis();
+        id = assemblerType.getID();
+        model = assemblerType.getModel();
+        modelData = assemblerType.getModelData();
+        description.addAll(assemblerType.getDescription());
+        price.putAll(assemblerType.getPrice());
+        recipes.putAll(assemblerType.getProduction().getRecipes());
+        prod = assemblerType.getProductionTime();
+    }
+
 
     public void addIncomes(Map<Ressource, Integer> incomes) {
         for(Ressource r : incomes.keySet()) {

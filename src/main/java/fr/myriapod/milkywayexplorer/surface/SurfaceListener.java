@@ -2,6 +2,10 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.surface.listeners.ConveyorManager;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.ConveyorType;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
@@ -39,7 +43,6 @@ public class SurfaceListener implements Listener {
         Entity entity = event.getRightClicked();
         Location entityLoc = entity.getLocation();
         Planet planet = Game.getPlayerPlanet(player);
-        Machinery m;
 
         Entity interaction = event.getRightClicked();
         Set<String> tags = interaction.getScoreboardTags();
@@ -48,44 +51,15 @@ public class SurfaceListener implements Listener {
 
         if(planet == null) return;
 
+        Machinery actualMachinery = planet.getMachinery(entity.getUniqueId());
 
 
+        //TODO REWORK CONVEYOR CASE WITH SNAKE TECHNIC
         //Conveyor case
-        m = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
-        if(m instanceof Conveyor conveyor) {
-            Machinery mClicked = planet.getMachinery(entity.getUniqueId());
-            if(mClicked instanceof Producter clicked) {
-                if(conveyor.hasInput()) {
-                    Machinery input = (Machinery) conveyor.getInput();
-                    Vector3i iLoc = input.getLocation();
-                    Vector3i cLoc = mClicked.getLocation();
-                    Vector3i pos = iLoc.add(cLoc).div(2);
-
-                    Interaction e = (Interaction) player.getWorld().spawnEntity(new Location(planet.getSurfacePlanet().getWorld(), pos.x, pos.y, pos.z), EntityType.INTERACTION);
-                    e.setInteractionWidth(2.5f);
-                    e.setInteractionHeight(1.5f);
-                    e.addScoreboardTag("conveyor");
-                    e.addScoreboardTag(SaveFile.formatVectorAsString(iLoc));
-                    e.addScoreboardTag(SaveFile.formatVectorAsString(cLoc));
-
-                    Conveyor c = new BasicConveyor(conveyor.getInput(), clicked, pos);
-                    ((Conveyor) m).setInput(null);
-
-                    planet.addMachinery(e.getUniqueId(), c);
-
-                    player.getInventory().remove(player.getInventory().getItemInMainHand());
-
-                } else {
-                    conveyor.setInput(clicked);
-                    player.sendMessage(ChatColor.GREEN + "Vous avez lié votre tapis roulant à cette machine");
-
-                }
-                return;
-            }
-
+        MachineryType actualMachineryType = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
+        if(actualMachineryType instanceof ConveyorType) {
+            new ConveyorManager().interactWithEntity(event);
         }
-
-
 
 
         /******* Tags Logic ********/
@@ -100,8 +74,6 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("vein")) {
-            m = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
-
             Set<String> t = new HashSet<>(tags);
             t.remove("vein");
 
@@ -109,9 +81,9 @@ public class SurfaceListener implements Listener {
 
             if(ressource == null) return;
 
-            if(m != null) {
-                if(m instanceof Drill) {
-                    new PasteSchem().generate(entityLoc, m.getModel());
+            if(actualMachinery != null) {
+                if(actualMachinery instanceof Drill) {
+                    new PasteSchem().generate(entityLoc, actualMachinery.getModel());
                     interaction.remove();
 
                     Interaction e = (Interaction) player.getWorld().spawnEntity(entityLoc, EntityType.INTERACTION);
@@ -121,9 +93,9 @@ public class SurfaceListener implements Listener {
                     e.addScoreboardTag((String) t.toArray()[0]);
 
 
-                    Machinery drill = new BasicDrill(new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)), ressource);
-                    Drill d = (Drill) drill;
-                    d.startProduction();
+                    Drill drill = new Drill(DrillType.BASIC ,new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)));
+                    drill.setProduction(ressource);
+                    drill.startProduction();
 
                     planet.addMachinery(e.getUniqueId(), drill);
 
@@ -148,10 +120,7 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("drill")) {
-            m = planet.getMachinery(entity.getUniqueId());
-
-            if(m instanceof BasicDrill) {
-                Drill drill = (Drill) m;
+            if(actualMachinery instanceof Drill drill) {
                 Map<Ressource, Integer> prod = drill.getProducted();
 
                 for(Ressource r : prod.keySet()) {
@@ -168,9 +137,7 @@ public class SurfaceListener implements Listener {
         }
 
         else if (tags.contains("basic_assembler")) {
-            m = planet.getMachinery(entity.getUniqueId());
-
-            if(m instanceof Producter p) {
+            if(actualMachinery instanceof Producter p) {
                 Map<Ressource, Integer> prod = p.getProducted();
 
 
@@ -189,11 +156,7 @@ public class SurfaceListener implements Listener {
 
 
         else if(tags.contains("crafter")) {
-            m = planet.getMachinery(entity.getUniqueId());
-
-            if(m instanceof BasicCrafter) {
-                Crafter c = (Crafter) m;
-
+            if(actualMachinery instanceof Crafter c) {
                 player.openInventory(c.getCrafterInventory());
 
             }
@@ -219,7 +182,7 @@ public class SurfaceListener implements Listener {
 
 
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            Machinery m = Machinery.getAsMachinery(item);
+            MachineryType m = Machinery.getAsMachinery(item);
             if(m == null) {
                 event.setCancelled(true);
                 return;
@@ -228,23 +191,16 @@ public class SurfaceListener implements Listener {
             Location blockLoc = event.getClickedBlock().getLocation();
             Location loc = new Location(player.getWorld(), blockLoc.getBlockX() + 0.5, blockLoc.getBlockY() + 1, blockLoc.getBlockZ() + 0.5);
 
-            try {
-                Machinery machinery = m.getClass().getDeclaredConstructor(Vector3i.class).newInstance(new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
+            Machinery machinery = MachineryType.createMachineryByID(m.getID(), new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
 
-                new PasteSchem().generate(loc, m.getModel());
+            new PasteSchem().generate(loc, m.getModel());
 
-                Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
-                e.addScoreboardTag(m.getID());
-                e.setInteractionHeight(1.3f);
-                e.setInteractionWidth(1.3f);
+            Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
+            e.addScoreboardTag(m.getID());
+            e.setInteractionHeight(1.3f);
+            e.setInteractionWidth(1.3f);
 
-                planet.addMachinery(e.getUniqueId(), machinery);
-
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                     NoSuchMethodException ex) {
-                event.setCancelled(true);
-                throw new RuntimeException(ex);
-            }
+            planet.addMachinery(e.getUniqueId(), machinery);
 
         }
 
@@ -268,7 +224,7 @@ public class SurfaceListener implements Listener {
             return;
         }
 
-        Machinery surfaceObject = Machinery.getAsMachinery(item);
+        MachineryType surfaceObject = Machinery.getAsMachinery(item);
 
         if(item == null) { //TODO ENTITIES SHOULD BE BASE ON ALL MACHINERY UUID AND NOT LOADED CHUNKSrl
 
@@ -283,7 +239,7 @@ public class SurfaceListener implements Listener {
         }
 
         if(item.hasItemMeta()) {
-            if(surfaceObject instanceof Drill || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) { //TODO outillage
+            if(surfaceObject instanceof DrillType || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) { //TODO outillage
 
                 for (Generable r : planet.getSurfacePlanet().getOresPose().keySet()) {
                     for (Vector3i v : planet.getSurfacePlanet().getOresPose().get(r)) {

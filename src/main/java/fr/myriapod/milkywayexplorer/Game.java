@@ -3,9 +3,9 @@ package fr.myriapod.milkywayexplorer;
 import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
-import fr.myriapod.milkywayexplorer.surface.machinery.BasicCrafter;
-import fr.myriapod.milkywayexplorer.surface.machinery.BasicDrill;
 import fr.myriapod.milkywayexplorer.surface.machinery.TechtreeBlock;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.Techtree;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
@@ -55,8 +55,8 @@ public class Game {
         Tech.getMajorBranches().forEach(Game::unlockTech);
 
         player.getInventory().clear();
-        player.getInventory().addItem(new BasicDrill().getAsItem());
-        player.getInventory().addItem(new BasicCrafter().getAsItem());
+        player.getInventory().addItem(DrillType.BASIC.getAsItem());
+        player.getInventory().addItem(CrafterType.BASIC.getAsItem());
         player.getInventory().addItem(new TechtreeBlock().getAsItem());
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE);
         ItemMeta meta = item.getItemMeta();

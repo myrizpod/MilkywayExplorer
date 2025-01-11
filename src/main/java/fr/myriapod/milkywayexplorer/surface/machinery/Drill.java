@@ -1,21 +1,45 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 import fr.myriapod.milkywayexplorer.Main;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
+import org.joml.Vector3i;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Drill extends Machinery implements Producter {
+public class Drill extends Machinery implements Producter {
 
     protected final Map<Generable, Double> production = new HashMap<>();
     protected final Map<Generable, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
+    protected DrillType drillType;
 
+
+    public Drill(DrillType drillType, Vector3i pos) {
+        this.drillType = drillType;
+        this.pos = pos;
+        setupInfo();
+        productionLoop();
+    }
+
+
+    @Override
+    void setupInfo() {
+        name = drillType.getName();
+        material = drillType.getMaterial();
+        prerequis = drillType.getPrerequis();
+        model = drillType.getModel();
+        id = drillType.getID();
+        modelData = drillType.getModelData();
+        description.addAll(drillType.getDescription());
+        price.putAll(drillType.getPrice());
+        prod = drillType.getProductionTime();
+    }
 
     public void addIncomes(Map<Ressource, Integer> incomes) {}
 

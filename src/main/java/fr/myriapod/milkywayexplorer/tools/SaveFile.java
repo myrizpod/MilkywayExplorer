@@ -4,7 +4,7 @@ import fr.myriapod.milkywayexplorer.Main;
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
-import fr.myriapod.milkywayexplorer.surface.machinery.MachineryAnnotationProcessor;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class SaveFile {
@@ -90,23 +89,12 @@ public class SaveFile {
         Map<Vector3i, Machinery> machineryMap = new HashMap<>();
 
         for(String s : config.getConfigurationSection(path).getKeys(false)) {
-            for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
+            for(String vectorS : config.getStringList(path + "." + s)){
+                Vector3i v = formatStringAsVectori(vectorS);
+                Machinery machinery = MachineryType.createMachineryByID(s, v);
 
-                if(m.getID().equals(s)) {
-                    for(String vectorS : config.getStringList(path + "." + m.getID())){
-                        Vector3i v = formatStringAsVectori(vectorS);
+                machineryMap.put(v, machinery);
 
-                        try {
-                            Machinery machinery = m.getClass().getDeclaredConstructor(Vector3i.class).newInstance(new Vector3i(v.x, v.y, v.z));
-                            machineryMap.put(v, machinery);
-
-                        } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                                 NoSuchMethodException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                    }
-                }
             }
         }
 

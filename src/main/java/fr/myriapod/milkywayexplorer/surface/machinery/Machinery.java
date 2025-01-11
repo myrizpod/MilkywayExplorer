@@ -1,6 +1,7 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Material;
@@ -13,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@MachineryAnnotation
 public abstract class Machinery {
 
 
@@ -62,18 +62,6 @@ public abstract class Machinery {
     }
 
 
-    public boolean isItemEqual(ItemStack item) {
-        if(item == null) {
-            return false;
-        }
-        if(! item.getItemMeta().hasCustomModelData()) {
-            return false;
-        }
-
-        return item.getType().equals(material) && item.getItemMeta().getCustomModelData() == modelData;
-
-    }
-
     public ItemStack getAsItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -86,14 +74,14 @@ public abstract class Machinery {
     }
 
 
-    public static Machinery getAsMachinery(ItemStack item) {
+    public static MachineryType getAsMachinery(ItemStack item) {
         if(item == null) {
             return null;
         }
         if(item.getType().equals(Material.AIR)) {
             return null;
         }
-        for(Machinery m : new MachineryAnnotationProcessor().getIterator()) {
+        for(MachineryType m : MachineryType.getAllTypes()) {
             if(m.isItemEqual(item)) {
                 return m;
             }

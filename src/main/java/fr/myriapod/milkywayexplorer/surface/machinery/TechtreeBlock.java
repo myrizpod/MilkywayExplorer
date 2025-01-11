@@ -1,6 +1,6 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Material;
 import org.joml.Vector3i;
@@ -24,6 +24,6 @@ public class TechtreeBlock extends Machinery {
         id = "techtree";
         modelData = 1001;
         description.add("Permet d'ouvrir l'arbre de competence");
-        price.put(new Iron().getNormalized(), 5);
+        price.put(Ressource.IRON, 5);
     }
 }

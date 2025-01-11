@@ -21,7 +21,6 @@ public abstract class Conveyor extends Machinery {
 
 
     void conveyorLoop() {
-
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             Map<Ressource, Integer> prod = input.getProducted();
             Bukkit.getLogger().info("conv " + prod);

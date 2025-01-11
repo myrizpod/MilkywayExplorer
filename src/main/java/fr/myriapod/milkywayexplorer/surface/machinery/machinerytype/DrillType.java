@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.surface.machinery.machinerytype;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.DirectList;
@@ -13,19 +12,19 @@ import java.util.*;
 
 public enum DrillType implements MachineryType {
     BASIC("Foreuse Basique", Material.LIGHTNING_ROD, Tech.AUTOMATISATION_ESSENTIALS, "basic_drill", "basic_drill", 1001,
-            new DirectList<>("Peut etre posé sur un sol exploitable"), new DirectList<>(new Tuple<>(new Iron().getNormalized(), 20)), 0.1);
+            new DirectList<>("Peut etre posé sur un sol exploitable"), new DirectList<>(new Tuple<>(Ressource.IRON, 20)), 0.1);
 
 
 
-    private String name;
-    private Material material;
-    private Tech prerequis;
-    private String id;
-    private String model;
-    private int modelData;
-    private List<String> description = new ArrayList<>();
-    private Map<Ressource, Integer> price = new HashMap<>();
-    private double productionTime;
+    private final String name;
+    private final Material material;
+    private final Tech prerequis;
+    private final String id;
+    private final String model;
+    private final int modelData;
+    private final List<String> description = new ArrayList<>();
+    private final Map<Ressource, Integer> price = new HashMap<>();
+    private final double productionTime;
 
 
     DrillType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, double prodTime) {

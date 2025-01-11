@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.surface.ressource;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -10,14 +9,23 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.Map;
 
-@RessourceAnnotation
-public abstract class Ressource {
+public enum Ressource {
 
-    abstract void setupInfo();
+    COAL("Charbon", Material.COAL, 100),
+    IRON("Fer", Material.IRON_INGOT, 101),
+    COPPER("Cuivre", Material.COPPER_INGOT, 102),
+    IRON_BAR("Bar de Fer", Material.IRON_BARS, 110);
 
-    String name;
-    Material material;
-    int modelData;
+
+    final String name;
+    final Material material;
+    final int modelData;
+
+    Ressource(String name, Material material, int modelData) {
+        this.name = name;
+        this.material = material;
+        this.modelData = modelData;
+    }
 
     public String getName() {
         return name;
@@ -32,12 +40,12 @@ public abstract class Ressource {
     }
 
 
-    public boolean isEqual(Ressource r) {
-        return this.getClass().equals(r.getClass());
-    }
 
     public boolean isEqual(ItemStack item) {
         if(item == null) {
+            return false;
+        }
+        if(! item.hasItemMeta()) {
             return false;
         }
 
@@ -48,19 +56,10 @@ public abstract class Ressource {
     }
 
 
-    public Ressource getNormalized() {
-        for(Ressource r : new RessourceAnnotationProcessor().getIterator()) {
-            if(r.isEqual(this)) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-
     public ItemStack getAsItem(Integer integer) {
         ItemStack item = new ItemStack(material, integer);
         ItemMeta meta = item.getItemMeta();
+        assert meta != null;
         meta.setCustomModelData(modelData);
         meta.setDisplayName(ChatColor.RESET + name);
         item.setItemMeta(meta);
@@ -69,7 +68,7 @@ public abstract class Ressource {
 
 
     public static Ressource nameToRessource(String string) {
-        for(Ressource r : new RessourceAnnotationProcessor().getIterator()) {
+        for(Ressource r : Ressource.values()) {
             if(r.name.toLowerCase().equals(string)) {
                 return r;
             }
@@ -85,11 +84,14 @@ public abstract class Ressource {
             if(item == null) {
                 continue;
             }
+            if(! item.hasItemMeta()) {
+                continue;
+            }
             if(! item.getItemMeta().hasCustomModelData()) {
                 continue;
             }
 
-            for (Ressource r : new RessourceAnnotationProcessor().getIterator()) {
+            for (Ressource r : Ressource.values()) {
                 if (r.isEqual(item)) {
                     if(ressources.containsKey(r)) {
                         ressources.put(r, ressources.get(r) + item.getAmount());
@@ -117,7 +119,7 @@ public abstract class Ressource {
         }
         for(Ressource pr : price.keySet()) {
             for (Ressource rr : ressources.keySet()) {
-                if (rr.isEqual(pr)) {
+                if (rr.equals(pr)) {
                     if (ressources.get(rr) < price.get(pr)) {
                         retourne.put(pr, price.get(pr) - ressources.get(rr));
                     }

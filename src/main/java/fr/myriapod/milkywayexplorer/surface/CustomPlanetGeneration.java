@@ -32,7 +32,7 @@ public class CustomPlanetGeneration extends ChunkGenerator {
         noisePipeline = currentSurface.setHeightmapNoise(seed);
         colorPipeline = currentSurface.setColorNoise(seed);
         for(Generable ore : ores) {
-            oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.getModelData(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
+            oresPipeline.put(ore, JNoise.newBuilder().fastSimplex(seed + ore.getProduct().getModelData(), Simplex2DVariant.CLASSIC, null, null).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build());
             oresPose.computeIfAbsent(ore, k -> new HashSet<>());
         }
 

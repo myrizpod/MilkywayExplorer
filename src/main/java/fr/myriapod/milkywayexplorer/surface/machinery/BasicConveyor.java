@@ -1,6 +1,6 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Material;
 import org.joml.Vector3i;
@@ -27,6 +27,6 @@ public class BasicConveyor extends Conveyor {
         id = "basic_conveyor";
         modelData = 1001;
         description.add("Permet de transferer des ressources d'une machine à une autre");
-        price.put(new Iron().getNormalized(), 3);
+        price.put(Ressource.IRON, 3);
     }
 }

@@ -32,7 +32,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3i;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class SurfaceListener implements Listener {
@@ -77,7 +76,7 @@ public class SurfaceListener implements Listener {
             Set<String> t = new HashSet<>(tags);
             t.remove("vein");
 
-            Generable ressource = (Generable) Ressource.nameToRessource((String) t.toArray()[0]);
+            Generable ressource = Generable.nameToRessource((String) t.toArray()[0]);
 
             if(ressource == null) return;
 
@@ -110,7 +109,7 @@ public class SurfaceListener implements Listener {
                 // Cas particulier de la pioche, faire apres une classe outillage qui va gerer tous les outils
                 if(! player.hasCooldown(Material.DIAMOND_PICKAXE)) {
                     if (item.getType().equals(Material.DIAMOND_PICKAXE) && item.getItemMeta().getCustomModelData() == 1001) {
-                        player.getInventory().addItem(ressource.getAsItem(1));
+                        player.getInventory().addItem(ressource.getProduct().getAsItem(1));
                         player.setCooldown(Material.DIAMOND_PICKAXE, 5 * 20);
                     }
                 }
@@ -187,6 +186,14 @@ public class SurfaceListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
+            if(m instanceof ConveyorType) {
+                new ConveyorManager().playerInteract(event);
+                return;
+            }
+            if(m instanceof DrillType) {
+                event.setCancelled(true);
+                return;
+            }
 
             Location blockLoc = event.getClickedBlock().getLocation();
             Location loc = new Location(player.getWorld(), blockLoc.getBlockX() + 0.5, blockLoc.getBlockY() + 1, blockLoc.getBlockZ() + 0.5);
@@ -248,7 +255,7 @@ public class SurfaceListener implements Listener {
                         e.setInteractionHeight(2.5f);
                         e.setInteractionWidth((float) 11);
                         e.addScoreboardTag("vein");
-                        e.addScoreboardTag(r.getName().toLowerCase());
+                        e.addScoreboardTag(r.getModelName());
 
                     }
                 }

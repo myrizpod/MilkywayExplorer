@@ -15,7 +15,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -76,5 +78,13 @@ public class ConveyorManager {
          */
 
     }
+
+
+
+    public void playerInteract(PlayerInteractEvent event) {
+
+
+    }
+
 
 }

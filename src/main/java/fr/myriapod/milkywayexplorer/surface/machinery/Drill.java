@@ -11,10 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Drill extends Machinery implements Producter {
+public class Drill extends Machinery implements Producter /*TODO PUT AS GENERATOR NOT PRODUCTOR */ {
 
     protected final Map<Generable, Double> production = new HashMap<>();
-    protected final Map<Generable, Integer> producted = new HashMap<>();
+    protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
     protected DrillType drillType;
@@ -41,7 +41,9 @@ public class Drill extends Machinery implements Producter {
         prod = drillType.getProductionTime();
     }
 
-    public void addIncomes(Map<Ressource, Integer> incomes) {}
+    public void addIncomes(Map<Ressource, Integer> incomes) {
+        return; //Cant add ressource to a Drill
+    }
 
     public void startProduction() {
         isProducting = true;
@@ -72,12 +74,12 @@ public class Drill extends Machinery implements Producter {
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
             if (isProducting) {
                 for(Generable r : production.keySet()) {
-                    producted.computeIfAbsent(r, ressource -> 0);
+                    producted.computeIfAbsent(r.getProduct(), ressource -> 0);
 
-                    int value = producted.get(r);
+                    int value = producted.get(r.getProduct());
                     value++;
 
-                    producted.put(r, value);
+                    producted.put(r.getProduct(), value);
                 }
 
 

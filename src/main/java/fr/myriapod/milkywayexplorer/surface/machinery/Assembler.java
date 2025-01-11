@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class Assembler extends Machinery implements Producter {
 
-    protected Map<Ressource , Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
+    protected Map<Ressource, Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
     protected Map<Ressource, Integer> incomes = new HashMap<>();
     protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
@@ -50,7 +50,7 @@ public class Assembler extends Machinery implements Producter {
         for(Ressource r : incomes.keySet()) {
             this.incomes.putIfAbsent(r, 0);
             for(Ressource tr : this.incomes.keySet()) {
-                if(r.isEqual(tr)) {
+                if(r.equals(tr)) {
                     Bukkit.getLogger().info("working ???");
                     int n = this.incomes.get(tr);
                     n += incomes.get(r);
@@ -98,7 +98,7 @@ public class Assembler extends Machinery implements Producter {
                         //removes ressources used for the craft
                         for(Ressource r : recipes.get(craft).keySet()) {
                             for(Ressource ir : incomes.keySet()) {
-                                if(r.isEqual(ir)) {
+                                if(r.equals(ir)) {
                                     int n = incomes.get(ir);
                                     n -= recipes.get(craft).get(r);
                                     incomes.put(ir, n);

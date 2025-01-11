@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.surface.machinery.machinerytype;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.DirectList;
@@ -14,17 +13,17 @@ import java.util.*;
 
 public enum CrafterType implements MachineryType {
     BASIC("Crafteur Basique", Material.CRAFTING_TABLE, Tech.AUTOMATISATION_ESSENTIALS, "crafter", null, 1001,
-            new DirectList<>(ChatColor.RESET + "Permet de creer les Machines de base"), new DirectList<>(new Tuple<>(new Iron().getNormalized(), 10)), Tech.AUTOMATISATION_ESSENTIALS);
+            new DirectList<>(ChatColor.RESET + "Permet de creer les Machines de base"), new DirectList<>(new Tuple<>(Ressource.IRON, 10)), Tech.AUTOMATISATION_ESSENTIALS);
 
 
-    private String name;
-    private Material material;
-    private Tech prerequis;
-    private String id;
-    private String model;
-    private int modelData;
-    private List<String> description = new ArrayList<>();
-    private Map<Ressource, Integer> price = new HashMap<>();
+    private final String name;
+    private final Material material;
+    private final Tech prerequis;
+    private final String id;
+    private final String model;
+    private final int modelData;
+    private final List<String> description = new ArrayList<>();
+    private final Map<Ressource, Integer> price = new HashMap<>();
     private Tech products;
 
 

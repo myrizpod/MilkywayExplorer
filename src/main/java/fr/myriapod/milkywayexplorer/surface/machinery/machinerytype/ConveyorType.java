@@ -1,6 +1,5 @@
 package fr.myriapod.milkywayexplorer.surface.machinery.machinerytype;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.DirectList;
@@ -14,20 +13,20 @@ import java.util.*;
 public enum ConveyorType implements MachineryType {
 
     BASIC("Tapis Roulant Basique", Material.FURNACE, Tech.AUTOMATISATION_ESSENTIALS, "basic_conveyor", null, 1001,
-            new DirectList<>("Permet de transporter des ressources"), new DirectList<>(new Tuple<>(new Iron().getNormalized(), 35)), 0.1);
+            new DirectList<>("Permet de transporter des ressources"), new DirectList<>(new Tuple<>(Ressource.IRON, 35)), 0.1);
 
 
 
 
-    private String name;
-    private Material material;
-    private Tech prerequis;
-    private String id;
-    private String model;
-    private int modelData;
-    private List<String> description = new ArrayList<>();
-    private Map<Ressource, Integer> price = new HashMap<>();
-    private double speed;
+    private final String name;
+    private final Material material;
+    private final Tech prerequis;
+    private final String id;
+    private final String model;
+    private final int modelData;
+    private final List<String> description = new ArrayList<>();
+    private final Map<Ressource, Integer> price = new HashMap<>();
+    private final double speed;
 
 
     ConveyorType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, double speed) {

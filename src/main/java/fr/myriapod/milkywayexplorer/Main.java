@@ -4,7 +4,6 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
-import fr.myriapod.milkywayexplorer.surface.ressource.RessourceAnnotationProcessor;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
@@ -36,7 +35,6 @@ public class Main extends JavaPlugin {
 
         //important functions to makes the plugin work
         createSchematics();
-        new RessourceAnnotationProcessor().process();
 
         Bukkit.unloadWorld("world_nether", false);
         Bukkit.unloadWorld("world_the_end", false);

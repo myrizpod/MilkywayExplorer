@@ -58,6 +58,7 @@ public class Crafter extends Machinery {
                 lore.add(ChatColor.RESET + "" + ChatColor.GOLD + r.getName() + " " + ChatColor.AQUA + m.getPrice().get(r));
             }
             ItemMeta meta = item.getItemMeta();
+            assert meta != null;
             meta.setLore(lore);
             item.setItemMeta(meta);
 

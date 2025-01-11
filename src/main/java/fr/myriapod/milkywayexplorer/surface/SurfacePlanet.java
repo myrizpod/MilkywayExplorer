@@ -1,10 +1,7 @@
 package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Game;
-import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
-import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
-import fr.myriapod.milkywayexplorer.surface.ressource.RessourceAnnotationProcessor;
+import fr.myriapod.milkywayexplorer.surface.ressource.*;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
@@ -25,8 +22,8 @@ import java.util.*;
 public class SurfacePlanet {
 
 
-    private int side;
-    private int seed;
+    private final int side;
+    private final int seed;
     private final Generable[] ores;
     private final Map<Generable, Set<Vector3i>> oresPoseFinal = new HashMap<>();
     private final Map<Generable, Set<Vector3i>> oresPose = new HashMap<>();
@@ -40,11 +37,11 @@ public class SurfacePlanet {
         this.seed = seed;
 
         Generable[] ores = new Generable[3];
-        Generable[] allOres = new RessourceAnnotationProcessor().getGenerableIterator();
+        Generable[] allOres = Generable.values();
         for (int i = 0; i < ores.length ; i++) {
             ores[i] = allOres[new Random(seed).nextInt(allOres.length)];
         }
-        ores[2] = new Iron();
+        ores[2] = Generable.IRON; //TODO DEBUG TO HAVE RESSOURCE
         this.ores = ores;
     }
 
@@ -69,6 +66,7 @@ public class SurfacePlanet {
 
         world = wc.createWorld();
 
+        assert world != null;
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         world.setClearWeatherDuration(10);
@@ -108,8 +106,8 @@ public class SurfacePlanet {
                     }
                 }
 
-                oresPose.put((Generable) r.getNormalized(), set);
-                oresPoseFinal.put((Generable) r.getNormalized(), set);
+                oresPose.put(r, set);
+                oresPoseFinal.put(r, set);
             }
         }
     }
@@ -123,7 +121,7 @@ public class SurfacePlanet {
 
         if(machinery instanceof Drill d) {
             for(Generable r : d.getRessources()) {
-                Set<Vector3i> set = oresPose.get(r.getNormalized());
+                Set<Vector3i> set = oresPose.get(r);
                 set.remove(d.getLocation());
                 oresPose.put(r, set);
             }
@@ -206,13 +204,13 @@ public class SurfacePlanet {
                         Set<String> t = new HashSet<>(tags);
                         t.remove("vein");
 
-                        Ressource ressource = Ressource.nameToRessource((String) t.toArray()[0]);
+                        Generable ressource = Generable.nameToRessource((String) t.toArray()[0]);
 
                         Bukkit.getLogger().info("r " + ressource);
 
                         if(ressource == null) continue;
 
-                        d.setProduction((Generable) ressource);
+                        d.setProduction(ressource);
                         d.startProduction();
                     }
 

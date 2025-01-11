@@ -1,12 +1,9 @@
 package fr.myriapod.milkywayexplorer.surface.machinery.machinerytype;
 
-import fr.myriapod.milkywayexplorer.surface.ressource.Iron;
-import fr.myriapod.milkywayexplorer.surface.ressource.IronBar;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.DirectList;
 import fr.myriapod.milkywayexplorer.tools.Tuple;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,22 +13,22 @@ import java.util.*;
 public enum AssemblerType implements MachineryType {
 
     BASIC("Assembleur Basique", Material.FURNACE, Tech.AUTOMATISATION_ESSENTIALS, "basic_assembler", null, 1001,
-            new DirectList<>("Permet de produire des ressources"), new DirectList<>(new Tuple<>(new Iron().getNormalized(), 35)),
-            new Production(new IronBar(), new Tuple<>(new Iron(), 40)), 0.1);
+            new DirectList<>("Permet de produire des ressources"), new DirectList<>(new Tuple<>(Ressource.IRON, 35)),
+            new Production(Ressource.IRON_BAR, new Tuple<>(Ressource.IRON, 40)), 0.1);
 
 
 
 
-    private String name;
-    private Material material;
-    private Tech prerequis;
-    private String id;
-    private String model;
-    private int modelData;
-    private List<String> description = new ArrayList<>();
-    private Map<Ressource, Integer> price = new HashMap<>();
-    private Production production;
-    private double productionTime;
+    private final String name;
+    private final Material material;
+    private final Tech prerequis;
+    private final String id;
+    private final String model;
+    private final int modelData;
+    private final List<String> description = new ArrayList<>();
+    private final Map<Ressource, Integer> price = new HashMap<>();
+    private final Production production;
+    private final double productionTime;
 
 
     AssemblerType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, Production prod, double prodTime) {

@@ -9,8 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public enum ConveyorType implements MachineryType {
 
@@ -26,8 +25,8 @@ public enum ConveyorType implements MachineryType {
     private String id;
     private String model;
     private int modelData;
-    private List<String> description;
-    private Map<Ressource, Integer> price;
+    private List<String> description = new ArrayList<>();
+    private Map<Ressource, Integer> price = new HashMap<>();
     private double speed;
 
 
@@ -38,12 +37,14 @@ public enum ConveyorType implements MachineryType {
         this.id = id;
         this.model = model;
         this.modelData = modelData;
-        while (description.hasNext()) {
-            String s = description.next();
+        Iterator<String> it = description.getIterator();
+        while (it.hasNext()) {
+            String s = it.next();
             this.description.add(s);
         }
-        while (price.hasNext()) {
-            Tuple<Ressource, Integer> t = price.next();
+        Iterator<Tuple<Ressource, Integer>> itt = price.getIterator();
+        while (itt.hasNext()) {
+            Tuple<Ressource, Integer> t = itt.next();
             this.price.put(t.getA(), t.getB());
         }
         this.speed = speed;

@@ -1,9 +1,8 @@
 package fr.myriapod.milkywayexplorer.tools;
 
 import java.util.*;
-import java.util.function.Consumer;
 
-public class DirectList<T> implements Iterator<T> {
+public class DirectList<T> {
 
     List<T> list = new ArrayList<>();
 
@@ -16,15 +15,7 @@ public class DirectList<T> implements Iterator<T> {
         return list;
     }
 
+    public Iterator<T> getIterator() {return list.iterator();}
 
-    @Override
-    public boolean hasNext() {
-        return list.iterator().hasNext();
-    }
-
-    @Override
-    public T next() {
-        return list.iterator().next();
-    }
 
 }

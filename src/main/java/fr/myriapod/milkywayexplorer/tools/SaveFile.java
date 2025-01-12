@@ -54,16 +54,23 @@ public class SaveFile {
     public List<StarSystem> getAllStarSystems(int seed) {
         List<StarSystem> starSystems = new ArrayList<>();
 
-        if(!config.contains("starsystems")) {
+        if(! config.contains("starsystems")) {
             return starSystems;
         }
 
-        for(String s : config.getConfigurationSection("starsystems").getKeys(false)) {
+        for(String s : config.getConfigurationSection("starsystems.deconnection").getKeys(false)) {
             StarSystem ss = new StarSystem(formatStringAsVectord(s), seed);
             starSystems.add(ss);
         }
 
         return starSystems;
+    }
+
+
+    public void registerPlayerPos(StarSystem ss) {
+        String path = "starsystems.deconnection." + formatVectorAsString(ss.getCenter());
+
+        config.set(path, true);
     }
 
 

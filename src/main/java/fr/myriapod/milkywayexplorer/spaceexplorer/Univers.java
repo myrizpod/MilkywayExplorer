@@ -60,6 +60,7 @@ public class Univers {
         SaveFile f = new SaveFile();
 
         List<StarSystem> ss = f.getAllStarSystems(seed);
+        Bukkit.getLogger().info("nb solar system: " + ss.size());
 
         for(StarSystem s : ss) {
             allLoadedSystems.add(s);

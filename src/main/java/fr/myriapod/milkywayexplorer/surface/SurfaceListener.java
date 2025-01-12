@@ -2,6 +2,7 @@ package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.surface.listeners.ConveyorManager;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.ConveyorType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
@@ -80,9 +81,9 @@ public class SurfaceListener implements Listener {
 
             if(ressource == null) return;
 
-            if(actualMachinery != null) {
-                if(actualMachinery instanceof Drill) {
-                    new PasteSchem().generate(entityLoc, actualMachinery.getModel());
+            if(actualMachineryType != null) {
+                if(actualMachineryType instanceof DrillType) {
+                    new PasteSchem().generate(entityLoc, actualMachineryType.getModel());
                     interaction.remove();
 
                     Interaction e = (Interaction) player.getWorld().spawnEntity(entityLoc, EntityType.INTERACTION);
@@ -292,6 +293,17 @@ public class SurfaceListener implements Listener {
             f.savePlayer(p);
         }
 
+    }
+
+
+    @EventHandler
+    public void playerQuitEvent(PlayerQuitEvent event) {
+        SaveFile f = new SaveFile();
+        Player p = event.getPlayer();
+        StarSystem ss = Game.getSystemByWorld(p.getWorld());
+
+        assert ss != null;
+        f.registerPlayerPos(ss);
     }
 
 

@@ -46,6 +46,12 @@ public class Game {
         for(StarSystem s : univers.getAllLoadedSystems()) {
             f.saveStarSystem(s);
         }
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            StarSystem ss = Game.getSystemByWorld(player.getWorld());
+            assert ss != null;
+            f.registerPlayerPos(ss);
+
+        }
     }
 
 

@@ -6,9 +6,9 @@ public enum Generable {
     COPPER(null, 0.25, Ressource.COPPER),
     IRON("iron_ore", 0.25, Ressource.IRON);
 
-    String modelName;
-    double rarity;
-    Ressource product;
+    final String modelName;
+    final double rarity;
+    final Ressource product;
 
     Generable(String modelName, double rarity, Ressource ressource) {
         this.modelName = modelName;
@@ -18,8 +18,11 @@ public enum Generable {
     }
 
     public static Generable nameToRessource(String s) {
+        if(s == null) {
+            return null;
+        }
         for(Generable r : Generable.values()) {
-            if(r.getModelName().equals(s)) {
+            if(s.equals(r.modelName)) {
                 return r;
             }
         }

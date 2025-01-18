@@ -23,7 +23,7 @@ public class CrafterInventory {
         if(planet == null) return;
 
         for(Machinery m : planet.getAllMachines().values()) {
-            if (event.getView().getTitle().equals(ChatColor.GOLD + m.getName())) {
+            if (event.getView().getTitle().equals(ChatColor.GOLD + m.getType().getName())) {
                 if(m instanceof Crafter) {
                     MachineryType buy = Machinery.getAsMachinery(event.getCurrentItem());
 

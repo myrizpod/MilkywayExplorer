@@ -17,29 +17,14 @@ public class Drill extends Machinery implements Producter /*TODO PUT AS GENERATO
     protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
-    protected DrillType drillType;
 
 
     public Drill(DrillType drillType, Vector3i pos) {
-        this.drillType = drillType;
-        this.pos = pos;
-        setupInfo();
+        super(drillType, pos);
+        prod = drillType.getProductionTime();
         productionLoop();
     }
 
-
-    @Override
-    void setupInfo() {
-        name = drillType.getName();
-        material = drillType.getMaterial();
-        prerequis = drillType.getPrerequis();
-        model = drillType.getModel();
-        id = drillType.getID();
-        modelData = drillType.getModelData();
-        description.addAll(drillType.getDescription());
-        price.putAll(drillType.getPrice());
-        prod = drillType.getProductionTime();
-    }
 
     public void addIncomes(Map<Ressource, Integer> incomes) {
         return; //Cant add ressource to a Drill

@@ -6,6 +6,7 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import fr.myriapod.milkywayexplorer.surface.machinery.TechtreeBlock;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.TechtreeType;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.Techtree;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
@@ -63,7 +64,7 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().addItem(DrillType.BASIC.getAsItem());
         player.getInventory().addItem(CrafterType.BASIC.getAsItem());
-        player.getInventory().addItem(new TechtreeBlock().getAsItem());
+        player.getInventory().addItem(TechtreeType.TECHTREE_BLOCK.getAsItem());
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE);
         ItemMeta meta = item.getItemMeta();
         meta.setCustomModelData(1001);

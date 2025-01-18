@@ -1,9 +1,6 @@
 package fr.myriapod.milkywayexplorer.surface.machinery.machinerytype;
 
-import fr.myriapod.milkywayexplorer.surface.machinery.Assembler;
-import fr.myriapod.milkywayexplorer.surface.machinery.Crafter;
-import fr.myriapod.milkywayexplorer.surface.machinery.Drill;
-import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
+import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.Tuple;
@@ -16,6 +13,11 @@ import java.util.*;
 public interface MachineryType {
 
     static Machinery createMachineryByID(String id, Vector3i pos) {
+        for(TechtreeType t : TechtreeType.values()) {
+            if(t.getID().equals(id)) {
+                return new TechtreeBlock(t, pos);
+            }
+        }
         for(AssemblerType a : AssemblerType.values()) {
             if(a.getID().equals(id)) {
                 return new Assembler(a, pos);
@@ -42,6 +44,7 @@ public interface MachineryType {
         allTypes.addAll(List.of(AssemblerType.values()));
         allTypes.addAll(List.of(CrafterType.values()));
         allTypes.addAll(List.of(DrillType.values()));
+        allTypes.addAll(List.of(TechtreeType.values()));
 
         return allTypes;
     }

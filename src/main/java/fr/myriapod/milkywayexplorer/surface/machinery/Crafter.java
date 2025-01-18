@@ -3,7 +3,6 @@ package fr.myriapod.milkywayexplorer.surface.machinery;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
-import fr.myriapod.milkywayexplorer.techtree.Tech;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -19,27 +18,12 @@ import java.util.Set;
 public class Crafter extends Machinery {
 
     Set<MachineryType> products = new HashSet<>();
-    CrafterType crafterType;
 
     public Crafter(CrafterType crafterType, Vector3i pos) {
-        this.crafterType = crafterType;
-        this.pos = pos;
-        setupInfo();
-    }
-
-    @Override
-    void setupInfo() {
-        name = crafterType.getName();
-        material = crafterType.getMaterial();
-        prerequis = crafterType.getPrerequis();
-        id = crafterType.getID();
-        model = crafterType.getModel();
-        modelData = crafterType.getModelData();
-        description.addAll(crafterType.getDescription());
-        price.putAll(crafterType.getPrice());
+        super(crafterType, pos);
 
         for(MachineryType m : MachineryType.getAllTypes()) {
-            if(m.getPrerequis().equals(Tech.AUTOMATISATION_ESSENTIALS)) {
+            if(m.getPrerequis().equals(crafterType.getProducts())) {
                 products.add(m);
             }
         }
@@ -47,8 +31,7 @@ public class Crafter extends Machinery {
 
 
     public Inventory getCrafterInventory() {
-        setupInfo();
-        Inventory inv = Bukkit.createInventory(null, 9*5, ChatColor.GOLD + name);
+        Inventory inv = Bukkit.createInventory(null, 9*5, ChatColor.GOLD + type.getName());
 
         for(MachineryType m : products) {
             ItemStack item = m.getAsItem();

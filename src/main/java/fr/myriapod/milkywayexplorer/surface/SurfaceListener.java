@@ -93,7 +93,7 @@ public class SurfaceListener implements Listener {
                     e.addScoreboardTag((String) t.toArray()[0]);
 
 
-                    Drill drill = new Drill(DrillType.BASIC ,new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)));
+                    Drill drill = new Drill((DrillType) actualMachineryType,new Vector3i((int) (entityLoc.getX()-0.5), (int) entityLoc.getY(), (int) (entityLoc.getZ()-0.5)));
                     drill.setProduction(ressource);
                     drill.startProduction();
 

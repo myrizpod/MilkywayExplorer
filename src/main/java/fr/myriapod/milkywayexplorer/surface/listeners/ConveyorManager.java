@@ -2,23 +2,11 @@ package fr.myriapod.milkywayexplorer.surface.listeners;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.Planet;
-import fr.myriapod.milkywayexplorer.surface.machinery.BasicConveyor;
-import fr.myriapod.milkywayexplorer.surface.machinery.Conveyor;
-import fr.myriapod.milkywayexplorer.surface.machinery.Machinery;
-import fr.myriapod.milkywayexplorer.surface.machinery.Producter;
-import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.ConveyorType;
-import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
-import fr.myriapod.milkywayexplorer.tools.SaveFile;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.joml.Vector3i;
 
 import java.util.Set;
 

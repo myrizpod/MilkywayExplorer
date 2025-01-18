@@ -28,7 +28,7 @@ public class SurfacePlanet {
     private final Map<Generable, Set<Vector3i>> oresPoseFinal = new HashMap<>();
     private final Map<Generable, Set<Vector3i>> oresPose = new HashMap<>();
     private World world;
-    private Set<Player> players = new HashSet<>();
+    private final Set<Player> players = new HashSet<>();
     private final Map<UUID, Machinery> allMachineries = new HashMap<>();
 
 
@@ -200,6 +200,8 @@ public class SurfacePlanet {
                     Machinery machinery = allMachineries.get(v);
                     this.allMachineries.put(e.getUniqueId(), machinery);
 
+
+                    //TODO CHANGE FOR ALL TYPES
                     if(machinery instanceof Drill d) {
                         Set<String> t = new HashSet<>(tags);
                         t.remove("vein");

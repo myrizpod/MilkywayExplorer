@@ -17,32 +17,13 @@ public class Assembler extends Machinery implements Producter {
     protected final Map<Ressource, Integer> producted = new HashMap<>();
     protected boolean isProducting = false;
     protected double prod;
-    protected AssemblerType assemblerType;
 
     public Assembler(AssemblerType assembler, Vector3i v) {
-        pos = v;
-        assemblerType = assembler;
-        setupInfo();
+        super(assembler, v);
+        recipes.putAll(assembler.getProduction().getRecipes());
+        prod = assembler.getProductionTime();
         startProduction();
         productionLoop();
-    }
-
-    @Override
-    void setupInfo() {
-        if(assemblerType == null) {
-            throw new NullPointerException("Type is not instantiated");
-        }
-
-        name = assemblerType.getName();
-        material = assemblerType.getMaterial();
-        prerequis = assemblerType.getPrerequis();
-        id = assemblerType.getID();
-        model = assemblerType.getModel();
-        modelData = assemblerType.getModelData();
-        description.addAll(assemblerType.getDescription());
-        price.putAll(assemblerType.getPrice());
-        recipes.putAll(assemblerType.getProduction().getRecipes());
-        prod = assemblerType.getProductionTime();
     }
 
 

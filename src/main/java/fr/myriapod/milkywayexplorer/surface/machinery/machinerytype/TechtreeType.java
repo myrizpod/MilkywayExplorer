@@ -4,17 +4,20 @@ import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.DirectList;
 import fr.myriapod.milkywayexplorer.tools.Tuple;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
-public enum CrafterType implements MachineryType {
-    BASIC("Crafteur Basique", Material.CRAFTING_TABLE, Tech.AUTOMATISATION_ESSENTIALS, "crafter", null, 1001,
-            new DirectList<>(ChatColor.RESET + "Permet de creer les Machines de base"),
-            new DirectList<>(new Tuple<>(Ressource.IRON, 10)), Tech.AUTOMATISATION_ESSENTIALS);
+public enum TechtreeType implements MachineryType {
+
+    TECHTREE_BLOCK("Arbre De Competence", Material.FLETCHING_TABLE, Tech.AUTOMATISATION_ESSENTIALS, "techtree", null, 1001,
+            new DirectList<>("Permet d'ouvrir l'arbre de competence"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 5)))
+
+
+    ;
 
 
     private final String name;
@@ -25,10 +28,9 @@ public enum CrafterType implements MachineryType {
     private final int modelData;
     private final List<String> description = new ArrayList<>();
     private final Map<Ressource, Integer> price = new HashMap<>();
-    private Tech products;
 
 
-    CrafterType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, Tech products) {
+    TechtreeType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price) {
         this.name = name;
         this.material = mat;
         this.prerequis = prerequis;
@@ -45,9 +47,9 @@ public enum CrafterType implements MachineryType {
             Tuple<Ressource, Integer> t = itt.next();
             this.price.put(t.getA(), t.getB());
         }
-        this.products = products;
 
     }
+
 
     @Override
     public String getName() {
@@ -112,9 +114,4 @@ public enum CrafterType implements MachineryType {
 
         return item.getType().equals(material) && item.getItemMeta().getCustomModelData() == modelData;
     }
-
-    public Tech getProducts() {
-        return products;
-    }
-
 }

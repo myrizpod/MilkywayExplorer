@@ -1,20 +1,21 @@
 package fr.myriapod.milkywayexplorer.surface.machinery;
 
 import fr.myriapod.milkywayexplorer.Main;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.ConveyorType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
+import org.joml.Vector3i;
 
 import java.util.Map;
 
-public abstract class Conveyor extends Machinery {
+public class Conveyor extends Machinery {
 
     Producter input;
     Producter output;
     double rate;
 
-    public Conveyor() {}
-
-    public Conveyor(Producter input, Producter output) {
+    public Conveyor(ConveyorType type, Vector3i pos, Producter input, Producter output) {
+        super(type, pos);
         this.input = input;
         this.output = output;
     }

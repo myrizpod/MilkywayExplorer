@@ -96,7 +96,7 @@ public class SaveFile {
         Map<Vector3i, Machinery> machineryMap = new HashMap<>();
 
         for(String s : config.getConfigurationSection(path).getKeys(false)) {
-            for(String vectorS : config.getStringList(path + "." + s)){
+            for(String vectorS : config.getStringList(path + "." + s)) {
                 Vector3i v = formatStringAsVectori(vectorS);
                 Machinery machinery = MachineryType.createMachineryByID(s, v);
 

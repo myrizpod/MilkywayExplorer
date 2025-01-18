@@ -109,7 +109,7 @@ public class SaveFile {
     }
 
 
-    private String formatVectorAsString(Vector3d v) {
+    public static String formatVectorAsString(Vector3d v) {
         return (int) v.x + ";" + (int) v.y + ";" + (int) v.z;
     }
 
@@ -117,14 +117,14 @@ public class SaveFile {
         return v.x + ";" + v.y + ";" + v.z;
     }
 
-    private Vector3d formatStringAsVectord(String s) {
+    public static Vector3d formatStringAsVectord(String s) {
         String[] coord = s.split(";");
-        return new Vector3d(Double.valueOf(coord[0]), Double.valueOf(coord[1]), Double.valueOf(coord[2]));
+        return new Vector3d(Double.parseDouble(coord[0]), Double.parseDouble(coord[1]), Double.parseDouble(coord[2]));
     }
 
-    private Vector3i formatStringAsVectori(String s) {
+    public static Vector3i formatStringAsVectori(String s) {
         String[] coord = s.split(";");
-        return new Vector3i(Integer.valueOf(coord[0]), Integer.valueOf(coord[1]), Integer.valueOf(coord[2]));
+        return new Vector3i(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]), Integer.parseInt(coord[2]));
     }
 
 }

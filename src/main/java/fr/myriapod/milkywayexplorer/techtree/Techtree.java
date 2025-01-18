@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Techtree {
 
-    public static final String INVENTORY_NAME = ChatColor.GOLD + "Techtree";
+    public static final String INVENTORY_NAME = ChatColor.RESET + "Techtree";
 
 
     private final List<Tech> techsUnlocked;

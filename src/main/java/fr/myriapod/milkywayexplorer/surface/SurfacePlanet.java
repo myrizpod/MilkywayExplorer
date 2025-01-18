@@ -204,7 +204,7 @@ public class SurfacePlanet {
                     //TODO CHANGE FOR ALL TYPES
                     if(machinery instanceof Drill d) {
                         Set<String> t = new HashSet<>(tags);
-                        t.remove("vein");
+                        t.remove("drill");
 
                         Generable ressource = Generable.nameToRessource((String) t.toArray()[0]);
 

@@ -8,12 +8,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class LoopOnPlanet {
 
-    /* TODO FIX
-        Could not pass event PlayerMoveEvent to Planet v1.0-SNAPSHOT
-        org.bukkit.event.EventException: null
-        Caused by: java.lang.NullPointerException: Cannot invoke "fr.myriapod.milkywayexplorer.Planet.getSurfacePlanet()" because "planet" is null
-            at fr.myriapod.milkywayexplorer.surface.listeners.LoopOnPlanet.loopOnPlanet(LoopOnPlanet.java:18) ~[?:?]
-     */
     public void loopOnPlanet(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 

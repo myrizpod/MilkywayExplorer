@@ -24,12 +24,12 @@ public class TechtreeInventories {
         for(Tech tech : major) {
             ItemStack item = new ItemStack(tech.getMaterial());
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(tech.getName());
+            meta.setDisplayName(ChatColor.RESET + tech.getName());
             item.setItemMeta(meta);
 
             inv.setItem(i, item);
 
-            i++; //TODO faire meilleur placement
+            i++;
 
         }
 
@@ -39,7 +39,7 @@ public class TechtreeInventories {
 
     public static Inventory getTree(Tech t) {
         List<Tech> sons = t.getArborescenceUnlocked();
-        Inventory inv = Bukkit.createInventory(null, 6*9, Techtree.INVENTORY_NAME + t.getName()); //TODO Correct name affiching
+        Inventory inv = Bukkit.createInventory(null, 6*9, t.getName());
 
         int i = 0;
         for(Tech son : sons) {
@@ -56,7 +56,7 @@ public class TechtreeInventories {
             }
 
             meta.setLore(lore);
-            meta.setDisplayName(son.getName());
+            meta.setDisplayName(ChatColor.RESET +  son.getName());
             item.setItemMeta(meta);
 
             inv.setItem(i, item);

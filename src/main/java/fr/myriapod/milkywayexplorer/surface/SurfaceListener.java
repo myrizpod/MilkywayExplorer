@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -188,7 +189,8 @@ public class SurfaceListener implements Listener {
                 return;
             }
             if(m instanceof ConveyorType) {
-                new ConveyorManager().playerInteract(event);
+//                new ConveyorManager().playerInteract(event);
+//                event.setCancelled(true);
                 return;
             }
             if(m instanceof DrillType) {
@@ -306,6 +308,8 @@ public class SurfaceListener implements Listener {
         f.registerPlayerPos(ss);
     }
 
+    @EventHandler
+    public void poseBlockEvent(BlockPlaceEvent event) { new ConveyorManager().playerInteract(event); }
 
     @EventHandler
     public void foodEvent(FoodLevelChangeEvent event) {

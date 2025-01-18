@@ -45,6 +45,7 @@ public interface MachineryType {
         allTypes.addAll(List.of(CrafterType.values()));
         allTypes.addAll(List.of(DrillType.values()));
         allTypes.addAll(List.of(TechtreeType.values()));
+        allTypes.addAll(List.of(ConveyorType.values()));
 
         return allTypes;
     }

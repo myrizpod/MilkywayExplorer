@@ -43,7 +43,7 @@ public class TechtreeListener implements Listener {
 
 
         for(Tech t : Tech.getMajorBranches()) {
-            if (invName.equals(Techtree.INVENTORY_NAME + t.getName())) {
+            if (invName.equals(t.getName())) {
 
                 if(item.getType().equals(Material.ARROW)) {
                     player.openInventory(TechtreeInventories.getDefaultInventory());

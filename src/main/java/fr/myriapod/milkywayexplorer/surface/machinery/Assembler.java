@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Assembler extends Machinery implements Producter {
+public class Assembler extends Machinery implements Producter, Input, Output {
 
     protected Map<Ressource, Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
     protected Map<Ressource, Integer> incomes = new HashMap<>();

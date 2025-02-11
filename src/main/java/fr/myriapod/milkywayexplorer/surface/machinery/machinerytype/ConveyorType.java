@@ -12,10 +12,9 @@ import java.util.*;
 
 public enum ConveyorType implements MachineryType {
 
-    BASIC("Tapis Roulant Basique", Material.STONE_SLAB, Tech.AUTOMATISATION_ESSENTIALS, "basic_conveyor", null, 1001,
+    BASIC("Tapis Roulant Basique", Material.STONECUTTER, Tech.AUTOMATISATION_ESSENTIALS, "basic_conveyor", null, 1001,
             new DirectList<>("Permet de transporter des ressources"),
             new DirectList<>(new Tuple<>(Ressource.IRON, 1)), 0.1);
-
 
 
 
@@ -118,4 +117,14 @@ public enum ConveyorType implements MachineryType {
     public double getSpeed() {
         return speed;
     }
+
+    public static ConveyorType isItemAConveyor(ItemStack item) {
+        for(ConveyorType c : ConveyorType.values()) {
+            if(c.isItemEqual(item)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
 }

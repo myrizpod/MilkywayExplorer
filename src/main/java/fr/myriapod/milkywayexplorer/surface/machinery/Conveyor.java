@@ -10,35 +10,25 @@ import java.util.Map;
 
 public class Conveyor extends Machinery {
 
-    Producter input;
-    Producter output;
+    Input input;
+    Output output;
     double rate;
 
-    public Conveyor(ConveyorType type, Vector3i pos, Producter input, Producter output) {
+    public Conveyor(ConveyorType type, Vector3i pos, Output output, Input input) {
         super(type, pos);
         this.input = input;
         this.output = output;
+        this.rate = type.getSpeed();
+        conveyorLoop();
     }
 
 
     void conveyorLoop() {
         Bukkit.getScheduler().runTaskTimer(Main.plugin, () -> {
-            Map<Ressource, Integer> prod = input.getProducted();
+            Map<Ressource, Integer> prod = output.getProducted();
             Bukkit.getLogger().info("conv " + prod);
-            output.addIncomes(prod);
+            input.addIncomes(prod);
         }, 1, (long) (rate*100) * 20);
     }
 
-
-    public boolean hasInput() {
-        return input != null;
-    }
-
-    public Producter getInput() {
-        return input;
-    }
-
-    public void setInput(Producter input) {
-        this.input = input;
-    }
 }

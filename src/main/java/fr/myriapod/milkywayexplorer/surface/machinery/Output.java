@@ -4,14 +4,8 @@ import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 
 import java.util.Map;
 
-public interface Producter {
-
-    void startProduction();
-
-    void stopProduction();
+public interface Output {
 
     Map<Ressource, Integer> getProducted();
-
-    void productionLoop();
 
 }

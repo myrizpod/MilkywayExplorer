@@ -152,8 +152,8 @@ public class Ship {
                     player.sendMessage("Momentum: " + shipMomentum.toString());
 
                 } else {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1f);
-                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.4f);
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.10000000149011612f);
+                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.42f);
                     player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(0.3f);
                 }
 

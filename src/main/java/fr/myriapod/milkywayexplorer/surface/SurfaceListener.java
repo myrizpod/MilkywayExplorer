@@ -55,7 +55,6 @@ public class SurfaceListener implements Listener {
         Machinery actualMachinery = planet.getMachinery(entity.getUniqueId());
 
 
-        //TODO REWORK CONVEYOR CASE WITH SNAKE TECHNIC
         //Conveyor case
         MachineryType actualMachineryType = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
         if(actualMachineryType instanceof ConveyorType) {
@@ -109,10 +108,10 @@ public class SurfaceListener implements Listener {
                 if(item.getItemMeta() == null) return;
 
                 // Cas particulier de la pioche, faire apres une classe outillage qui va gerer tous les outils
-                if(! player.hasCooldown(Material.DIAMOND_PICKAXE)) {
-                    if (item.getType().equals(Material.DIAMOND_PICKAXE) && item.getItemMeta().getCustomModelData() == 1001) {
+                if(Tools.MANUAL_DRILL.canBeUsedByPlayer(player)) {
+                    if (Tools.MANUAL_DRILL.isEqual(item)) {
                         player.getInventory().addItem(ressource.getProduct().getAsItem(1));
-                        player.setCooldown(Material.DIAMOND_PICKAXE, 5 * 20);
+                        Tools.MANUAL_DRILL.setCooldownForPlayer(player);
                     }
                 }
 
@@ -177,9 +176,14 @@ public class SurfaceListener implements Listener {
         Planet planet = Game.getPlayerPlanet(player);
         ItemStack item = event.getItem();
 
-        if(item == null) return;
-
-        if(planet == null) return;
+        if(item == null) {
+            event.setCancelled(true);
+            return;
+        }
+        if(planet == null) {
+            event.setCancelled(true);
+            return;
+        }
 
 
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -189,8 +193,6 @@ public class SurfaceListener implements Listener {
                 return;
             }
             if(m instanceof ConveyorType) {
-//                new ConveyorManager().playerInteract(event);
-//                event.setCancelled(true);
                 return;
             }
             if(m instanceof DrillType) {
@@ -309,7 +311,7 @@ public class SurfaceListener implements Listener {
     }
 
     @EventHandler
-    public void poseBlockEvent(BlockPlaceEvent event) { new ConveyorManager().playerInteract(event); }
+    public void poseBlockEvent(BlockPlaceEvent event) { new ConveyorManager().playerBlockPlace(event); }
 
     @EventHandler
     public void foodEvent(FoodLevelChangeEvent event) {

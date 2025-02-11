@@ -4,6 +4,7 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
+import fr.myriapod.milkywayexplorer.surface.listeners.ConveyorManager;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
@@ -82,6 +83,8 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        ConveyorManager.resetAllPlacings();
+
         Game.saveGame();
         saveConfig();
     }

@@ -57,7 +57,6 @@ public class CustomPlanetGeneration extends ChunkGenerator {
                     double t = actualZ / TILE_HEIGHT;
 
                     // Calculate our 4D coordinates - I have no clue on how that works
-
                     double nx = 1 + Math.cos(s*2*Math.PI) * 1/(2*Math.PI) * TILE_WIDTH;
                     double ny = 1 + Math.cos(t*2*Math.PI) * 1/(2*Math.PI) * TILE_HEIGHT;
                     double nz = 1 + Math.sin(s*2*Math.PI) * 1/(2*Math.PI) * TILE_WIDTH;

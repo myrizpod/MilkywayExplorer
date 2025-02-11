@@ -8,11 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 
-import javax.crypto.Mac;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Vector;
 
 public class Planet {
 

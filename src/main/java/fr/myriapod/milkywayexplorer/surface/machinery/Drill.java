@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Drill extends Machinery implements Producter /*TODO PUT AS GENERATOR NOT PRODUCTOR */ {
+public class Drill extends Machinery implements Output, Producter /*TODO PUT AS GENERATOR NOT PRODUCTOR */ {
 
     protected final Map<Generable, Double> production = new HashMap<>();
     protected final Map<Ressource, Integer> producted = new HashMap<>();
@@ -23,11 +23,6 @@ public class Drill extends Machinery implements Producter /*TODO PUT AS GENERATO
         super(drillType, pos);
         prod = drillType.getProductionTime();
         productionLoop();
-    }
-
-
-    public void addIncomes(Map<Ressource, Integer> incomes) {
-        return; //Cant add ressource to a Drill
     }
 
     public void startProduction() {

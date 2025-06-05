@@ -2,6 +2,7 @@ package fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects;
 
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -18,18 +19,18 @@ public class SpacePixel {
     private double scale;
     private TextDisplay pixel;
     private String color;
-    private Vector3d pos;
-    private double size;
-    private Vector3d trigSpherePos;
+    private Vector3d spherePos;
+    private Vector3d relativePos;
     private double currentAngle;
     private Vector3d renderPos;
 
-    public SpacePixel(Vector3d pos,Vector3d trigSpherePos, String color, double size,double angle){
-        this.pos = pos;
-        this.size = size;
+    public SpacePixel(Vector3d pos,Vector3d spherePos, String color, double size,double angle){
+        this.renderPos = pos;
+        this.scale = size;
         this.scale = 3;
         this.color = color; //hex color code
-        this.trigSpherePos = trigSpherePos; //position on the trig sphere: [-1;1] kinda usleless
+        this.spherePos = spherePos; //position on the trig sphere: [-1;1] kinda usleless
+        relativePos = spherePos;
         this.currentAngle = angle; // angle of the pixel around the vertical axis of the planet in degrees
 
 
@@ -44,38 +45,35 @@ public class SpacePixel {
     }
 
     public void tpTo(Vector3d newPos) {
-        pos = newPos;
-    }
-    public Vector3d getPos() {
-        return pos;
+        renderPos = newPos;
     }
 
-    public Vector3d getTrigSpherePos() {
-        return trigSpherePos;
-    }
+    public void setRelativePos(Vector3d newPos) { relativePos = newPos; }
 
-    public void rotate(Vector3d center,double angle) {
+    public void setSpherePos(Vector3d newPos) { spherePos = newPos; }
+
+    public void rotate(double angle) {
         currentAngle += angle;
-        double rad = Math.sqrt(Math.pow(pos.x - center.x,2)+Math.pow(pos.z - center.z,2));
+        double rad = Math.sqrt(Math.pow(spherePos.x,2)+Math.pow(spherePos.z,2));
         double x = Math.cos(currentAngle) * rad;
         double z = Math.sin(currentAngle) * rad;
-        this.tpTo(new Vector3d(x + center.x ,pos.y,z + center.z));
+        setSpherePos(new Vector3d(x,spherePos.y,z));
 
     }
 
-    public void setDistanceWithCenter(Vector3d center, double dist){
-        Vector3d relativePos = pos.sub(center);
-        scale = dist/50;
+    public void setDistanceWithCenter(double dist){
+        scale = dist;
         Transformation transformation = pixel.getTransformation();
         transformation.getScale().set(scale);
         pixel.setTransformation(transformation);
-        this.tpTo(new Vector3d(center.x + relativePos.x / relativePos.length() * dist ,center.y + relativePos.y / relativePos.length() * dist ,center.z + relativePos.z / relativePos.length() * dist ));
+        //tpTo(new Vector3d(center.x + relativePos.x / relativePos.length() * dist ,center.y + relativePos.y / relativePos.length() * dist ,center.z + relativePos.z / relativePos.length() * dist ));
+        setRelativePos(new Vector3d(spherePos.x * dist , spherePos.y * dist , spherePos.z * dist ));
     }
 
-    public void renderToShip(Ship ship) {
-        //pixel.teleport(new Location(Bukkit.getWorld("world"), pos.x, pos.y, pos.z)); //old way to render
-        renderPos = new Vector3d((pos.x - ship.getPos().x) / ship.getSpaceScale() + ship.getWorldCenter().x , (pos.y - ship.getPos().y) / ship.getSpaceScale() + ship.getWorldCenter().y , (pos.z - ship.getPos().z) / ship.getSpaceScale() + ship.getWorldCenter().z);
-        //pos.sub(ship.getPos()).add(ship.getWorldCenter()).div(ship.getSpaceScale())
-        pixel.teleport(new Location(Game.getUniversWorld(), renderPos.x , renderPos.y , renderPos.z));
+    public void renderToShip(Ship ship, Vector3d planetpos) {
+
+        this.tpTo(new Vector3d(planetpos).add(relativePos));
+
+        pixel.teleport(new Location(Game.getUniversWorld(), renderPos.x + ship.getWorldCenter().x, renderPos.y + ship.getWorldCenter().y, renderPos.z + ship.getWorldCenter().z));
     }
 }

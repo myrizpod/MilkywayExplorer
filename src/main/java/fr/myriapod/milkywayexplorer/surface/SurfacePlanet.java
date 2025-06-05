@@ -32,8 +32,8 @@ public class SurfacePlanet {
     private final Map<UUID, Machinery> allMachineries = new HashMap<>();
 
 
-    public SurfacePlanet(int radius, int seed) {
-        this.side = (int) Math.sqrt(radius * radius * Math.PI * 4);
+    public SurfacePlanet(double radius, int seed) {
+        this.side = 200;//(int) Math.sqrt(radius * radius * Math.PI * 4);
         this.seed = seed;
 
         Generable[] ores = new Generable[3];

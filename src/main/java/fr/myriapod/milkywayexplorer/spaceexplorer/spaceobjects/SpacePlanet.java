@@ -36,8 +36,9 @@ public class SpacePlanet {
     private double rotSpeed;
     private double revolveSpeed;
     private Ship ship;
-    private Vector3d renderedPos;
-    private double renderedScale;
+    private Vector3d renderPos;
+    private double renderScale;
+    private boolean isStar;
 
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
@@ -52,7 +53,7 @@ public class SpacePlanet {
     }
 
 
-    public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed) {
+    public SpacePlanet(Vector3d pos, double radius, Vector3d starPos, int seed,boolean isStar) {
         this.pos = pos;
         //this.pixelAmount = (int) (Maths.getSphereArea(radius) * RAPPORT_NB_POINT_SURFACE);
         this.pixelAmount = 500;
@@ -62,6 +63,7 @@ public class SpacePlanet {
         this.generator = new Random(seed);
         this.revolveSpeed = generator.nextDouble(MIN_RESOLVE_SPEED, MAX_RESOLVE_SPEED); //rotation on itself
         this.rotSpeed = generator.nextDouble(MIN_ROTATION_SPEED, MAX_ROTATION_SPEED); //rotation around star
+        this.isStar = isStar;
     }
 
 
@@ -81,40 +83,65 @@ public class SpacePlanet {
     public void create() {
 
         JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library
-        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount, radius); //4th dimension is angle in radians
+
+        //All pixel positions
+        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount); //4th dimension is angle in radians
+
+        //The list of all pixels
         pixelComponents = new ArrayList<>();
+
+        //the position used to manage pixels as they should only know their render pos
+        renderPos = new Vector3d(pos.x/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE,pos.y/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE,pos.z/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE);
+
 
         ArrayList<Vector3i> colorlist = new ArrayList<>();
         int colorAmount = (Math.abs(seed) % 2) + 2; //choose the color amount: randint(2,4)
-        for (int eachCol = 0; eachCol < colorAmount; eachCol++) {
-            colorlist.add(new Vector3i(Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255));
+        if (isStar) {
+            colorlist.add(new Vector3i(255, 0, 0));
+            colorlist.add(new Vector3i(255, 255, 0));
+        }
+        else {
+            for (int eachCol = 0; eachCol < colorAmount; eachCol++) {
+                colorlist.add(new Vector3i(Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255, Math.abs(generator.nextInt()) % 255));
+            }
         }
 
         for (Vector4d eachPoint : points) {
-            double bwMap = noisePipeline.evaluateNoise(eachPoint.x / radius + 1,eachPoint.y / radius + 1,eachPoint.z / radius + 1);
+            double bwMap = noisePipeline.evaluateNoise(eachPoint.x + 1,eachPoint.y + 1,eachPoint.z + 1);
             double angle = eachPoint.w;
 
             String color = Gradients.getGradientColor(colorlist,bwMap);
-            pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z),new Vector3d(eachPoint.x + pos.x, eachPoint.y + pos.y, eachPoint.z + pos.z), color,3, angle));
+            pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + renderPos.x, eachPoint.y + renderPos.y, eachPoint.z + renderPos.z),new Vector3d(eachPoint.x, eachPoint.y, eachPoint.z), color,3, angle));
 
         }
     }
 
     public double getShipDistance(){
         Vector3d shipPos = ship.getPos();
-        return Math.sqrt(Math.pow(pos.x-shipPos.x,2)+Math.pow(pos.y-shipPos.y,2)+Math.pow(pos.z-shipPos.z,2));
+        return Math.sqrt(Math.pow(pos.x-shipPos.x,2)+Math.pow(pos.y-shipPos.y,2)+Math.pow(pos.z-shipPos.z,2))-radius;
     }
 
     public void updatePlanet() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
             private double currentAngle = 0;
             public void run() {
-                rotateOnItself(revolveSpeed);
                 rotate(rotSpeed);
+                //recalculates the render position of the planet
+                if (ship!=null) {
+                    // WTF apparement changer la renderpos change la pos
+                    // OK BAH LE SHIP BOUGE SEUL NAN SANS BLAGUE YA UN GOLEM QUI SAIT PAS DEV
+                    renderPos = new Vector3d(Ship.SKYBOX_SIZE * (pos.x - ship.getPos().x) / Ship.MAX_VIEW_DISTANCE, Ship.SKYBOX_SIZE * (pos.y - ship.getPos().y) / Ship.MAX_VIEW_DISTANCE, Ship.SKYBOX_SIZE * (pos.z - ship.getPos().z) / Ship.MAX_VIEW_DISTANCE);
+                }
+                rotateOnItself(revolveSpeed);
+
+
                 updateAllPoints();
                 if(ship != null) {
-                    setScale(1000 / getShipDistance() * radius);
+                    if(getShipDistance()!=0) {
+                        setScale(radius * Ship.SKYBOX_SIZE / getShipDistance());
+                    }
                 }
+
 
             }
 
@@ -124,23 +151,19 @@ public class SpacePlanet {
                 double x = rad * Math.cos(Math.PI * 2 * Math.toRadians(currentAngle));
                 double z = rad * Math.sin(Math.PI * 2 * Math.toRadians(currentAngle));
 
-                for (SpacePixel eachPixel : pixelComponents){
-                    Vector3d pixelPos = eachPixel.getPos();
-                    Vector3d newPos = new Vector3d(x + pixelPos.x - pos.x , pixelPos.y, z + pixelPos.z - pos.z );
-                    eachPixel.tpTo(newPos);
-                }
                 pos.x = x;
                 pos.z = z;
             }
             private void rotateOnItself(double speed){
                 for (SpacePixel eachPixel : pixelComponents) {
-                    eachPixel.rotate(pos,speed);
+                    eachPixel.rotate(speed);
                 }
             }
 
             private void setScale(double scale){
+                renderScale = scale;
                 for (SpacePixel eachPixel : pixelComponents) {
-                    eachPixel.setDistanceWithCenter(pos,scale);
+                    eachPixel.setDistanceWithCenter(scale);
                 }
             }
 
@@ -148,7 +171,7 @@ public class SpacePlanet {
                 if(ship == null) return;
 
                 for (SpacePixel eachPixel : pixelComponents) {
-                    eachPixel.renderToShip(ship);
+                    eachPixel.renderToShip(ship, renderPos);
                 }
 
 

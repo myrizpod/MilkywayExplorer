@@ -14,15 +14,15 @@ import java.util.UUID;
 public class Planet {
 
     private final SpacePlanet spacePlanet;
-    private final SurfacePlanet surfacePlanet;
+    private SurfacePlanet surfacePlanet = null;
 
-    public Planet(Vector3d pos, double radius, Vector3d starPos, int seed) {
+    public Planet(Vector3d pos, double radius, Vector3d starPos, int seed,boolean isStar) {
 
-        SpacePlanet sp = new SpacePlanet(pos, radius, starPos, seed);
-        SurfacePlanet surP = new SurfacePlanet((int) radius, seed);
+        spacePlanet = new SpacePlanet(pos, radius, starPos, seed,isStar);
+        if (!isStar) {
+            surfacePlanet = new SurfacePlanet((int) Math.sqrt(radius), seed);
+        }
 
-        spacePlanet = sp;
-        surfacePlanet = surP;
     }
 
 

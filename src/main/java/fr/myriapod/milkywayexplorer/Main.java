@@ -83,10 +83,10 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ConveyorManager.resetAllPlacings();
+        //ConveyorManager.resetAllPlacings();
 
-        Game.saveGame();
-        saveConfig();
+        //Game.saveGame();
+        //saveConfig();
     }
 
 

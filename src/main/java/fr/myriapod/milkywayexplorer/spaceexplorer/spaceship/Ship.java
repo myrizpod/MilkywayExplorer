@@ -15,7 +15,7 @@ import org.joml.Vector3d;
 
 public class Ship {
 
-    private final double THRUST_POWER = 0.5;
+    private final double THRUST_POWER = 3*Math.pow(10,10);
 
     //private final Horse seat;
     private final Player player;
@@ -24,27 +24,29 @@ public class Ship {
     private Vector3d shipRotMomentum; //the rotation momentum of the ship
     private Vector3d shipMomentum; //a vector of the current speed of the ship. is added to pos every X time
     private final Vector3d SHIP_CENTER = new Vector3d(0.5,101,0.5); //actual center of the ship in the world NOT ITS POS IN SPACE
-    private final int SPACE_SCALE = 50; //This is the scale ratio between space and world: world pos is (objPos-shipPos)/spaceScale + shipCenter
+    public static int SKYBOX_SIZE = 50;
+    public static double MAX_VIEW_DISTANCE = Math.pow(10,14);
 
 
     public Ship(Player player) {
         World world = player.getWorld();
 
+        Bukkit.getLogger().info("Thrust power:"+ THRUST_POWER);
+
         Game.addShip(this);
 
         this.player = player;
-        this.shipPos = new Vector3d(200,0,100);
+        this.shipPos = new Vector3d(Math.pow(10,11),0,Math.pow(10,11));
         this.shipRot = new Vector3d(0,0,0);
         this.shipMomentum = new Vector3d(0,0,0);
         this.shipRotMomentum = new Vector3d(0,0,0);
 
         //create a skybox using a black #000000 head item display with reversed size
-        int skyBoxSize = 150; //TODO make skybox size depend on renderdistance
 //        int skyBoxSize = player.getClientViewDistance()*16; CHECK RENDER DISTANCE *16 ?? //TODO make sure stuff like planets are rendered too based on this
         ItemDisplay skyBox = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), ItemDisplay.class);
         Transformation boxTransformation = skyBox.getTransformation();
-        boxTransformation.getScale().set(-skyBoxSize);
-        boxTransformation.getTranslation().set(0, (float) -skyBoxSize /4, 0);
+        boxTransformation.getScale().set(-SKYBOX_SIZE*4);
+        boxTransformation.getTranslation().set(0, (float) -SKYBOX_SIZE, 0);
         skyBox.setTransformation(boxTransformation);
 
 
@@ -74,9 +76,6 @@ public class Ship {
         shipMomentum = momentum;
     }
 
-    public int getSpaceScale(){
-        return SPACE_SCALE;
-    }
 
     public Vector3d getWorldCenter(){
         return SHIP_CENTER;
@@ -85,6 +84,7 @@ public class Ship {
     public void moveShip(Vector3d movement, Vector3d rotMovement){
         shipPos.add(movement);
         shipRot.add(rotMovement);
+
     }
 
     public Player getPlayer() {
@@ -96,7 +96,7 @@ public class Ship {
     }
 
     public void setShipPos(Vector3d pos){
-        shipPos = pos;
+        //shipPos = pos;
     }
 
 
@@ -123,8 +123,6 @@ public class Ship {
 
                     if(pos.equals(lastPos)) return;
 
-                    //player.sendMessage("Pos: " + pos.toString());
-                    //player.sendMessage("LastPos: " + lastPos.toString());
 
                     double Xdiff = Math.abs(pos.x-lastPos.x);
                     double Zdiff = Math.abs(pos.z-lastPos.z);

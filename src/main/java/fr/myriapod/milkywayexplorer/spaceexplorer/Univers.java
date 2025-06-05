@@ -20,10 +20,30 @@ public class Univers {
 
     private int seed = new Random().nextInt();
     private final List<StarSystem> allLoadedSystems = new ArrayList<>();
-    private final World world;
+    private World world;
 
 
     public Univers() {
+        createSpaceWorld();
+    }
+
+    public Univers(int seed) {
+        this.seed = seed;
+        createSpaceWorld();
+
+    }
+
+    public void loadAllStarSystems() {
+        StarSystem s = new StarSystem(new Vector3d(0 , 0, 0), seed);
+
+        allLoadedSystems.add(s);
+
+        for(StarSystem ss : allLoadedSystems) {
+            ss.loadSystem();
+        }
+    }
+
+    private void createSpaceWorld() {
         WorldCreator wc = new WorldCreator(WORLD_SPACE_NAME);
         wc.generateStructures(false);
         wc.keepSpawnInMemory(true);
@@ -37,22 +57,6 @@ public class Univers {
         world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
         world.setClearWeatherDuration(Integer.MAX_VALUE);
         world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-    }
-
-    public Univers(int seed) {
-        this.seed = seed;
-        world = Bukkit.createWorld(new WorldCreator(WORLD_SPACE_NAME));
-
-    }
-
-    public void loadAllStarSystems() {
-        StarSystem s = new StarSystem(new Vector3d(0 , 0, 0), seed);
-
-        allLoadedSystems.add(s);
-
-        for(StarSystem ss : allLoadedSystems) {
-            ss.loadSystem();
-        }
     }
 
 

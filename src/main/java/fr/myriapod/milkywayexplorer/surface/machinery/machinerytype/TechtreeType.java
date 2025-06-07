@@ -92,6 +92,11 @@ public enum TechtreeType implements MachineryType {
     }
 
     @Override
+    public SchematicSetting getSchematicSetting() {
+        return MachineryType.SCHEMATIC_SETTING_ONE_BLOCK;
+    }
+
+    @Override
     public ItemStack getAsItem() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

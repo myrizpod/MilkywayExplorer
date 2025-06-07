@@ -1,10 +1,12 @@
 package fr.myriapod.milkywayexplorer.spaceexplorer;
 
 import fr.myriapod.milkywayexplorer.Planet;
+import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
@@ -31,6 +33,14 @@ public class Univers {
         this.seed = seed;
         createSpaceWorld();
 
+        world.getEntities().forEach(Entity::remove);
+
+        SaveFile f = new SaveFile();
+
+        List<StarSystem> ss = f.getAllStarSystems(seed);
+        Bukkit.getLogger().info("nb solar system: " + ss.size());
+
+        allLoadedSystems.addAll(ss);
     }
 
     public void loadAllStarSystems() {
@@ -39,6 +49,7 @@ public class Univers {
         allLoadedSystems.add(s);
 
         for(StarSystem ss : allLoadedSystems) {
+            ss.preloadSystem();
             ss.loadSystem();
         }
     }
@@ -61,16 +72,14 @@ public class Univers {
 
 
     public void restoreSave() {
-        SaveFile f = new SaveFile();
-
-        List<StarSystem> ss = f.getAllStarSystems(seed);
-        Bukkit.getLogger().info("nb solar system: " + ss.size());
-
-        for(StarSystem s : ss) {
-            allLoadedSystems.add(s);
-            s.loadSystem();
+        for(StarSystem ss : allLoadedSystems) {
+            ss.loadSystem();
         }
-
+    }
+    public void preloadSave() {
+        for(StarSystem ss : allLoadedSystems) {
+            ss.preloadSystem();
+        }
     }
 
 
@@ -104,4 +113,5 @@ public class Univers {
         }
         return null;
     }
+
 }

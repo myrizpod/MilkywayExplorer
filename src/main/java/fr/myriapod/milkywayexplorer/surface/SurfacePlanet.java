@@ -189,6 +189,7 @@ public class SurfacePlanet {
     public void setAllMachineries(Map<Vector3i, Machinery> allMachineries) {
         //HUGE CHANCE IT WONT WORK, MAYBE DO INTERACTION PROPERTIES IN EACH MACHINERY
         for(Entity e : world.getEntities()) {
+            Bukkit.getLogger().info("Entity founded: " + e.getName() + "   " + Arrays.toString(e.getScoreboardTags().toArray()));
             for(Vector3i v : allMachineries.keySet()) {
                 Location loc = e.getLocation();
                 Set<String> tags = e.getScoreboardTags();
@@ -204,7 +205,7 @@ public class SurfacePlanet {
                     //TODO CHANGE FOR ALL TYPES
                     if(machinery instanceof Drill d) {
                         Set<String> t = new HashSet<>(tags);
-                        t.remove("drill");
+                        t.remove(d.getID());
 
                         Generable ressource = Generable.nameToRessource((String) t.toArray()[0]);
 
@@ -221,5 +222,17 @@ public class SurfacePlanet {
 
         }
 
+    }
+
+    public void loadMachineryChunks(Map<Vector3i, Machinery> allMachineries) {
+        //Load all needed chuncks
+        for(Vector3i v : allMachineries.keySet()) {
+            Chunk c = world.getChunkAt(new Location(world, v.x,v.y,v.z));
+            c.load();
+            SurfaceListener.loadedChunk.add(c);
+            Bukkit.getLogger().info("Chunk loading at:" + c.getX() + " " + c.getZ());
+            Bukkit.getLogger().info("Chunk loaded at: " + v + "  " + c.isLoaded());
+            Bukkit.getLogger().info("Chunk is entity loaded ? at: " + v + "  " + c.isEntitiesLoaded());
+        }
     }
 }

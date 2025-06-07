@@ -8,13 +8,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.joml.Vector3i;
 
 import java.util.*;
 
 public enum CrafterType implements MachineryType {
-    BASIC("Crafteur Basique", Material.CRAFTING_TABLE, Tech.AUTOMATISATION_ESSENTIALS, "crafter", null, 1001,
+    BASIC("Crafteur Basique", Material.CRAFTING_TABLE, Tech.AUTOMATISATION_ESSENTIALS, "basic_crafter", null, 1001,
             new DirectList<>(ChatColor.RESET + "Permet de creer les Machines de base"),
-            new DirectList<>(new Tuple<>(Ressource.IRON, 10)), Tech.AUTOMATISATION_ESSENTIALS);
+            new DirectList<>(new Tuple<>(Ressource.IRON, 10)),
+            MachineryType.SCHEMATIC_SETTING_ONE_BLOCK, Tech.AUTOMATISATION_ESSENTIALS),
+    NORMAL("Crafteur Normal", Material.CRAFTER, Tech.AUTOMATISATION_ESSENTIALS, "normal_crafter", "crafter", 1002,
+            new DirectList<>(ChatColor.RESET + "Permet de creer les Machines de base"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 2)),
+            new SchematicSetting(4.1f, 3.1f), Tech.ADVANCED_CRAFTNG)
+    ;
 
 
     private final String name;
@@ -25,16 +32,18 @@ public enum CrafterType implements MachineryType {
     private final int modelData;
     private final List<String> description = new ArrayList<>();
     private final Map<Ressource, Integer> price = new HashMap<>();
+    private final SchematicSetting schematicSetting;
     private Tech products;
 
 
-    CrafterType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, Tech products) {
+    CrafterType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, SchematicSetting schematicSetting, Tech products) {
         this.name = name;
         this.material = mat;
         this.prerequis = prerequis;
         this.id = id;
         this.model = model;
         this.modelData = modelData;
+        this.schematicSetting = schematicSetting;
         Iterator<String> it = description.getIterator();
         while (it.hasNext()) {
             String s = it.next();
@@ -87,6 +96,11 @@ public enum CrafterType implements MachineryType {
     @Override
     public Map<Ressource, Integer> getPrice() {
         return price;
+    }
+
+    @Override
+    public SchematicSetting getSchematicSetting() {
+        return schematicSetting;
     }
 
     @Override

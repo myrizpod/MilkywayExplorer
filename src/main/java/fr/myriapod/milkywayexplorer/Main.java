@@ -4,7 +4,8 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
-import fr.myriapod.milkywayexplorer.surface.listeners.ConveyorManager;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
+import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
 import org.bukkit.Bukkit;
@@ -23,36 +24,21 @@ import java.util.Set;
 public class Main extends JavaPlugin {
 
     public static Main plugin;
+    public static int id = -1;
 
     @Override
     public void onEnable() {
         plugin = this;
-
-        //Debug info
-        Bukkit.getLogger().info("-------------");
-        Bukkit.getLogger().info("MilkyWayExplorer enabled");
-        Bukkit.getLogger().info("Searching for a save...");
-        Bukkit.getLogger().info("-------------");
-
-        //important functions to makes the plugin work
-        createSchematics();
-
-        Bukkit.unloadWorld("world_nether", false);
-        Bukkit.unloadWorld("world_the_end", false);
-
-        //getting debug commands
-        getCommand("gen").setExecutor(new GenPlanetCommand());
-        getCommand("ship").setExecutor(new CreateShipCommand());
-        getCommand("goto").setExecutor(new DevMoveShipCommand());
-        getCommand("debug").setExecutor(new DebugCommand());
 
         //getting listeners
         Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);
         Bukkit.getPluginManager().registerEvents(new SurfaceListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpaceShipListener(), this);
 
-
-
+        //Debug info
+        Bukkit.getLogger().info("-------------");
+        Bukkit.getLogger().info("MilkyWayExplorer enabled");
+        Bukkit.getLogger().info("Searching for a save...");
 
         /****** Load or create Game ******/
         if(getConfig().contains("seed")) {
@@ -68,6 +54,7 @@ public class Main extends JavaPlugin {
                 }
             }
 
+            Bukkit.getLogger().info("Game with seed: " + seed + " found !");
             new Game(seed, techs);
 
 
@@ -78,15 +65,43 @@ public class Main extends JavaPlugin {
             }
         }
 
+
+        checkForLoading();
+
+
+        //important functions to makes the plugin work
+        createSchematics();
+
+        Bukkit.unloadWorld("world_nether", false);
+        Bukkit.unloadWorld("world_the_end", false);
+
+        //getting debug commands
+        getCommand("gen").setExecutor(new GenPlanetCommand());
+        getCommand("ship").setExecutor(new CreateShipCommand());
+        getCommand("goto").setExecutor(new DevMoveShipCommand());
+        getCommand("debug").setExecutor(new DebugCommand());
+
+    }
+
+    private void checkForLoading() {
+        id = Bukkit.getScheduler().runTaskTimer(this, () -> {
+            if(Game.isUniversPreloaded()) {
+                Bukkit.getLogger().info("ssssssssssssssssssssssssssssssssssssssssssssssssss");
+                Game.loadPlanets();
+
+                Bukkit.getLogger().info("-------------");
+                Bukkit.getServer().getScheduler().cancelTask(id);
+                id = -1;
+            }
+        },2,0).getTaskId();
     }
 
 
     @Override
     public void onDisable() {
         //ConveyorManager.resetAllPlacings();
-
-        //Game.saveGame();
-        //saveConfig();
+        Game.saveGame();
+        saveConfig();
     }
 
 
@@ -95,10 +110,18 @@ public class Main extends JavaPlugin {
     private void createSchematics() {
         Set<String> schem = new HashSet<>();
         schem.add("ship");
-        schem.add("basic_crafter");
-        schem.add("basic_drill");
-        schem.add("drill");
-        schem.add("iron_ore");
+
+        for(MachineryType m : MachineryType.getAllTypes()) {
+            if(m.getModel() != null) {
+                schem.add(m.getModel());
+            }
+        }
+        for(Generable g : Generable.values()) {
+            if(g.getModelName() != null) {
+                schem.add(g.getModelName());
+            }
+        }
+
 
         for(String s : schem) {
 

@@ -4,9 +4,8 @@ import fr.myriapod.milkywayexplorer.Planet;
 import fr.myriapod.milkywayexplorer.Game;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.surface.listeners.ConveyorManager;
-import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.ConveyorType;
-import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
-import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
+import fr.myriapod.milkywayexplorer.surface.listeners.MachineryDestructorLogic;
+import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.*;
 import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
@@ -15,10 +14,7 @@ import fr.myriapod.milkywayexplorer.surface.listeners.LoopOnPlanet;
 import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeInventories;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
@@ -31,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3i;
 
@@ -53,17 +50,17 @@ public class SurfaceListener implements Listener {
         if(planet == null) return;
 
         Machinery actualMachinery = planet.getMachinery(entity.getUniqueId());
-
-
-        //Conveyor case
         MachineryType actualMachineryType = Machinery.getAsMachinery(player.getInventory().getItemInMainHand());
-        if(actualMachineryType instanceof ConveyorType) {
-            new ConveyorManager().interactWithEntity(event);
+
+
+        if(Tools.MACHINERY_DESTRUCTOR.isEqual(player.getItemInUse())) {
+            new MachineryDestructorLogic().playerInteractWithDestructorEvent(event);
+            return;
         }
 
 
         /******* Tags Logic ********/
-        if(tags.contains("techtree")) {
+        if(tags.contains(TechtreeType.TECHTREE_BLOCK.getID())) {
             player.openInventory(TechtreeInventories.getDefaultInventory());
         }
 
@@ -87,9 +84,10 @@ public class SurfaceListener implements Listener {
                     interaction.remove();
 
                     Interaction e = (Interaction) player.getWorld().spawnEntity(entityLoc, EntityType.INTERACTION);
-                    e.setInteractionWidth(3);
-                    e.setInteractionHeight(3);
-                    e.addScoreboardTag("drill");
+                    MachineryType.SchematicSetting setting = actualMachineryType.getSchematicSetting();
+                    e.setInteractionWidth(setting.getWidth());
+                    e.setInteractionHeight(setting.getHeight());
+                    e.addScoreboardTag(actualMachineryType.getID());
                     e.addScoreboardTag((String) t.toArray()[0]);
 
 
@@ -119,7 +117,7 @@ public class SurfaceListener implements Listener {
         }
 
 
-        else if(tags.contains("drill")) {
+        else if(tags.contains(DrillType.BASIC.getID())) {
             if(actualMachinery instanceof Drill drill) {
                 Map<Ressource, Integer> prod = drill.getProducted();
 
@@ -136,7 +134,7 @@ public class SurfaceListener implements Listener {
 
         }
 
-        else if (tags.contains("basic_assembler")) {
+        else if (tags.contains(AssemblerType.BASIC.getID())) {
             if(actualMachinery instanceof Producter p) {
                 Map<Ressource, Integer> prod = p.getProducted();
 
@@ -147,7 +145,7 @@ public class SurfaceListener implements Listener {
                         player.getInventory().addItem(r.getAsItem(prod.get(r)));
                         player.sendMessage(ChatColor.GREEN + "Vous avez obtenu " + ChatColor.AQUA + prod.get(r) + " " + ChatColor.GOLD + r.getName());
                     } else {
-                        player.sendMessage(ChatColor.RED + "L'assembleur ne contient rien !");
+                        player.sendMessage(ChatColor.RED + "Le " + actualMachineryType.getName() + " ne contient rien !");
                     }
                 }
             }
@@ -155,15 +153,13 @@ public class SurfaceListener implements Listener {
         }
 
 
-        else if(tags.contains("crafter")) {
+        else if(tags.contains(CrafterType.BASIC.getID())) {
             if(actualMachinery instanceof Crafter c) {
                 player.openInventory(c.getCrafterInventory());
 
             }
 
         }
-
-
 
     }
 
@@ -187,12 +183,18 @@ public class SurfaceListener implements Listener {
 
 
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(Tools.MACHINERY_DESTRUCTOR.isEqual(item)) {
+                new MachineryDestructorLogic().playerInteractWithDestructorEvent(event);
+                return;
+            }
+
             MachineryType m = Machinery.getAsMachinery(item);
             if(m == null) {
                 event.setCancelled(true);
                 return;
             }
-            if(m instanceof ConveyorType) {
+            if(m instanceof ConveyorType c) {
+                new ConveyorManager().playerPlaceConveyorEvent(event, c);
                 return;
             }
             if(m instanceof DrillType) {
@@ -208,9 +210,10 @@ public class SurfaceListener implements Listener {
             new PasteSchem().generate(loc, m.getModel());
 
             Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
+            MachineryType.SchematicSetting setting = m.getSchematicSetting();
             e.addScoreboardTag(m.getID());
-            e.setInteractionHeight(1.3f);
-            e.setInteractionWidth(1.3f);
+            e.setInteractionHeight(setting.getHeight());
+            e.setInteractionWidth(setting.getWidth());
 
             planet.addMachinery(e.getUniqueId(), machinery);
 
@@ -251,7 +254,7 @@ public class SurfaceListener implements Listener {
         }
 
         if(item.hasItemMeta()) {
-            if(surfaceObject instanceof DrillType || (item.getItemMeta().getCustomModelData() == 1001 && item.getType().equals(Material.DIAMOND_PICKAXE))) { //TODO outillage
+            if(surfaceObject instanceof DrillType || Tools.MANUAL_DRILL.isEqual(item)) {
 
                 for (Generable r : planet.getSurfacePlanet().getOresPose().keySet()) {
                     for (Vector3i v : planet.getSurfacePlanet().getOresPose().get(r)) {
@@ -311,7 +314,8 @@ public class SurfaceListener implements Listener {
     }
 
     @EventHandler
-    public void poseBlockEvent(BlockPlaceEvent event) { new ConveyorManager().playerBlockPlace(event); }
+    public void poseBlockEvent(BlockPlaceEvent event) { //new ConveyorManager().playerBlockPlace(event); }
+    }
 
     @EventHandler
     public void foodEvent(FoodLevelChangeEvent event) {
@@ -336,5 +340,40 @@ public class SurfaceListener implements Listener {
         new LoopOnPlanet().loopOnPlanet(event);
     }
 
+
+    public static Set<Chunk> loadedChunk = new HashSet<>();
+    public static Set<Chunk> loadedEntitiesChunk = new HashSet<>();
+
+//    @EventHandler
+//    public void chunkLoadEvent(ChunkLoadEvent event) {
+//        if(Game.isUniversPreloaded()) {
+//            return;
+//        }
+//
+//        try {
+//            if (Game.getSystemByWorld(event.getWorld()) != null) {
+//                Bukkit.getLogger().info("Load chunk at: " + event.getChunk().getX() + "    " + event.getChunk().getZ());
+//                loadedChunk.add(event.getChunk());
+//            }
+//        } catch (NullPointerException e) {
+//
+//        }
+//    }
+
+    @EventHandler
+    public void entitiesLoadedEvent(EntitiesLoadEvent event) {
+        if(Game.stopLoadEvent()) {
+            return;
+        }
+
+        try {
+            if (Game.getSystemByWorld(event.getWorld()) != null) {
+                Bukkit.getLogger().info("Load entities at: " + event.getWorld().getName() + "   " + event.getChunk().getX() + "    " + event.getChunk().getZ());
+                loadedEntitiesChunk.add(event.getChunk());
+            }
+        } catch (NullPointerException e) {
+
+        }
+    }
 
 }

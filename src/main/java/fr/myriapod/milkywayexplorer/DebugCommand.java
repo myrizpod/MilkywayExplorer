@@ -1,10 +1,16 @@
 package fr.myriapod.milkywayexplorer;
 
+import fr.myriapod.milkywayexplorer.surface.MovingItem;
+import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Transformation;
 
 public class DebugCommand implements CommandExecutor {
 
@@ -15,11 +21,13 @@ public class DebugCommand implements CommandExecutor {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
 
+            new MovingItem(Ressource.IRON, player.getLocation());
+
             Planet p = Game.getPlayerPlanet(player);
 
-            if(p != null) {
-                Bukkit.getLogger().info("a " + p.getAllMachines());
-            }
+//            if(p != null) {
+//                Bukkit.getLogger().info("a " + p.getAllMachines());
+//            }
 
             //GIVES ALL THE POSSIBLE RESSOURCES TO PLAYER
 //            for(Ressource r : Ressource.values()) {

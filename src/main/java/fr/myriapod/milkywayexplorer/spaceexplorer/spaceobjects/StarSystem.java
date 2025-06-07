@@ -30,6 +30,7 @@ public class StarSystem {
 
 
     public StarSystem(Vector3d center, int seed) {
+        //int planetCount = 5;
         int planetCount = 1;
         Random generator = new Random(seed);
         this.center = center;
@@ -79,8 +80,7 @@ public class StarSystem {
         return allPlanets.get(id);
     }
 
-
-    public void loadSystem() {
+    public void preloadSystem() {
         for(Planet p : allPlanets) {
             SpacePlanet sp = p.getSpacePlanet();
             sp.create();
@@ -88,16 +88,24 @@ public class StarSystem {
 
             SurfacePlanet spl = p.getSurfacePlanet();
             spl.generate();
-
-            SaveFile saveFile = new SaveFile();
-            if(saveFile.doPlanetHasMachinery(center, allPlanets.indexOf(p))) {
-                spl.setAllMachineries(saveFile.getAllMachineries(center, allPlanets.indexOf(p)));
-            }
-
+            spl.loadMachineryChunks(new SaveFile().getAllMachineries(center, allPlanets.indexOf(p)));
         }
+
         SpacePlanet s = star.getSpacePlanet();
         s.create();
         s.updatePlanet();
+    }
+
+    public void loadSystem() {
+        for(Planet p : allPlanets) {
+            SurfacePlanet spl = p.getSurfacePlanet();
+            SaveFile saveFile = new SaveFile();
+            if (saveFile.doPlanetHasMachinery(center, allPlanets.indexOf(p))) {
+                spl.setAllMachineries(saveFile.getAllMachineries(center, allPlanets.indexOf(p)));
+            }
+        }
+
+
     }
 
     public List<Planet> getAllPlanets() {
@@ -111,5 +119,6 @@ public class StarSystem {
     public Vector3d getCenter() {
         return center;
     }
+
 }
 

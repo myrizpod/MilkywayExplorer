@@ -8,7 +8,6 @@ import org.joml.Vector3i;
 
 public abstract class Machinery {
 
-
     protected Vector3i pos;
     protected String id;
     protected MachineryType type;

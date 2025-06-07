@@ -12,6 +12,8 @@ import java.util.*;
 
 public interface MachineryType {
 
+    SchematicSetting SCHEMATIC_SETTING_ONE_BLOCK = new SchematicSetting(1.3f,1.3f);
+
     static Machinery createMachineryByID(String id, Vector3i pos) {
         for(TechtreeType t : TechtreeType.values()) {
             if(t.getID().equals(id)) {
@@ -60,13 +62,14 @@ public interface MachineryType {
     int getModelData();
     List<String> getDescription();
     Map<Ressource, Integer> getPrice();
+    SchematicSetting getSchematicSetting();
     ItemStack getAsItem();
     boolean isItemEqual(ItemStack item);
 
 
     class Production {
 
-        Map<Ressource, Map<Ressource, Integer>> recipes = new HashMap<>();
+        private Map<Ressource, Map<Ressource, Integer>> recipes = new HashMap<>();
 
         @SafeVarargs
         Production(Ressource result, Tuple<Ressource, Integer>... prices) {
@@ -80,6 +83,27 @@ public interface MachineryType {
         public Map<Ressource, Map<Ressource, Integer>> getRecipes() {
             return recipes;
         }
+    }
+
+
+    class SchematicSetting {
+
+        private float width;
+        private float height;
+
+        public SchematicSetting(float width, float height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
+
     }
 
 }

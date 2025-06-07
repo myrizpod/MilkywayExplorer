@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.joml.Vector3d;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class Planet {
@@ -42,7 +43,7 @@ public class Planet {
     public void teleportPlayerToSpace(Player player) {
         player.teleport(new Location(Game.getUniversWorld(), 0.5 ,100, 0.5));
         Ship ship = new Ship(player);
-        Vector3d exitpos = spacePlanet.getPos().add(new Vector3d(0,spacePlanet.getRadius(),0));
+        Vector3d exitpos = spacePlanet.getPos().add(new Vector3d(0, spacePlanet.getRadius(),0));
         ship.setShipPos(exitpos);
         Game.shipEnters(0, ship);
 //        player.getScoreboardTags().add("onShip");

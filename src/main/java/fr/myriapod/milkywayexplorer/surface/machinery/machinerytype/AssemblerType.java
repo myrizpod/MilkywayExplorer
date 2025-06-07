@@ -7,13 +7,16 @@ import fr.myriapod.milkywayexplorer.tools.Tuple;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.joml.Vector3i;
 
 import java.util.*;
 
 public enum AssemblerType implements MachineryType {
 
     BASIC("Assembleur Basique", Material.FURNACE, Tech.AUTOMATISATION_ESSENTIALS, "basic_assembler", null, 1001,
-            new DirectList<>("Permet de produire des ressources"), new DirectList<>(new Tuple<>(Ressource.IRON, 35)),
+            new DirectList<>("Permet de produire des ressources"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 35)),
+            MachineryType.SCHEMATIC_SETTING_ONE_BLOCK,
             new Production(Ressource.IRON_BAR, new Tuple<>(Ressource.IRON, 40)), 0.1);
 
 
@@ -27,17 +30,19 @@ public enum AssemblerType implements MachineryType {
     private final int modelData;
     private final List<String> description = new ArrayList<>();
     private final Map<Ressource, Integer> price = new HashMap<>();
+    private final SchematicSetting schematicSetting;
     private final Production production;
     private final double productionTime;
 
 
-    AssemblerType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, Production prod, double prodTime) {
+    AssemblerType(String name, Material mat, Tech prerequis, String id, String model, int modelData, DirectList<String> description, DirectList<Tuple<Ressource, Integer>> price, SchematicSetting schematicSetting, Production prod, double prodTime) {
         this.name = name;
         this.material = mat;
         this.prerequis = prerequis;
         this.id = id;
         this.model = model;
         this.modelData = modelData;
+        this.schematicSetting = schematicSetting;
         Iterator<String> it = description.getIterator();
         while (it.hasNext()) {
             String s = it.next();
@@ -91,6 +96,11 @@ public enum AssemblerType implements MachineryType {
     @Override
     public Map<Ressource, Integer> getPrice() {
         return price;
+    }
+
+    @Override
+    public SchematicSetting getSchematicSetting() {
+        return schematicSetting;
     }
 
     @Override

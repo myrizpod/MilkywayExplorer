@@ -3,6 +3,8 @@ package fr.myriapod.milkywayexplorer;
 import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
+import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
+import fr.myriapod.milkywayexplorer.surface.Tools;
 import fr.myriapod.milkywayexplorer.surface.machinery.TechtreeBlock;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
@@ -17,7 +19,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Game {
     private static List<Ship> shipList;
@@ -37,7 +41,7 @@ public class Game {
         shipList = new ArrayList<>();
         techtree = new Techtree(techs);
         univers = new Univers(seed);
-        univers.restoreSave();
+        univers.preloadSave();
     }
 
 
@@ -65,11 +69,8 @@ public class Game {
         player.getInventory().addItem(DrillType.BASIC.getAsItem());
         player.getInventory().addItem(CrafterType.BASIC.getAsItem());
         player.getInventory().addItem(TechtreeType.TECHTREE_BLOCK.getAsItem());
-        ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE);
-        ItemMeta meta = item.getItemMeta();
-        meta.setCustomModelData(1001);
-        item.setItemMeta(meta);
-        player.getInventory().addItem(item);
+        player.getInventory().addItem(Tools.MANUAL_DRILL.getAsItem());
+        player.getInventory().addItem(Tools.MACHINERY_DESTRUCTOR.getAsItem());
         player.setGameMode(GameMode.SURVIVAL);
         player.setFoodLevel(20);
         player.setHealth(20);
@@ -130,5 +131,23 @@ public class Game {
         }
         return null;
 
+    }
+
+    public static void loadPlanets() {
+        univers.restoreSave();
+    }
+
+    private static boolean stopLoadEvent = false;
+
+    public static boolean isUniversPreloaded() {
+        boolean check = (!SurfaceListener.loadedEntitiesChunk.isEmpty()) && SurfaceListener.loadedEntitiesChunk.containsAll(SurfaceListener.loadedChunk) && univers != null;
+        if(check) {
+            stopLoadEvent = true;
+        }
+        return check;
+    }
+
+    public static boolean stopLoadEvent() {
+        return stopLoadEvent;
     }
 }

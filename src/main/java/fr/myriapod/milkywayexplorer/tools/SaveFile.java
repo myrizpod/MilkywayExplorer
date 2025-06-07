@@ -88,8 +88,8 @@ public class SaveFile {
         return config.contains("starsystems." + formatVectorAsString(starSystemPos) + "." + index + ".machineries");
     }
 
-    public Map<Vector3i, Machinery> getAllMachineries(Vector3d starSystemPos, int index) {
-        String path = "starsystems." + formatVectorAsString(starSystemPos) + "." + index + ".machineries";
+    public Map<Vector3i, Machinery> getAllMachineries(Vector3d starSystemPos, int planetIndex) {
+        String path = "starsystems." + formatVectorAsString(starSystemPos) + "." + planetIndex + ".machineries";
         if(! config.contains(path)) {
             return new HashMap<>();
         }

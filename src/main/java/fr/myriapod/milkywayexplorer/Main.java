@@ -40,6 +40,12 @@ public class Main extends JavaPlugin {
         Bukkit.getLogger().info("MilkyWayExplorer enabled");
         Bukkit.getLogger().info("Searching for a save...");
 
+        //important functions to makes the plugin work
+        createSchematics();
+        if(! getConfig().contains("seed")) {
+            saveConfig();
+        }
+
         /****** Load or create Game ******/
         if(getConfig().contains("seed")) {
             int seed = getConfig().getInt("seed");
@@ -72,9 +78,6 @@ public class Main extends JavaPlugin {
 
         checkForLoading();
 
-
-        //important functions to makes the plugin work
-        createSchematics();
 
         Bukkit.unloadWorld("world_nether", false);
         Bukkit.unloadWorld("world_the_end", false);

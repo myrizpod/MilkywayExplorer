@@ -47,28 +47,28 @@ public class Main extends JavaPlugin {
         }
 
         /****** Load or create Game ******/
-        if(getConfig().contains("seed")) {
-            int seed = getConfig().getInt("seed");
-            List<String> techsAsString = getConfig().getStringList("techs");
-            List<Tech> techs = new ArrayList<>();
-
-            for(String s : techsAsString) {
-                for (Tech t : Tech.values()) {
-                    if (t.name().equals(s)) {
-                        techs.add(t);
-                    }
-                }
-            }
-
-            Bukkit.getLogger().info("Game with seed: " + seed + " found !");
-            new Game(seed, techs);
-
-
-        } else {
+//        if(getConfig().contains("seed")) {
+//            int seed = getConfig().getInt("seed");
+//            List<String> techsAsString = getConfig().getStringList("techs");
+//            List<Tech> techs = new ArrayList<>();
+//
+//            for(String s : techsAsString) {
+//                for (Tech t : Tech.values()) {
+//                    if (t.name().equals(s)) {
+//                        techs.add(t);
+//                    }
+//                }
+//            }
+//
+//            Bukkit.getLogger().info("Game with seed: " + seed + " found !");
+//            new Game(seed, techs);
+//
+//
+//        } else {
             new Game();
             for(Player p : Bukkit.getOnlinePlayers()) {
                 Game.startGame(p);
-            }
+            //}
         }
 
         Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);

@@ -26,6 +26,9 @@ public class SpacePlanet {
     private final double RAPPORT_NB_POINT_SURFACE = 0.0032;
 
 
+    public final int MAX_PLANET_POINTS = 2000;
+
+
     private ArrayList<SpacePixel> pixelComponents;
     private Vector3d pos;
     private int pixelAmount;
@@ -39,6 +42,7 @@ public class SpacePlanet {
     private Vector3d renderPos;
     private double renderScale;
     private boolean isStar;
+    private ArrayList<Vector3i> colorlist;
 
 
     public SpacePlanet(Vector3d pos, int pixelAmount, double radius, int seed, Vector3d starPos, double rotSpeed, double revolveSpeed) {
@@ -82,11 +86,6 @@ public class SpacePlanet {
 
     public void create() {
 
-        JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library
-
-        //All pixel positions
-        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount); //4th dimension is angle in radians
-
         //The list of all pixels
         pixelComponents = new ArrayList<>();
 
@@ -94,7 +93,7 @@ public class SpacePlanet {
         renderPos = new Vector3d(pos.x/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE,pos.y/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE,pos.z/Ship.MAX_VIEW_DISTANCE*Ship.SKYBOX_SIZE);
 
 
-        ArrayList<Vector3i> colorlist = new ArrayList<>();
+        colorlist = new ArrayList<>();
         int colorAmount = (Math.abs(seed) % 2) + 2; //choose the color amount: randint(2,4)
         if (isStar) {
             colorlist.add(new Vector3i(255, 0, 0));
@@ -106,15 +105,57 @@ public class SpacePlanet {
             }
         }
 
+        setPointAmount(500);
+        calculatePointColorsAndPos();
+
+
+    }
+
+    public void setPointAmount(int points) {
+        pixelAmount = points;
+        if (pixelComponents.size()>pixelAmount) {
+            while (pixelComponents.size()!=pixelAmount) {
+                pixelComponents.getFirst().delete();
+                pixelComponents.removeFirst();
+            }
+        }
+        else if (pixelComponents.size()<pixelAmount) {
+            while (pixelComponents.size()!=pixelAmount) {
+                pixelComponents.add(new SpacePixel(renderPos,new Vector3d(0,0,0), "#000000",1, 0));
+            }
+        }
+    }
+
+
+    private void calculatePointColorsAndPos() {
+
+        JNoise noisePipeline = JNoise.newBuilder().perlin(seed, Interpolation.COSINE, FadeFunction.QUINTIC_POLY).addModifier(v -> (v + 1) / 2.0).clamp(0.0, 1.0).build(); // ^ this is funny noise pattern using complicated library
+
+
+        //All pixel positions
+        List<Vector4d> points = Maths.fibonacciSphere(pixelAmount); //4th dimension is angle in radians
+
+        int i = 0;
         for (Vector4d eachPoint : points) {
             double bwMap = noisePipeline.evaluateNoise(eachPoint.x + 1,eachPoint.y + 1,eachPoint.z + 1);
             double angle = eachPoint.w;
 
             String color = Gradients.getGradientColor(colorlist,bwMap);
-            pixelComponents.add(new SpacePixel(new Vector3d(eachPoint.x + renderPos.x, eachPoint.y + renderPos.y, eachPoint.z + renderPos.z),new Vector3d(eachPoint.x, eachPoint.y, eachPoint.z), color,3, angle));
 
+            SpacePixel currentPixel =pixelComponents.get(i);
+            currentPixel.setRenderPos(new Vector3d(eachPoint.x + renderPos.x, eachPoint.y + renderPos.y, eachPoint.z + renderPos.z));
+            currentPixel.setSpherePos(new Vector3d(eachPoint.x, eachPoint.y, eachPoint.z));
+            currentPixel.setColor(color);
+            currentPixel.setSize(0.2);
+            currentPixel.setAngle(angle);
+
+            i++;
         }
+
     }
+
+
+
 
     public double getShipDistance(){
         Vector3d shipPos = ship.getPos();
@@ -126,21 +167,29 @@ public class SpacePlanet {
             private double currentAngle = 0;
             public void run() {
                 rotate(rotSpeed);
+                rotateOnItself(revolveSpeed);
                 //recalculates the render position of the planet
                 if (ship!=null) {
                     // WTF apparement changer la renderpos change la pos
                     // OK BAH LE SHIP BOUGE SEUL NAN SANS BLAGUE YA UN GOLEM QUI SAIT PAS DEV
                     renderPos = new Vector3d(Ship.SKYBOX_SIZE * (pos.x - ship.getPos().x) / Ship.MAX_VIEW_DISTANCE, Ship.SKYBOX_SIZE * (pos.y - ship.getPos().y) / Ship.MAX_VIEW_DISTANCE, Ship.SKYBOX_SIZE * (pos.z - ship.getPos().z) / Ship.MAX_VIEW_DISTANCE);
-                }
-                rotateOnItself(revolveSpeed);
-
-
-                updateAllPoints();
-                if(ship != null) {
                     if(getShipDistance()!=0) {
                         setScale(radius * Ship.SKYBOX_SIZE / getShipDistance());
+                        calculatePointColorsAndPos();
                     }
+
+                    //offsetting renderpos to avoid clipping in ship
+                    renderPos.add(new Vector3d(pos.x - ship.getPos().x,pos.y - ship.getPos().y,pos.z - ship.getPos().z).normalize((double) Ship.SKYBOX_SIZE /5));
+
+                    if(getShipDistance()!=0) {
+                        double distanceInRender = Math.sqrt(Math.pow(renderPos.x,2)+Math.pow(renderPos.y,2)+Math.pow(renderPos.z,2));
+                        setPointAmount((int) Math.min(Math.max(1,Math.pow(10,0) * Ship.SKYBOX_SIZE / Math.pow(distanceInRender,2)),MAX_PLANET_POINTS));
+                    }
+
+
                 }
+
+                updateAllPoints();
 
 
             }

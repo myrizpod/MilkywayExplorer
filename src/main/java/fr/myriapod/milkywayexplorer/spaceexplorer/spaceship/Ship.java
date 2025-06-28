@@ -10,12 +10,14 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Transformation;
+import org.bukkit.util.Vector;
 import org.joml.Vector3d;
 
 public class Ship {
 
-    private final double THRUST_POWER = 3*Math.pow(10,10);
+    private final double THRUST_POWER = 3*Math.pow(10,9);
 
     //private final Horse seat;
     private final Player player;
@@ -52,12 +54,13 @@ public class Ship {
 
         skyBox.setItemStack(Skull.getSpaceSkull());
 
-//        seat = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y - 2, SHIP_CENTER.z), Horse.class);
-//        seat.setGravity(false);
-//        seat.setInvulnerable(true);
-//        seat.addScoreboardTag("ship");
-//        seat.setInvisible(true);
-        //seat.addPassenger(player);
+        ArmorStand seat = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y-0.5, SHIP_CENTER.z), ArmorStand.class);
+        seat.setGravity(false);
+        seat.setInvulnerable(true);
+        seat.addScoreboardTag("ship");
+        seat.setInvisible(true);
+        seat.setMarker(true);
+        seat.addPassenger(player);
 
         TextDisplay controlCircle = world.spawn(new Location(world, SHIP_CENTER.x, SHIP_CENTER.y, SHIP_CENTER.z + 2), TextDisplay.class);
         controlCircle.setText(ChatColor.GREEN + "◯");
@@ -96,66 +99,36 @@ public class Ship {
     }
 
     public void setShipPos(Vector3d pos){
-        //shipPos = pos;
+        //shipPos = pos; //TODO bad
     }
 
 
     public void movementLoop() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
             public void run() {
-                getMovement();
                 moveShip(shipMomentum,shipRotMomentum);
 
             }
-
-            Vector3d lastPos;
-
-            private void getMovement() {
-                if(player.getScoreboardTags().contains("onShip")) {
-                    Location loc = player.getLocation();
-                    Vector3d pos = new Vector3d(loc.getX(), loc.getY(), loc.getZ());
-
-                    if(lastPos == null) lastPos = pos;
-
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.001);
-                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.1);
-                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(0.001);
-
-                    if(pos.equals(lastPos)) return;
-
-
-                    double Xdiff = Math.abs(pos.x-lastPos.x);
-                    double Zdiff = Math.abs(pos.z-lastPos.z);
-
-                    if (Xdiff > Zdiff){
-                        if(pos.x < lastPos.x) {
-                            shipMomentum.add(-THRUST_POWER, 0, 0);
-                        } else if (pos.x > lastPos.x) {
-                            shipMomentum.add(THRUST_POWER, 0, 0);
-                        }
-
-                    } else {
-                        if (pos.z < lastPos.z) {
-                            shipMomentum.add(0, 0, -THRUST_POWER);
-                        } else if (pos.z > lastPos.z) {
-                            shipMomentum.add(0, 0, THRUST_POWER);
-                        }
-                    }
-
-
-
-
-                    lastPos = pos;
-
-                    player.sendMessage("Momentum: " + shipMomentum.toString());
-
-                } else {
-                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.10000000149011612f);
-                    player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0.42f);
-                    player.getAttribute(Attribute.PLAYER_SNEAKING_SPEED).setBaseValue(0.3f);
-                }
-
-            }
         }, 20, 1);
+    }
+
+    public void movementInput(float forward, float sideways) {
+
+        Bukkit.getLogger().info("Forward: " + forward + "Sideway: " + sideways);
+
+        if(forward>0.5) {
+            shipMomentum.add(0, 0, THRUST_POWER);
+        } else if (forward<-0.5) {
+            shipMomentum.add(0, 0, -THRUST_POWER);
+        }
+
+
+        //TODO should not be able to strafe with ship, use Q and D for something else idk
+        if (sideways>0.5) {
+            shipMomentum.add(THRUST_POWER, 0, 0);
+        } else if (sideways<-0.5) {
+            shipMomentum.add(-THRUST_POWER, 0, 0);
+        }
+
     }
 }

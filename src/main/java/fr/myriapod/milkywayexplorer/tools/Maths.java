@@ -1,5 +1,7 @@
 package fr.myriapod.milkywayexplorer.tools;
 
+import org.joml.Matrix3d;
+import org.joml.Vector3d;
 import org.joml.Vector4d;
 
 import java.util.ArrayList;
@@ -33,6 +35,28 @@ public class Maths {
     public static double getSpherePointSize(int samples, double radius){
         return Math.sqrt((4 * Math.PI * radius * radius) / samples);
     }
+
+//    public Vector3d angleToVector(Vector3d angle) {
+//        Vector3d vec = new Vector3d(0, -1, 0);
+//        Matrix3d m = new Matrix3d(1,0,0,0,1,0,0,0,1); //IDENTITY
+//
+//        m.mul(getRotationMatrixX(angle.x));
+//        m.mul(getRotationMatrixY(Math.toRadians(angle.y))); //
+//        m.mul(getRotationMatrixZ(angle.z));
+//        return m.mul(vec);
+//    }
+//
+//    private Matrix3d getRotationMatrixX(double pitch) {
+//        return new Matrix3d(Math.cos(pitch),0,Math.sin(pitch),0,1,0,-Math.sin(pitch),0,Math.cos(pitch));
+//    }
+//
+//    private Matrix3d getRotationMatrixY(double yaw) {
+//        return new Matrix3d(Math.cos(yaw), );
+//    }
+//
+//    private Matrix3d getRotationMatrixZ(double roll) {
+//        return new Matrix3d(Math.cos(pitch),0,Math.sin(pitch),0,1,0,-Math.sin(pitch),0,Math.cos(pitch));
+//    }
 
 
 }

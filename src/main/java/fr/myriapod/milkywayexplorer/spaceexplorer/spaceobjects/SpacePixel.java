@@ -35,7 +35,7 @@ public class SpacePixel {
 
 
         pixel = Game.getUniversWorld().spawn(new Location(Game.getUniversWorld(), 0, 0, 0), TextDisplay.class);
-        pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
+        setColor(color);
         pixel.setBackgroundColor(BACKGROUND_COLOR);
         Transformation transformation = pixel.getTransformation();
         pixel.setBillboard(Display.Billboard.CENTER);
@@ -62,11 +62,6 @@ public class SpacePixel {
     }
 
     public void setDistanceWithCenter(double dist){
-        scale = dist;
-        Transformation transformation = pixel.getTransformation();
-        transformation.getScale().set(scale);
-        pixel.setTransformation(transformation);
-        //tpTo(new Vector3d(center.x + relativePos.x / relativePos.length() * dist ,center.y + relativePos.y / relativePos.length() * dist ,center.z + relativePos.z / relativePos.length() * dist ));
         setRelativePos(new Vector3d(spherePos.x * dist , spherePos.y * dist , spherePos.z * dist ));
     }
 
@@ -75,5 +70,26 @@ public class SpacePixel {
         this.tpTo(new Vector3d(planetpos).add(relativePos));
 
         pixel.teleport(new Location(Game.getUniversWorld(), renderPos.x + ship.getWorldCenter().x, renderPos.y + ship.getWorldCenter().y, renderPos.z + ship.getWorldCenter().z));
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+        pixel.setText(net.md_5.bungee.api.ChatColor.of(color) + "⬤");
+    }
+
+    public void setAngle(double currentAngle) {
+        this.currentAngle = currentAngle;
+    }
+
+    public void setSize(double scale) {
+        this.scale = scale;
+    }
+
+    public void setRenderPos(Vector3d renderPos) {
+        this.renderPos = renderPos;
+    }
+
+    public void delete() {
+        pixel.remove();
     }
 }

@@ -9,7 +9,7 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <outputDirectory>C:\Users\augus\OneDrive\Bureau\Serveur 1.21\plugins</outputDirectory>
+          <outputDirectory>C:\Users\ugoal\Desktop\single-player-server\plugins</outputDirectory>
         </configuration>
       </plugin>
       <plugin>
@@ -59,7 +59,7 @@
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
+      <artifactId>spigot</artifactId>
       <version>1.21.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>

@@ -4,6 +4,7 @@ import fr.myriapod.milkywayexplorer.surface.machinery.*;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.tools.Tuple;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3i;
@@ -35,6 +36,8 @@ public interface MachineryType {
                 return new Drill(d, pos);
             }
         }
+
+        Bukkit.getLogger().info("Miss created machinery: " + id + "   " + pos);
 
         return null;
     }

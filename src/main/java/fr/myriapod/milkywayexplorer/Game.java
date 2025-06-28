@@ -3,9 +3,8 @@ package fr.myriapod.milkywayexplorer;
 import fr.myriapod.milkywayexplorer.spaceexplorer.Univers;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceobjects.StarSystem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
-import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
 import fr.myriapod.milkywayexplorer.surface.Tools;
-import fr.myriapod.milkywayexplorer.surface.machinery.TechtreeBlock;
+import fr.myriapod.milkywayexplorer.surface.listeners.PreloadEvent;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.DrillType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.TechtreeType;
@@ -14,14 +13,10 @@ import fr.myriapod.milkywayexplorer.techtree.Techtree;
 import fr.myriapod.milkywayexplorer.tools.SaveFile;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Game {
     private static List<Ship> shipList;
@@ -66,7 +61,7 @@ public class Game {
         Tech.getMajorBranches().forEach(Game::unlockTech);
 
         player.getInventory().clear();
-        player.getInventory().addItem(DrillType.BASIC.getAsItem());
+        player.getInventory().addItem(DrillType.MINI.getAsItem());
         player.getInventory().addItem(CrafterType.BASIC.getAsItem());
         player.getInventory().addItem(TechtreeType.TECHTREE_BLOCK.getAsItem());
         player.getInventory().addItem(Tools.MANUAL_DRILL.getAsItem());
@@ -130,7 +125,17 @@ public class Game {
             }
         }
         return null;
+    }
 
+    public static Planet getPlanetByWorld(World world) {
+        for(StarSystem ss : univers.getAllLoadedSystems()) {
+            for(Planet p : ss.getAllPlanets()) {
+                if(p.getSurfacePlanet().getWorld().equals(world)) {
+                    return p;
+                }
+            }
+        }
+        return null;
     }
 
     public static void loadPlanets() {
@@ -140,7 +145,7 @@ public class Game {
     private static boolean stopLoadEvent = false;
 
     public static boolean isUniversPreloaded() {
-        boolean check = (!SurfaceListener.loadedEntitiesChunk.isEmpty()) && SurfaceListener.loadedEntitiesChunk.containsAll(SurfaceListener.loadedChunk) && univers != null;
+        boolean check = (!PreloadEvent.loadedEntitiesChunk.isEmpty()) && PreloadEvent.loadedEntitiesChunk.containsAll(PreloadEvent.loadedChunk) && univers != null;
         if(check) {
             stopLoadEvent = true;
         }

@@ -22,12 +22,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
-import org.bukkit.event.world.EntitiesLoadEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.joml.Vector3i;
 
@@ -117,7 +120,7 @@ public class SurfaceListener implements Listener {
         }
 
 
-        else if(tags.contains(DrillType.BASIC.getID())) {
+        else if(tags.contains(DrillType.MINI.getID())) {
             if(actualMachinery instanceof Drill drill) {
                 Map<Ressource, Integer> prod = drill.getProducted();
 
@@ -181,9 +184,8 @@ public class SurfaceListener implements Listener {
             return;
         }
 
-
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if(Tools.MACHINERY_DESTRUCTOR.isEqual(item)) {
+            if (Tools.MACHINERY_DESTRUCTOR.isEqual(item)) {
                 new MachineryDestructorLogic().playerInteractWithDestructorEvent(event);
                 return;
             }
@@ -207,7 +209,7 @@ public class SurfaceListener implements Listener {
 
             Machinery machinery = MachineryType.createMachineryByID(m.getID(), new Vector3i((int) loc.getX(), (int) loc.getY(), (int) loc.getZ()));
 
-            new PasteSchem().generate(loc, m.getModel());
+            new PasteSchem().generate(loc.clone().subtract(0,1,0), m.getModel());
 
             Interaction e = (Interaction) player.getWorld().spawnEntity(loc, EntityType.INTERACTION);
             MachineryType.SchematicSetting setting = m.getSchematicSetting();
@@ -216,12 +218,6 @@ public class SurfaceListener implements Listener {
             e.setInteractionWidth(setting.getWidth());
 
             planet.addMachinery(e.getUniqueId(), machinery);
-
-        }
-
-        else {
-            event.setCancelled(true);
-
         }
 
     }
@@ -313,9 +309,9 @@ public class SurfaceListener implements Listener {
         f.registerPlayerPos(ss);
     }
 
-    @EventHandler
-    public void poseBlockEvent(BlockPlaceEvent event) { //new ConveyorManager().playerBlockPlace(event); }
-    }
+//    @EventHandler
+//    public void poseBlockEvent(BlockPlaceEvent event) {
+//    }
 
     @EventHandler
     public void foodEvent(FoodLevelChangeEvent event) {
@@ -341,39 +337,5 @@ public class SurfaceListener implements Listener {
     }
 
 
-    public static Set<Chunk> loadedChunk = new HashSet<>();
-    public static Set<Chunk> loadedEntitiesChunk = new HashSet<>();
-
-//    @EventHandler
-//    public void chunkLoadEvent(ChunkLoadEvent event) {
-//        if(Game.isUniversPreloaded()) {
-//            return;
-//        }
-//
-//        try {
-//            if (Game.getSystemByWorld(event.getWorld()) != null) {
-//                Bukkit.getLogger().info("Load chunk at: " + event.getChunk().getX() + "    " + event.getChunk().getZ());
-//                loadedChunk.add(event.getChunk());
-//            }
-//        } catch (NullPointerException e) {
-//
-//        }
-//    }
-
-    @EventHandler
-    public void entitiesLoadedEvent(EntitiesLoadEvent event) {
-        if(Game.stopLoadEvent()) {
-            return;
-        }
-
-        try {
-            if (Game.getSystemByWorld(event.getWorld()) != null) {
-                Bukkit.getLogger().info("Load entities at: " + event.getWorld().getName() + "   " + event.getChunk().getX() + "    " + event.getChunk().getZ());
-                loadedEntitiesChunk.add(event.getChunk());
-            }
-        } catch (NullPointerException e) {
-
-        }
-    }
 
 }

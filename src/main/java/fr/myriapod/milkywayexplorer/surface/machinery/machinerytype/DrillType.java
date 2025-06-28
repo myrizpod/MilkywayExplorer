@@ -11,14 +11,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 
 public enum DrillType implements MachineryType {
-    BASIC("Foreuse Basique", Material.LIGHTNING_ROD, Tech.AUTOMATISATION_ESSENTIALS, "basic_drill", "basic_drill", 1001,
+    MINI("Foreuse Basique", Material.LIGHTNING_ROD, Tech.AUTOMATISATION_ESSENTIALS, "mini_drill", "mini_drill", 1001,
+            new DirectList<>("Peut etre posé sur un sol exploitable"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 20)),
+            new SchematicSetting(3f,3f), 0.05),
+    PNEUMATIC("Foreuse Basique", Material.LIGHTNING_ROD, Tech.AUTOMATISATION_ESSENTIALS, "pneumatic_drill", "pneumatic_drill", 1002,
             new DirectList<>("Peut etre posé sur un sol exploitable"),
             new DirectList<>(new Tuple<>(Ressource.IRON, 20)),
             new SchematicSetting(3f,3f), 0.1),
-    NORMAL("Foreuse", Material.POINTED_DRIPSTONE, Tech.AUTOMATISATION_ESSENTIALS, "normal_drill", "drill", 1002,
-            new DirectList<>("Peut etre posé sur un sol exploitable"),
-            new DirectList<>(new Tuple<>(Ressource.IRON, 1)),
-            new SchematicSetting(5.2f, 4f), 0.4)
     ;
 
 

@@ -2,8 +2,9 @@ package fr.myriapod.milkywayexplorer.surface.ressource;
 
 public enum Generable {
 
-    COAL(null, 0.25, Ressource.COAL),
-    COPPER(null, 0.25, Ressource.COPPER),
+    COAL("coal_ore", 0.25, Ressource.COAL),
+    COPPER("copper_ore", 0.25, Ressource.COPPER),
+    GOLD("gold_ore", 0.25, Ressource.GOLD),
     IRON("iron_ore", 0.25, Ressource.IRON);
 
     final String modelName;

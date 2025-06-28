@@ -22,6 +22,7 @@ public class MachineryDestructorLogic {
 
         for(ConveyorType ct : ConveyorType.values()) {
             if(ct.getMaterial().equals(clickedBlock.getType())) {
+                new ConveyorManager().removeConveyor(Game.getPlayerPlanet(player).getSurfacePlanet(), clickedBlock);
                 clickedBlock.setType(Material.AIR);
                 player.getInventory().addItem(ct.getAsItem());
             }

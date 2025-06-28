@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer.surface.machinery;
 import fr.myriapod.milkywayexplorer.Main;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.AssemblerType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
+import fr.myriapod.milkywayexplorer.tools.Tuple;
 import org.bukkit.Bukkit;
 import org.joml.Vector3i;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Assembler extends Machinery implements Producter, Input, Output {
+public class Assembler extends Machinery implements Producter, Input {
 
     protected Map<Ressource, Map<Ressource, Integer>> recipes = new HashMap<>(); //la clé est la ressource créée et la value son craft
     protected Map<Ressource, Integer> incomes = new HashMap<>();
@@ -58,6 +59,21 @@ public class Assembler extends Machinery implements Producter, Input, Output {
     public Map<Ressource, Integer> getProducted() {
         Map<Ressource, Integer> prod = new HashMap<>(producted);
         producted.keySet().forEach(r -> producted.put(r, 0));
+        return prod;
+    }
+
+    public Tuple<Ressource, Integer> getProducted(Ressource r, int nb) {
+        Tuple<Ressource, Integer> prod;
+        if(nb == -1) {
+            prod = new Tuple<>(r, producted.get(r));
+            producted.put(r, 0);
+
+        } else {
+            int nbR = producted.get(r);
+            int nbF = Math.min(nbR, nb); //To not go in negative
+            producted.put(r, nbR-nbF);
+            prod = new Tuple<>(r, nbF);
+        }
         return prod;
     }
 

@@ -7,7 +7,6 @@ import fr.myriapod.milkywayexplorer.tools.Tuple;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.joml.Vector3i;
 
 import java.util.*;
 
@@ -17,7 +16,21 @@ public enum AssemblerType implements MachineryType {
             new DirectList<>("Permet de produire des ressources"),
             new DirectList<>(new Tuple<>(Ressource.IRON, 35)),
             MachineryType.SCHEMATIC_SETTING_ONE_BLOCK,
-            new Production(Ressource.IRON_BAR, new Tuple<>(Ressource.IRON, 40)), 0.1);
+            new Production(Ressource.IRON_BAR, new Tuple<>(Ressource.IRON, 40)), 0.1),
+
+    SMELTERY("Four", Material.BLAST_FURNACE, Tech.AUTOMATISATION_ESSENTIALS, "smeltery", "smeltery", 1002,
+            new DirectList<>("Permet de transformer les ressources"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 1)),
+            new SchematicSetting(4.1f, 4.1f),
+            new Production(Ressource.COAL, new Tuple<>(Ressource.IRON, 2)), 0.2),
+
+    ALLOY_SMELTERY("Four d'alliage plus fort", Material.BLAST_FURNACE, Tech.AUTOMATISATION_ESSENTIALS, "alloy_smeltery", "alloy_smeltery", 1003,
+            new DirectList<>("Permet de transformer les ressources"),
+            new DirectList<>(new Tuple<>(Ressource.IRON, 1)),
+            new SchematicSetting(4.1f, 4.1f),
+            new Production(Ressource.COAL, new Tuple<>(Ressource.IRON, 2)), 0.2),
+
+    ;
 
 
 

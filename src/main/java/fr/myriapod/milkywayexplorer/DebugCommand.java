@@ -1,6 +1,7 @@
 package fr.myriapod.milkywayexplorer;
 
 import fr.myriapod.milkywayexplorer.surface.MovingItem;
+import fr.myriapod.milkywayexplorer.surface.Tools;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,9 +22,10 @@ public class DebugCommand implements CommandExecutor {
         if(commandSender instanceof Player) {
             Player player = (Player) commandSender;
 
-            new MovingItem(Ressource.IRON, player.getLocation());
 
             Planet p = Game.getPlayerPlanet(player);
+
+            player.getInventory().addItem(Tools.MACHINERY_DESTRUCTOR.getAsItem());
 
 //            if(p != null) {
 //                Bukkit.getLogger().info("a " + p.getAllMachines());

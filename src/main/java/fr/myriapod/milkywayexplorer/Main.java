@@ -4,10 +4,12 @@ import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.CreateShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.DevMoveShipCommand;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.SpaceShipListener;
 import fr.myriapod.milkywayexplorer.surface.SurfaceListener;
+import fr.myriapod.milkywayexplorer.surface.listeners.PreloadEvent;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Generable;
 import fr.myriapod.milkywayexplorer.techtree.Tech;
 import fr.myriapod.milkywayexplorer.techtree.TechtreeListener;
+import fr.myriapod.milkywayexplorer.tools.DelayedTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,9 +33,7 @@ public class Main extends JavaPlugin {
         plugin = this;
 
         //getting listeners
-        Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);
-        Bukkit.getPluginManager().registerEvents(new SurfaceListener(), this);
-        Bukkit.getPluginManager().registerEvents(new SpaceShipListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PreloadEvent(), this);
 
         //Debug info
         Bukkit.getLogger().info("-------------");
@@ -65,6 +65,10 @@ public class Main extends JavaPlugin {
             }
         }
 
+        Bukkit.getPluginManager().registerEvents(new TechtreeListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SurfaceListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SpaceShipListener(), this);
+        new DelayedTask(this);
 
         checkForLoading();
 

@@ -3,6 +3,7 @@ package fr.myriapod.milkywayexplorer.surface.machinery;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.CrafterType;
 import fr.myriapod.milkywayexplorer.surface.machinery.machinerytype.MachineryType;
 import fr.myriapod.milkywayexplorer.surface.ressource.Ressource;
+import fr.myriapod.milkywayexplorer.tools.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -10,12 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class Crafter extends Machinery {
+public class Crafter extends Machinery implements Producter, Input {
 
     Set<MachineryType> products = new HashSet<>();
 
@@ -51,4 +49,34 @@ public class Crafter extends Machinery {
         return inv;
     }
 
+
+    @Override
+    public void addIncomes(Map<Ressource, Integer> prod) {
+
+    }
+
+    @Override
+    public void startProduction() {
+
+    }
+
+    @Override
+    public void stopProduction() {
+
+    }
+
+    @Override
+    public Map<Ressource, Integer> getProducted() {
+        return null;
+    }
+
+    @Override
+    public Tuple<Ressource, Integer> getProducted(Ressource r, int nb) {
+        return null;
+    }
+
+    @Override
+    public void productionLoop() {
+
+    }
 }

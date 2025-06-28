@@ -14,6 +14,7 @@ public enum Ressource {
     COAL("Charbon", Material.COAL, 100),
     IRON("Fer", Material.IRON_INGOT, 101),
     COPPER("Cuivre", Material.COPPER_INGOT, 102),
+    GOLD("Or", Material.GOLD_INGOT, 103),
     IRON_BAR("Bar de Fer", Material.IRON_BARS, 110);
 
 

@@ -1,6 +1,7 @@
 package fr.myriapod.milkywayexplorer.surface;
 
 import fr.myriapod.milkywayexplorer.Game;
+import fr.myriapod.milkywayexplorer.surface.listeners.PreloadEvent;
 import fr.myriapod.milkywayexplorer.surface.ressource.*;
 import fr.myriapod.milkywayexplorer.tools.PasteSchem;
 import fr.myriapod.milkywayexplorer.spaceexplorer.spaceship.Ship;
@@ -229,7 +230,9 @@ public class SurfacePlanet {
         for(Vector3i v : allMachineries.keySet()) {
             Chunk c = world.getChunkAt(new Location(world, v.x,v.y,v.z));
             c.load();
-            SurfaceListener.loadedChunk.add(c);
+            if(! c.isEntitiesLoaded()) {
+                PreloadEvent.loadedChunk.add(c);
+            }
             Bukkit.getLogger().info("Chunk loading at:" + c.getX() + " " + c.getZ());
             Bukkit.getLogger().info("Chunk loaded at: " + v + "  " + c.isLoaded());
             Bukkit.getLogger().info("Chunk is entity loaded ? at: " + v + "  " + c.isEntitiesLoaded());

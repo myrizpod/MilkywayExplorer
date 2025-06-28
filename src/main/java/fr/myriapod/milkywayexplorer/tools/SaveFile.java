@@ -100,7 +100,7 @@ public class SaveFile {
                 Vector3i v = formatStringAsVectori(vectorS);
                 Machinery machinery = MachineryType.createMachineryByID(s, v);
 
-                machineryMap.put(v, machinery);
+                machineryMap.putIfAbsent(v, machinery);
 
             }
         }
